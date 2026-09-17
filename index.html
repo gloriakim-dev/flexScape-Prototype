@@ -1,16 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>FlexScape • Home Portal</title>
-  <meta name="description" content="FlexScape - Next-Gen Motion Flow & Study Wellness. Choose between FlexScape Room (Vision AI Game) or FlexScape Mobile Web Companion.">
+  <meta name="description"
+    content="FlexScape - Next-Gen Motion Flow & Study Wellness. Choose between FlexScape Room (Vision AI Game) or FlexScape Mobile Web Companion.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
   <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Zen+Dots&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Zen+Dots&display=swap"
+    rel="stylesheet">
 
   <style>
     /* ==========================================================================
@@ -22,25 +26,25 @@
       --primary-pink: #FF3FAB;
       --primary-teal: #2C735F;
       --cream-light: #FFF4ED;
-      
+
       --bg-dark: #070B12;
       --bg-surface: #0E1626;
       --bg-card: rgba(16, 26, 46, 0.75);
       --bg-card-hover: rgba(22, 36, 64, 0.9);
-      
+
       --border-glass: rgba(255, 255, 255, 0.12);
       --border-cyan: rgba(48, 223, 242, 0.4);
       --border-lime: rgba(199, 253, 5, 0.4);
-      
+
       --text-main: #FFFFFF;
       --text-muted: #94A3B8;
       --text-dim: #64748B;
-      
+
       --radius-sm: 12px;
       --radius-md: 20px;
       --radius-lg: 32px;
       --radius-pill: 9999px;
-      
+
       --font-display: 'Outfit', sans-serif;
       --font-digital: 'Zen Dots', sans-serif;
       --font-body: 'Inter', sans-serif;
@@ -116,8 +120,13 @@
     }
 
     @keyframes floatOrb {
-      0% { transform: translateY(0) scale(1); }
-      100% { transform: translateY(50px) scale(1.15); }
+      0% {
+        transform: translateY(0) scale(1);
+      }
+
+      100% {
+        transform: translateY(50px) scale(1.15);
+      }
     }
 
     /* Background Cyber Grid */
@@ -127,7 +136,7 @@
       left: 0;
       width: 100%;
       height: 100%;
-      background-image: 
+      background-image:
         linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
         linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
       background-size: 50px 50px;
@@ -164,8 +173,15 @@
     }
 
     @keyframes gentleFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-8px); }
+
+      0%,
+      100% {
+        transform: translateY(0);
+      }
+
+      50% {
+        transform: translateY(-8px);
+      }
     }
 
     .brand-title {
@@ -186,7 +202,7 @@
       padding: 6px 16px;
       background: rgba(48, 223, 242, 0.1);
       border: 1px solid var(--border-cyan);
-      border-radius: var(--radius-pill);
+      bordegit r-radius: var(--radius-pill);
       font-size: 13px;
       font-weight: 600;
       color: var(--primary-cyan);
@@ -214,6 +230,7 @@
         grid-template-columns: 1fr;
         max-width: 520px;
       }
+
       .brand-title {
         font-size: 42px;
       }
@@ -387,6 +404,7 @@
     }
   </style>
 </head>
+
 <body>
 
   <!-- Background Orbs -->
@@ -399,17 +417,22 @@
 
   <!-- Main Portal Section -->
   <main class="portal-main-wrapper">
-    
+
     <!-- Hero Brand Header -->
     <header class="brand-hero-section">
       <div class="brand-logo-container">
         <svg viewBox="0 0 120 140" fill="none" style="width: 100%; height: 100%;">
-          <path d="M 18 38 C 18 16, 44 6, 70 14 C 82 18, 90 26, 92 36" stroke="#30DFF2" stroke-width="14" stroke-linecap="round" fill="none"/>
-          <circle cx="34" cy="30" r="12" fill="#FFF4ED"/>
-          <path d="M 24 38 C 22 52, 22 70, 36 78 C 48 84, 62 80, 68 68 C 70 60, 60 52, 48 50 C 38 48, 32 40, 30 36 Z" fill="#FFF4ED"/>
-          <path d="M 42 46 C 48 30, 74 26, 94 38" stroke="#C7FD05" stroke-width="14" stroke-linecap="round" fill="none"/>
-          <path d="M 18 94 C 18 122, 54 128, 76 108 C 84 100, 84 84, 76 74" stroke="#FF3FAB" stroke-width="14" stroke-linecap="round" fill="none"/>
-          <path d="M 76 64 C 92 66, 108 78, 108 94 C 108 110, 96 124, 84 126" stroke="#2C735F" stroke-width="14" stroke-linecap="round" fill="none"/>
+          <path d="M 18 38 C 18 16, 44 6, 70 14 C 82 18, 90 26, 92 36" stroke="#30DFF2" stroke-width="14"
+            stroke-linecap="round" fill="none" />
+          <circle cx="34" cy="30" r="12" fill="#FFF4ED" />
+          <path d="M 24 38 C 22 52, 22 70, 36 78 C 48 84, 62 80, 68 68 C 70 60, 60 52, 48 50 C 38 48, 32 40, 30 36 Z"
+            fill="#FFF4ED" />
+          <path d="M 42 46 C 48 30, 74 26, 94 38" stroke="#C7FD05" stroke-width="14" stroke-linecap="round"
+            fill="none" />
+          <path d="M 18 94 C 18 122, 54 128, 76 108 C 84 100, 84 84, 76 74" stroke="#FF3FAB" stroke-width="14"
+            stroke-linecap="round" fill="none" />
+          <path d="M 76 64 C 92 66, 108 78, 108 94 C 108 110, 96 124, 84 126" stroke="#2C735F" stroke-width="14"
+            stroke-linecap="round" fill="none" />
         </svg>
       </div>
 
@@ -419,7 +442,8 @@
 
       <h1 class="brand-title">FlexScape</h1>
       <p class="brand-description">
-        Choose your experience: Launch the camera-based Vision AI posture tracking game room, or open the mobile study stopwatch and break companion.
+        Choose your experience: Launch the camera-based Vision AI posture tracking game room, or open the mobile study
+        stopwatch and break companion.
       </p>
     </header>
 
@@ -427,18 +451,20 @@
     <section class="experience-cards-grid">
 
       <!-- Card 1: FlexScape Room (Game) -->
-      <a href="room.html" class="experience-card card-room" id="card-room" title="Launch FlexScape Room (Vision AI Game)">
+      <a href="room.html" class="experience-card card-room" id="card-room"
+        title="Launch FlexScape Room (Vision AI Game)">
         <div class="card-top-badge">
           <span>🌌 Motion Tracking • Vision AI</span>
         </div>
-        
+
         <div class="card-icon-emblem">
           <span>🧘</span>
         </div>
 
         <h2 class="card-title">FlexScape Room (Game)</h2>
         <p class="card-desc">
-          Enter the full-body posture tracking space. Match stretch poses in real-time, view glowing cyber body outlines, and control settings with in-air arm controls.
+          Enter the full-body posture tracking space. Match stretch poses in real-time, view glowing cyber body
+          outlines, and control settings with in-air arm controls.
         </p>
 
         <div class="card-tags-row">
@@ -455,7 +481,8 @@
       </a>
 
       <!-- Card 2: FlexScape Mobile Web Companion -->
-      <a href="mobile.html" class="experience-card card-mobile" id="card-mobile" title="Launch FlexScape Mobile Web Companion">
+      <a href="mobile.html" class="experience-card card-mobile" id="card-mobile"
+        title="Launch FlexScape Mobile Web Companion">
         <div class="card-top-badge">
           <span>📱 Study Companion • 3 Pages</span>
         </div>
@@ -466,7 +493,8 @@
 
         <h2 class="card-title">FlexScape Mobile</h2>
         <p class="card-desc">
-          Stay focused during study sessions with smart break intervals. Features a digital stopwatch, 0–59 custom sliding interval wheel, break launcher, and session statistics.
+          Stay focused during study sessions with smart break intervals. Features a digital stopwatch, 0–59 custom
+          sliding interval wheel, break launcher, and session statistics.
         </p>
 
         <div class="card-tags-row">
@@ -505,4 +533,5 @@
   </script>
 
 </body>
+
 </html>
