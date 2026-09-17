@@ -5187,37 +5187,80 @@
         });
       });
     }
-        ctx.fillText("▲", 0, -6);
-      } else if (direction === "down") {
-        ctx.fillText("▼", 0, -6);
+
+    /* ==========================================================================
+       In-Air Holographic Arm Control Feedback Gauge
+       ========================================================================== */
+    function drawInAirArmControl(point, actionType, label, valueText, width, height, themeColor) {
+      if (!point) return;
+      const px = point.x * width;
+      const py = point.y * height;
+      const radius = 44;
+
+      ctx.save();
+      ctx.translate(px, py);
+
+      const activeColor = actionType === "confirm" ? "#22c55e" : (actionType === "up" ? "#C7FD05" : (actionType === "down" ? "#FF3FAB" : (themeColor || "#30DFF2")));
+
+      // Futuristic holographic glowing outer ring
+      ctx.beginPath();
+      ctx.arc(0, 0, radius, 0, Math.PI * 2);
+      ctx.strokeStyle = activeColor;
+      ctx.lineWidth = 3;
+      ctx.shadowColor = activeColor;
+      ctx.shadowBlur = 18;
+      ctx.stroke();
+
+      // Inner dashed cyber ring
+      ctx.beginPath();
+      ctx.arc(0, 0, radius - 7, 0, Math.PI * 2);
+      ctx.strokeStyle = "rgba(255, 255, 255, 0.35)";
+      ctx.lineWidth = 1.5;
+      ctx.setLineDash([4, 4]);
+      ctx.stroke();
+
+      // Action Icon
+      ctx.fillStyle = "#ffffff";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.font = "bold 20px 'Inter', sans-serif";
+      if (actionType === "up") {
+        ctx.fillText("▲", 0, -8);
+      } else if (actionType === "down") {
+        ctx.fillText("▼", 0, -8);
+      } else if (actionType === "confirm") {
+        ctx.fillText("✓", 0, -8);
       } else {
-        ctx.fillText("🤏", 0, -6);
+        ctx.fillText("⚡", 0, -8);
       }
 
-      // Value percentage text
-      ctx.font = "bold 13px 'Zen Dots', sans-serif";
-      ctx.fillText(`${value}%`, 0, 14);
+      // Value text / label
+      ctx.font = "bold 11px 'Zen Dots', sans-serif";
+      ctx.fillStyle = activeColor;
+      ctx.fillText(valueText || "", 0, 12);
 
-      // Floating action pill below
-      const badgeText = direction === "up" ? "INCREASING ▲" : (direction === "down" ? "DECREASING ▼" : "PINCH HELD");
-      ctx.font = "bold 10px 'Zen Dots', sans-serif";
+      // Floating action badge pill below
+      const badgeText = actionType === "up" 
+        ? "PUSH UP (+10%)" 
+        : (actionType === "down" ? "PUSH DOWN (-10%)" : (actionType === "confirm" ? "CONFIRMED & NEXT" : "ARM CONTROL"));
+      ctx.font = "bold 9px 'Zen Dots', sans-serif";
       const badgeW = ctx.measureText(badgeText).width + 16;
-      ctx.fillStyle = "rgba(1, 1, 1, 0.85)";
+      ctx.fillStyle = "rgba(1, 1, 1, 0.88)";
       ctx.strokeStyle = activeColor;
       ctx.lineWidth = 1.2;
       ctx.beginPath();
-      ctx.roundRect(-badgeW / 2, radius + 12, badgeW, 20, 10);
+      ctx.roundRect(-badgeW / 2, radius + 8, badgeW, 19, 9);
       ctx.fill();
       ctx.stroke();
 
-      ctx.fillStyle = activeColor;
-      ctx.fillText(badgeText, 0, radius + 22);
+      ctx.fillStyle = "#ffffff";
+      ctx.fillText(badgeText, 0, radius + 17);
 
       ctx.restore();
     }
 
     /* ==========================================================================
-       Render & Game Loop (Real-Time Detection, In-Air Gestures & Hold Progression)
+       Render & Game Loop (Real-Time Arm Detection, Pose Evaluation & Guide Sync)
        ========================================================================== */
     function gameLoop() {
       // Dynamic Canvas Size Auto-Sync to match webcam stream resolution perfectly
@@ -5228,7 +5271,10 @@
 
       let isCurrentPoseMatched = false;
       let isStartPoseDetected = false;
-      let isSettingsGestureDetected = false;
+      let armWaveResult = { isWaveTriggered: false, waveCount: 0 };
+      let isArmUp = false;
+      let isArmDown = false;
+      let isArmOutside = false;
 
       // Detect Pose from Video Stream
       if (video.currentTime !== lastVideoTime && poseLandmarker && video.readyState >= 2) {
@@ -5241,8 +5287,8 @@
           const rawLandmarks = results.landmarks[0];
           currentPoseLandmarks = smoothPoseLandmarks(rawLandmarks, smoothingAlpha);
 
-          // Universal Settings Gesture detection on all screens (Thumbs touching + open palms facing camera)
-          isSettingsGestureDetected = checkThumbsTogetherFacepalm(currentPoseLandmarks, poseStrictness);
+          // Universal Settings Gesture detection on all screens: Wave arm 2 times side-to-side
+          armWaveResult = checkArmWave(currentPoseLandmarks);
 
           if (isGameRunning) {
             // Check if in-game pose matches target
@@ -5295,94 +5341,120 @@
             }
           }
 
-          // 4. In-Settings Gestures: ONLY active when Settings Drawer is OPEN
+          // 4. In-Settings Arm Controls: Active when Settings Drawer is OPEN
           const isDrawerOpen = settingsDrawer.classList.contains("open");
           if (isDrawerOpen) {
-            const pinchRes = checkPinchGesture(currentPoseLandmarks);
+            sound.init(); // Audio context ready
 
-            if (pinchRes.isPinching) {
-              sound.init(); // Audio context ready
-
-              if (!pinchState.active) {
-                pinchState.active = true;
-                pinchState.hand = pinchRes.hand;
-                pinchState.startY = pinchRes.point.y;
-                pinchState.lastY = pinchRes.point.y;
-                pinchState.initialData = getSelectedSettingData();
-                if (pinchState.confirmedTimeout) {
-                  clearTimeout(pinchState.confirmedTimeout);
-                  pinchState.confirmedTimeout = null;
-                }
-              }
-
-              // Calculate vertical movement: Hand moving UP (lower Y) increases value
-              const deltaY = pinchState.startY - pinchRes.point.y;
-              const adjustResult = adjustSelectedSettingRealtime(deltaY, pinchState.initialData);
-
-              pinchState.lastDirection = deltaY > 0.02 ? "up" : (deltaY < -0.02 ? "down" : null);
-
-              // Floating In-Air Pinch Adjustment HUD Indicator
-              if (gesturePinchIndicator) {
-                gesturePinchIndicator.classList.add("active");
-                gesturePinchIndicator.classList.remove("confirmed");
-                if (pinchLevelBarFill) {
-                  pinchLevelBarFill.style.height = `${adjustResult.displayVal}%`;
-                }
-                if (pinchTitleText) {
-                  pinchTitleText.innerHTML = `<span>🤏 ${adjustResult.label}</span>`;
-                }
-                if (pinchSubText) {
-                  pinchSubText.innerText = "Move Up / Down • Release to Save";
-                }
-              }
-
-              // Draw In-Air dynamic holographic gauge over pinching hand
-              drawInAirPinchSlider(pinchRes.point, adjustResult.displayVal, pinchState.lastDirection, canvas.width, canvas.height, themeColor);
-            } else {
-              // Hand released: Confirm & Lock Setting
-              if (pinchState.active) {
-                pinchState.active = false;
+            // A. Check for START POSE inside settings -> SAVE & EXIT
+            const isStartPoseForExit = checkStartPose(currentPoseLandmarks, poseStrictness);
+            if (isStartPoseForExit) {
+              const now = performance.now();
+              if (!settingsExitHoldStart) {
+                settingsExitHoldStart = now;
                 sound.playMatched();
+              }
+              const exitElapsed = now - settingsExitHoldStart;
+              const exitRatio = Math.min(1, exitElapsed / requiredStartHoldMs);
+              const centralCircumference = 439.82;
 
-                if (gesturePinchIndicator) {
-                  gesturePinchIndicator.classList.add("confirmed");
-                  if (pinchTitleText) pinchTitleText.innerHTML = "<span>✓ Setting Saved</span>";
-                  if (pinchSubText) pinchSubText.innerText = "Value locked in";
+              if (centralHoldIndicator) centralHoldIndicator.classList.add("active");
+              if (centralHoldFill) centralHoldFill.style.strokeDashoffset = centralCircumference * (1 - exitRatio);
+              if (centralHoldText) {
+                const pct = Math.round(exitRatio * 100);
+                centralHoldText.innerText = `Saving & Exiting Settings... ${pct}%`;
+              }
 
-                  pinchState.confirmedTimeout = setTimeout(() => {
-                    if (gesturePinchIndicator && !pinchState.active) {
-                      gesturePinchIndicator.classList.remove("active", "confirmed");
-                      if (pinchTitleText) pinchTitleText.innerHTML = "<span>🤏 Adjust Setting</span>";
-                      if (pinchSubText) pinchSubText.innerText = "Move Up / Down • Release to Save";
+              if (exitElapsed >= requiredStartHoldMs) {
+                settingsExitHoldStart = null;
+                if (centralHoldIndicator) centralHoldIndicator.classList.remove("active");
+                closeSettingsDrawer();
+                sound.playStagePass();
+              }
+            } else {
+              if (settingsExitHoldStart) {
+                settingsExitHoldStart = null;
+                if (centralHoldIndicator) centralHoldIndicator.classList.remove("active");
+              }
+
+              // B. Arm Push UP / Push DOWN / Arm OUTSIDE Controls
+              if (currentPoseLandmarks.length >= 25) {
+                const lWr = currentPoseLandmarks[15], rWr = currentPoseLandmarks[16];
+                const lElb = currentPoseLandmarks[13], rElb = currentPoseLandmarks[14];
+                const lSh = currentPoseLandmarks[11], rSh = currentPoseLandmarks[12];
+                const lHip = currentPoseLandmarks[23], rHip = currentPoseLandmarks[24];
+
+                const shY = (lSh && rSh && lSh.visibility > 0.3 && rSh.visibility > 0.3) ? (lSh.y + rSh.y) / 2 : 0.4;
+                const hipY = (lHip && rHip && lHip.visibility > 0.25 && rHip.visibility > 0.25) ? (lHip.y + rHip.y) / 2 : (shY + 0.45);
+                const chestY = (shY + hipY) / 2;
+
+                const isArmUpLeft = lWr && lSh && lWr.visibility > 0.35 && lWr.y < lSh.y - 0.04;
+                const isArmUpRight = rWr && rSh && rWr.visibility > 0.35 && rWr.y < rSh.y - 0.04;
+                isArmUp = isArmUpLeft || isArmUpRight;
+
+                const isArmDownLeft = lWr && lWr.visibility > 0.35 && lWr.y > chestY + 0.10;
+                const isArmDownRight = rWr && rWr.visibility > 0.35 && rWr.y > chestY + 0.10;
+                isArmDown = isArmDownLeft || isArmDownRight;
+
+                // Arm Going Outside: Wrist extended laterally past elbow and shoulder
+                const isArmOutsideLeft = lWr && lElb && lSh && lWr.visibility > 0.35 && (lWr.x < lElb.x - 0.05 && lWr.x < lSh.x - 0.10);
+                const isArmOutsideRight = rWr && rElb && rSh && rWr.visibility > 0.35 && (rWr.x > rElb.x + 0.05 && rWr.x > rSh.x + 0.10);
+                isArmOutside = (isArmOutsideLeft || isArmOutsideRight) && !isArmUp && !isArmDown;
+
+                const now = performance.now();
+                const activeWrist = (isArmUpLeft || isArmDownLeft || isArmOutsideLeft) ? lWr : (rWr || lWr);
+
+                if (now - lastArmActionTime > 460) {
+                  if (isArmOutside) {
+                    lastArmActionTime = now;
+                    const res = confirmSelectedSetting();
+                    if (res && gesturePinchIndicator) {
+                      gesturePinchIndicator.classList.add("active", "confirmed");
+                      if (pinchLevelBarFill) pinchLevelBarFill.style.height = "100%";
+                      if (pinchTitleText) pinchTitleText.innerHTML = `<span>✓ ${res.label} Confirmed</span>`;
+                      if (pinchSubText) pinchSubText.innerText = "Moved to next setting";
+                      if (inAirArmHUDTimeout) clearTimeout(inAirArmHUDTimeout);
+                      inAirArmHUDTimeout = setTimeout(() => {
+                        if (gesturePinchIndicator) gesturePinchIndicator.classList.remove("active", "confirmed");
+                      }, 1200);
                     }
-                  }, 1000);
-                }
-              } else {
-                // In-Settings Hands-free Navigation (Up / Down) when NOT pinching and NOT holding settings gesture
-                if (!isSettingsGestureDetected && currentPoseLandmarks.length >= 25) {
-                  const lWr = currentPoseLandmarks[15], rWr = currentPoseLandmarks[16];
-                  const lSh = currentPoseLandmarks[11], rSh = currentPoseLandmarks[12];
-                  const lHip = currentPoseLandmarks[23], rHip = currentPoseLandmarks[24];
-
-                  const now = performance.now();
-                  if (now - lastSettingNavTime > 420) {
-                    const isHandUp = (lWr && lSh && lWr.y < lSh.y - 0.06 && lWr.visibility > 0.3) ||
-                                     (rWr && rSh && rWr.y < rSh.y - 0.06 && rWr.visibility > 0.3);
-
-                    const hipY = (lHip && rHip && lHip.visibility > 0.25) ? (lHip.y + rHip.y) / 2 : 0.85;
-                    const isHandDown = (lWr && lWr.y > hipY - 0.04 && lWr.visibility > 0.3) ||
-                                       (rWr && rWr.y > hipY - 0.04 && rWr.visibility > 0.3);
-
-                    if (isHandUp) {
-                      lastSettingNavTime = now;
-                      updateSettingsSelection(selectedSettingIndex - 1);
-                      sound.playClick();
-                    } else if (isHandDown) {
-                      lastSettingNavTime = now;
-                      updateSettingsSelection(selectedSettingIndex + 1);
-                      sound.playClick();
+                  } else if (isArmUp) {
+                    lastArmActionTime = now;
+                    const res = stepSelectedSetting(+1);
+                    if (res && gesturePinchIndicator) {
+                      gesturePinchIndicator.classList.add("active");
+                      gesturePinchIndicator.classList.remove("confirmed");
+                      if (pinchLevelBarFill) pinchLevelBarFill.style.height = `${res.pct}%`;
+                      if (pinchTitleText) pinchTitleText.innerHTML = `<span>▲ ${res.label}: ${res.valText}</span>`;
+                      if (pinchSubText) pinchSubText.innerText = `${res.action} • Push down to decrease`;
+                      if (inAirArmHUDTimeout) clearTimeout(inAirArmHUDTimeout);
+                      inAirArmHUDTimeout = setTimeout(() => {
+                        if (gesturePinchIndicator) gesturePinchIndicator.classList.remove("active", "confirmed");
+                      }, 1200);
+                    }
+                  } else if (isArmDown) {
+                    lastArmActionTime = now;
+                    const res = stepSelectedSetting(-1);
+                    if (res && gesturePinchIndicator) {
+                      gesturePinchIndicator.classList.add("active");
+                      gesturePinchIndicator.classList.remove("confirmed");
+                      if (pinchLevelBarFill) pinchLevelBarFill.style.height = `${res.pct}%`;
+                      if (pinchTitleText) pinchTitleText.innerHTML = `<span>▼ ${res.label}: ${res.valText}</span>`;
+                      if (pinchSubText) pinchSubText.innerText = `${res.action} • Push up to increase`;
+                      if (inAirArmHUDTimeout) clearTimeout(inAirArmHUDTimeout);
+                      inAirArmHUDTimeout = setTimeout(() => {
+                        if (gesturePinchIndicator) gesturePinchIndicator.classList.remove("active", "confirmed");
+                      }, 1200);
                     }
                   }
+                }
+
+                // Draw real-time arm feedback halo on screen
+                if (activeWrist && (isArmUp || isArmDown || isArmOutside)) {
+                  const actionType = isArmOutside ? "confirm" : (isArmUp ? "up" : "down");
+                  const activeData = getSelectedSettingData();
+                  const valTxt = activeData?.type === "range" ? `${activeData.val}%` : (activeData?.type === "checkbox" ? (activeData.val ? "ON" : "OFF") : "");
+                  drawInAirArmControl(activeWrist, actionType, "", valTxt, canvas.width, canvas.height, themeColor);
                 }
               }
             }
@@ -5403,51 +5475,25 @@
         }
       }
 
-      // --- UNIVERSAL SETTINGS GESTURE DETECTION (ON ALL SCREENS) ---
-      if (isSettingsGestureDetected) {
-        const now = performance.now();
-        if (!settingsGestureHoldStart) {
-          settingsGestureHoldStart = now;
-          sound.playMatched();
-        }
-
-        const elapsed = now - settingsGestureHoldStart;
-        const progressRatio = Math.min(1, elapsed / settingsGestureHoldDuration);
-        const isDrawerOpen = settingsDrawer.classList.contains("open");
-
+      // --- UNIVERSAL SETTINGS GESTURE: WAVE 2 TIMES SIDE-TO-SIDE ---
+      if (armWaveResult.isWaveTriggered) {
+        toggleSettingsDrawer();
+        sound.playStagePass();
+      } else if (armWaveResult.waveCount > 0 && !settingsDrawer.classList.contains("open")) {
+        // Live wave feedback indicator
         if (gestureSettingsIndicator) {
           gestureSettingsIndicator.classList.add("active");
           if (gestureRingFill) {
             const circumference = 106.81; // 2 * PI * 17
-            gestureRingFill.style.strokeDashoffset = circumference * (1 - progressRatio);
+            gestureRingFill.style.strokeDashoffset = circumference * (1 - armWaveResult.waveCount / 2);
           }
           if (gestureSubText) {
-            const pct = Math.round(progressRatio * 100);
-            gestureSubText.innerText = isDrawerOpen ? `Closing Settings... ${pct}%` : `Opening Settings... ${pct}%`;
+            gestureSubText.innerText = `Waving to Open Settings (${armWaveResult.waveCount}/2 waves)...`;
           }
-        }
-
-        if (currentPoseLandmarks && currentPoseLandmarks.length >= 23) {
-          const lWr = currentPoseLandmarks[15], rWr = currentPoseLandmarks[16];
-          const midPoint = { x: (lWr.x + rWr.x) / 2, y: (lWr.y + rWr.y) / 2 - 0.05 };
-          const themeColor = getComputedStyle(document.body).getPropertyValue('--primary').trim() || "#30DFF2";
-          drawGestureChargingHalo(midPoint, progressRatio, canvas.width, canvas.height, themeColor);
-        }
-
-        if (elapsed >= settingsGestureHoldDuration) {
-          settingsGestureHoldStart = null;
-          if (gestureSettingsIndicator) {
-            gestureSettingsIndicator.classList.remove("active");
-          }
-          toggleSettingsDrawer();
-          sound.playStagePass();
         }
       } else {
-        if (settingsGestureHoldStart) {
-          settingsGestureHoldStart = null;
-          if (gestureSettingsIndicator) {
-            gestureSettingsIndicator.classList.remove("active");
-          }
+        if (gestureSettingsIndicator && !armWaveResult.isWaveTriggered && armWaveResult.waveCount === 0) {
+          gestureSettingsIndicator.classList.remove("active");
         }
       }
 
@@ -5655,19 +5701,21 @@
       const cardSettingsPose = document.getElementById("guide-settings-pose");
       const cardTargetPose = document.getElementById("guide-target-pose");
       const cardSkipPose = document.getElementById("guide-skip-pose");
-      const cardClosePose = document.getElementById("guide-close-pose");
-      const cardPinchUp = document.getElementById("guide-pinch-up");
-      const cardPinchDown = document.getElementById("guide-pinch-down");
-      const cardPinchRelease = document.getElementById("guide-pinch-release");
+      const cardSaveExit = document.getElementById("guide-save-exit");
+      const cardArmUp = document.getElementById("guide-arm-up");
+      const cardArmDown = document.getElementById("guide-arm-down");
+      const cardArmOutside = document.getElementById("guide-arm-outside");
 
-      if (cardStartPose) cardStartPose.classList.toggle("detected", !!isStartPoseDetected);
-      if (cardSettingsPose) cardSettingsPose.classList.toggle("detected", !!isSettingsGestureDetected);
+      const isDrawerOpenNow = settingsDrawer.classList.contains("open");
+
+      if (cardStartPose) cardStartPose.classList.toggle("detected", !!isStartPoseDetected && !isDrawerOpenNow);
+      if (cardSettingsPose) cardSettingsPose.classList.toggle("detected", (armWaveResult.waveCount > 0 || armWaveResult.isWaveTriggered));
       if (cardTargetPose) cardTargetPose.classList.toggle("detected", !!isCurrentPoseMatched);
       if (cardSkipPose) cardSkipPose.classList.toggle("detected", !!skipPoseHoldStart);
-      if (cardClosePose) cardClosePose.classList.toggle("detected", !!isSettingsGestureDetected);
-      if (cardPinchUp) cardPinchUp.classList.toggle("detected", pinchState.active && pinchState.lastDirection === "up");
-      if (cardPinchDown) cardPinchDown.classList.toggle("detected", pinchState.active && pinchState.lastDirection === "down");
-      if (cardPinchRelease) cardPinchRelease.classList.toggle("detected", !pinchState.active && isDrawerOpen);
+      if (cardSaveExit) cardSaveExit.classList.toggle("detected", !!isStartPoseDetected && isDrawerOpenNow);
+      if (cardArmUp) cardArmUp.classList.toggle("detected", !!isArmUp && isDrawerOpenNow);
+      if (cardArmDown) cardArmDown.classList.toggle("detected", !!isArmDown && isDrawerOpenNow);
+      if (cardArmOutside) cardArmOutside.classList.toggle("detected", !!isArmOutside && isDrawerOpenNow);
 
       requestAnimationFrame(gameLoop);
     }
