@@ -3,344 +3,506 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pose Matcher: Hole in the Wall</title>
+  <title>FlexScape • Home Portal</title>
+  <meta name="description" content="FlexScape - Next-Gen Motion Flow & Study Wellness. Choose between FlexScape Room (Vision AI Game) or FlexScape Mobile Web Companion.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Zen+Dots&display=swap" rel="stylesheet">
+
   <style>
+    /* ==========================================================================
+       Design System & Variables
+       ========================================================================== */
     :root {
-      --bg: #0f172a;
-      --card-bg: #1e293b;
-      --accent: #38bdf8;
-      --success: #22c55e;
-      --text: #f8fafc;
+      --primary-cyan: #30DFF2;
+      --primary-lime: #C7FD05;
+      --primary-pink: #FF3FAB;
+      --primary-teal: #2C735F;
+      --cream-light: #FFF4ED;
+      
+      --bg-dark: #070B12;
+      --bg-surface: #0E1626;
+      --bg-card: rgba(16, 26, 46, 0.75);
+      --bg-card-hover: rgba(22, 36, 64, 0.9);
+      
+      --border-glass: rgba(255, 255, 255, 0.12);
+      --border-cyan: rgba(48, 223, 242, 0.4);
+      --border-lime: rgba(199, 253, 5, 0.4);
+      
+      --text-main: #FFFFFF;
+      --text-muted: #94A3B8;
+      --text-dim: #64748B;
+      
+      --radius-sm: 12px;
+      --radius-md: 20px;
+      --radius-lg: 32px;
+      --radius-pill: 9999px;
+      
+      --font-display: 'Outfit', sans-serif;
+      --font-digital: 'Zen Dots', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
-      margin: 0;
-      padding: 20px;
-      background: var(--bg);
-      color: var(--text);
-      font-family: system-ui, -apple-system, sans-serif;
+      font-family: var(--font-body);
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      box-sizing: border-box;
-    }
-
-    h1 {
-      margin: 0 0 10px 0;
-      font-size: 1.8rem;
-    }
-
-    .container {
+      justify-content: center;
       position: relative;
-      width: 640px;
-      height: 480px;
-      border-radius: 12px;
-      overflow: hidden;
-      box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.5);
-      background: var(--card-bg);
+      overflow-x: hidden;
+      padding: 40px 20px;
     }
 
-    video, canvas {
-      position: absolute;
+    /* Ambient Animated Mesh Background */
+    .ambient-bg {
+      position: fixed;
       top: 0;
       left: 0;
-      width: 640px;
-      height: 480px;
-      transform: scaleX(-1); /* Mirror camera for natural movement */
-    }
-
-    #ui-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       pointer-events: none;
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      padding: 20px;
-      box-sizing: border-box;
-    }
-
-    .hud-header {
-      display: flex;
-      justify-content: space-between;
-      font-size: 1.2rem;
-      font-weight: bold;
-      background: rgba(15, 23, 42, 0.75);
-      padding: 10px 20px;
-      border-radius: 8px;
-      backdrop-filter: blur(4px);
-    }
-
-    .progress-bar-container {
-      width: 100%;
-      height: 16px;
-      background: rgba(255, 255, 255, 0.2);
-      border-radius: 8px;
+      z-index: 0;
       overflow: hidden;
-      margin-top: 10px;
     }
 
-    .progress-bar {
-      width: 0%;
-      height: 100%;
-      background: var(--success);
-      transition: width 0.1s linear;
-    }
-
-    .status-badge {
-      align-self: center;
-      font-size: 1.5rem;
-      font-weight: 800;
-      padding: 8px 16px;
-      border-radius: 20px;
-      background: rgba(15, 23, 42, 0.8);
-      color: var(--accent);
-      text-transform: uppercase;
-      letter-spacing: 1px;
-    }
-
-    #start-btn {
+    .ambient-orb {
       position: absolute;
-      top: 50%;
+      border-radius: 50%;
+      filter: blur(120px);
+      opacity: 0.28;
+      animation: floatOrb 12s ease-in-out infinite alternate;
+    }
+
+    .orb-1 {
+      width: 500px;
+      height: 500px;
+      background: radial-gradient(circle, var(--primary-cyan), transparent);
+      top: -100px;
+      left: -100px;
+    }
+
+    .orb-2 {
+      width: 450px;
+      height: 450px;
+      background: radial-gradient(circle, var(--primary-lime), transparent);
+      bottom: -80px;
+      right: -80px;
+      animation-delay: -4s;
+    }
+
+    .orb-3 {
+      width: 400px;
+      height: 400px;
+      background: radial-gradient(circle, var(--primary-pink), transparent);
+      top: 40%;
       left: 50%;
       transform: translate(-50%, -50%);
-      padding: 16px 32px;
-      font-size: 1.2rem;
-      font-weight: bold;
-      color: white;
-      background: var(--accent);
-      border: none;
-      border-radius: 8px;
-      cursor: pointer;
-      box-shadow: 0 4px 14px rgba(56, 189, 248, 0.4);
-      transition: transform 0.1s ease;
+      opacity: 0.16;
+      animation-delay: -8s;
     }
 
-    #start-btn:hover {
-      transform: translate(-50%, -50%) scale(1.05);
+    @keyframes floatOrb {
+      0% { transform: translateY(0) scale(1); }
+      100% { transform: translateY(50px) scale(1.15); }
+    }
+
+    /* Background Cyber Grid */
+    .cyber-grid {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 50px 50px;
+      pointer-events: none;
+      z-index: 1;
+    }
+
+    /* Main Container */
+    .portal-main-wrapper {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      max-width: 1100px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    /* Brand Header */
+    .brand-hero-section {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 48px;
+    }
+
+    .brand-logo-container {
+      width: 96px;
+      height: 112px;
+      margin-bottom: 20px;
+      filter: drop-shadow(0 12px 28px rgba(48, 223, 242, 0.4));
+      animation: gentleFloat 5s ease-in-out infinite;
+    }
+
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .brand-title {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      background: linear-gradient(135deg, #FFFFFF 30%, var(--primary-cyan) 70%, var(--primary-lime) 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 12px;
+    }
+
+    .brand-subtitle-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 16px;
+      background: rgba(48, 223, 242, 0.1);
+      border: 1px solid var(--border-cyan);
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--primary-cyan);
+      margin-bottom: 16px;
+    }
+
+    .brand-description {
+      max-width: 580px;
+      font-size: 17px;
+      line-height: 1.6;
+      color: var(--text-muted);
+    }
+
+    /* Cards Grid */
+    .experience-cards-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 28px;
+      width: 100%;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 820px) {
+      .experience-cards-grid {
+        grid-template-columns: 1fr;
+        max-width: 520px;
+      }
+      .brand-title {
+        font-size: 42px;
+      }
+    }
+
+    /* Experience Card */
+    .experience-card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-glass);
+      border-radius: var(--radius-lg);
+      padding: 36px 32px;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      backdrop-filter: blur(20px);
+      text-decoration: none;
+      color: inherit;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+    }
+
+    .experience-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 4px;
+      background: linear-gradient(90deg, var(--card-accent), transparent);
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .experience-card:hover {
+      background: var(--bg-card-hover);
+      transform: translateY(-8px) scale(1.015);
+      border-color: var(--card-accent);
+      box-shadow: 0 24px 50px rgba(0, 0, 0, 0.45), 0 0 30px var(--card-glow);
+    }
+
+    .experience-card:hover::before {
+      opacity: 1;
+    }
+
+    /* Room Theme Accent */
+    .card-room {
+      --card-accent: #30DFF2;
+      --card-glow: rgba(48, 223, 242, 0.25);
+    }
+
+    /* Mobile Theme Accent */
+    .card-mobile {
+      --card-accent: #C7FD05;
+      --card-glow: rgba(199, 253, 5, 0.25);
+    }
+
+    .card-top-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      border-radius: var(--radius-pill);
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 20px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-glass);
+      color: var(--card-accent);
+    }
+
+    .card-icon-emblem {
+      width: 64px;
+      height: 64px;
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border-glass);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 30px;
+      margin-bottom: 20px;
+      transition: transform 0.3s ease;
+    }
+
+    .experience-card:hover .card-icon-emblem {
+      transform: scale(1.1) rotate(4deg);
+      border-color: var(--card-accent);
+    }
+
+    .card-title {
+      font-family: var(--font-display);
+      font-size: 28px;
+      font-weight: 800;
+      color: #FFFFFF;
+      margin-bottom: 12px;
+    }
+
+    .card-desc {
+      font-size: 15px;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: 24px;
+      flex-grow: 1;
+    }
+
+    /* Tags Row */
+    .card-tags-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 28px;
+    }
+
+    .card-pill-tag {
+      padding: 4px 10px;
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 8px;
+      font-size: 12px;
+      color: #E2E8F0;
+      font-weight: 500;
+    }
+
+    /* Action Button inside Card */
+    .card-action-btn {
+      width: 100%;
+      height: 52px;
+      background: var(--card-accent);
+      color: #070B12;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 700;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      transition: all 0.25s ease;
+    }
+
+    .experience-card:hover .card-action-btn {
+      box-shadow: 0 8px 20px var(--card-glow);
+      transform: translateY(-2px);
+    }
+
+    /* Footer Key Hint */
+    .portal-footer {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      font-size: 13px;
+      color: var(--text-dim);
+    }
+
+    .key-badge {
+      display: inline-block;
+      padding: 2px 8px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-glass);
+      border-radius: 6px;
+      font-family: var(--font-digital);
+      font-size: 11px;
+      color: #FFFFFF;
     }
   </style>
-
-  <!-- Load MediaPipe Tasks Vision -->
-  <script src="https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0"></script>
 </head>
 <body>
 
-  <h1>Hole in the Wall: Pose Matcher</h1>
-
-  <div class="container">
-    <video id="webcam" autoplay playsinline></video>
-    <canvas id="output_canvas"></canvas>
-
-    <div id="ui-overlay">
-      <div class="hud-header">
-        <span id="stage-text">Stage: 1/3</span>
-        <span id="target-name">Target: T-Pose</span>
-      </div>
-      
-      <div class="status-badge" id="status-text">Get Ready</div>
-
-      <div>
-        <div class="progress-bar-container">
-          <div class="progress-bar" id="hold-progress"></div>
-        </div>
-      </div>
-    </div>
-
-    <button id="start-btn">Start Game</button>
+  <!-- Background Orbs -->
+  <div class="ambient-bg">
+    <div class="ambient-orb orb-1"></div>
+    <div class="ambient-orb orb-2"></div>
+    <div class="ambient-orb orb-3"></div>
   </div>
+  <div class="cyber-grid"></div>
 
-  <script type="module">
-    import {
-      PoseLandmarker,
-      FilesetResolver,
-      DrawingUtils
-    } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0";
+  <!-- Main Portal Section -->
+  <main class="portal-main-wrapper">
+    
+    <!-- Hero Brand Header -->
+    <header class="brand-hero-section">
+      <div class="brand-logo-container">
+        <svg viewBox="0 0 120 140" fill="none" style="width: 100%; height: 100%;">
+          <path d="M 18 38 C 18 16, 44 6, 70 14 C 82 18, 90 26, 92 36" stroke="#30DFF2" stroke-width="14" stroke-linecap="round" fill="none"/>
+          <circle cx="34" cy="30" r="12" fill="#FFF4ED"/>
+          <path d="M 24 38 C 22 52, 22 70, 36 78 C 48 84, 62 80, 68 68 C 70 60, 60 52, 48 50 C 38 48, 32 40, 30 36 Z" fill="#FFF4ED"/>
+          <path d="M 42 46 C 48 30, 74 26, 94 38" stroke="#C7FD05" stroke-width="14" stroke-linecap="round" fill="none"/>
+          <path d="M 18 94 C 18 122, 54 128, 76 108 C 84 100, 84 84, 76 74" stroke="#FF3FAB" stroke-width="14" stroke-linecap="round" fill="none"/>
+          <path d="M 76 64 C 92 66, 108 78, 108 94 C 108 110, 96 124, 84 126" stroke="#2C735F" stroke-width="14" stroke-linecap="round" fill="none"/>
+        </svg>
+      </div>
 
-    const video = document.getElementById("webcam");
-    const canvas = document.getElementById("output_canvas");
-    const ctx = canvas.getContext("2d");
-    const startBtn = document.getElementById("start-btn");
-    const stageText = document.getElementById("stage-text");
-    const targetNameText = document.getElementById("target-name");
-    const statusText = document.getElementById("status-text");
-    const progressBar = document.getElementById("hold-progress");
+      <div class="brand-subtitle-tag">
+        <span>✨ Next-Gen Interaction Design</span>
+      </div>
 
-    let poseLandmarker;
-    let runningMode = "VIDEO";
-    let lastVideoTime = -1;
-    let currentPose = null;
+      <h1 class="brand-title">FlexScape</h1>
+      <p class="brand-description">
+        Choose your experience: Launch the camera-based Vision AI posture tracking game room, or open the mobile study stopwatch and break companion.
+      </p>
+    </header>
 
-    // Game state setup
-    const HOLD_DURATION_MS = 3000;
-    let currentStageIndex = 0;
-    let holdStartTime = null;
-    let isGameActive = false;
+    <!-- 2 Main Interactive Experience Cards -->
+    <section class="experience-cards-grid">
 
-    // Define target poses with geometric checking rules
-    const POSES = [
-      {
-        name: "T-Pose",
-        check: (landmarks) => {
-          const lShoulder = landmarks[11], rShoulder = landmarks[12];
-          const lElbow = landmarks[13], rElbow = landmarks[14];
-          const lWrist = landmarks[15], rWrist = landmarks[16];
-
-          // Check if arms are raised horizontally (wrists aligned near shoulders vertically)
-          const lArmHorizontal = Math.abs(lWrist.y - lShoulder.y) < 0.15;
-          const rArmHorizontal = Math.abs(rWrist.y - rShoulder.y) < 0.15;
-          // Check extension outwards
-          const lExtended = lWrist.x < lShoulder.x;
-          const rExtended = rWrist.x > rShoulder.x;
-
-          return lArmHorizontal && rArmHorizontal && lExtended && rExtended;
-        }
-      },
-      {
-        name: "Hands Up",
-        check: (landmarks) => {
-          const lShoulder = landmarks[11], rShoulder = landmarks[12];
-          const lWrist = landmarks[15], rWrist = landmarks[16];
-
-          // Both wrists well above shoulders
-          return lWrist.y < (lShoulder.y - 0.2) && rWrist.y < (rShoulder.y - 0.2);
-        }
-      },
-      {
-        name: "Right Arm Up",
-        check: (landmarks) => {
-          const lShoulder = landmarks[11], rShoulder = landmarks[12];
-          const lWrist = landmarks[15], rWrist = landmarks[16];
-
-          // Right wrist above shoulder, left wrist below shoulder
-          const rUp = rWrist.y < (rShoulder.y - 0.2);
-          const lDown = lWrist.y > lShoulder.y;
-
-          return rUp && lDown;
-        }
-      }
-    ];
-
-    // Initialize MediaPipe PoseLandmarker
-    async function initPoseLandmarker() {
-      statusText.innerText = "Loading Model...";
-      const vision = await FilesetResolver.forVisionTasks(
-        "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.0/wasm"
-      );
-      poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
-        baseOptions: {
-          modelAssetPath: `https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task`,
-          delegate: "GPU"
-        },
-        runningMode: runningMode,
-        numPoses: 1
-      });
-      statusText.innerText = "Ready";
-    }
-
-    initPoseLandmarker();
-
-    // Start webcam stream
-    startBtn.addEventListener("click", async () => {
-      if (!poseLandmarker) return;
-
-      const stream = await navigator.mediaDevices.getUserMedia({
-        video: { width: 640, height: 480 }
-      });
-      video.srcObject = stream;
-      
-      video.addEventListener("loadeddata", () => {
-        canvas.width = video.videoWidth;
-        canvas.height = video.videoHeight;
-        startBtn.style.display = "none";
-        isGameActive = true;
-        resetGame();
-        renderLoop();
-      });
-    });
-
-    function resetGame() {
-      currentStageIndex = 0;
-      holdStartTime = null;
-      updateUI();
-    }
-
-    function updateUI() {
-      stageText.innerText = `Stage: ${currentStageIndex + 1}/${POSES.length}`;
-      targetNameText.innerText = `Target: ${POSES[currentStageIndex].name}`;
-    }
-
-    function renderLoop() {
-      // Process video frame
-      if (video.currentTime !== lastVideoTime) {
-        lastVideoTime = video.currentTime;
-        const results = poseLandmarker.detectForVideo(video, performance.now());
+      <!-- Card 1: FlexScape Room (Game) -->
+      <a href="room.html" class="experience-card card-room" id="card-room" title="Launch FlexScape Room (Vision AI Game)">
+        <div class="card-top-badge">
+          <span>🌌 Motion Tracking • Vision AI</span>
+        </div>
         
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        <div class="card-icon-emblem">
+          <span>🧘</span>
+        </div>
 
-        if (results.landmarks && results.landmarks.length > 0) {
-          const landmarks = results.landmarks[0];
-          currentPose = landmarks;
+        <h2 class="card-title">FlexScape Room (Game)</h2>
+        <p class="card-desc">
+          Enter the full-body posture tracking space. Match stretch poses in real-time, view glowing cyber body outlines, and control settings with in-air hand gestures.
+        </p>
 
-          // Draw pose skeleton overlay
-          const drawingUtils = new DrawingUtils(ctx);
-          drawingUtils.drawConnectors(landmarks, PoseLandmarker.POSE_CONNECTIONS, {
-            color: "#38bdf8",
-            lineWidth: 3
-          });
-          drawingUtils.drawLandmarks(landmarks, {
-            color: "#22c55e",
-            radius: 4
-          });
-        } else {
-          currentPose = null;
-        }
+        <div class="card-tags-row">
+          <span class="card-pill-tag">✨ Body Outline Mode</span>
+          <span class="card-pill-tag">⏱️ 4s Hold + 1s Rating</span>
+          <span class="card-pill-tag">🤲 0.8s Settings Gesture</span>
+          <span class="card-pill-tag">⚡ 1, 5, 10 Min Workouts</span>
+        </div>
+
+        <div class="card-action-btn">
+          <span>Enter Game Room</span>
+          <span>➔</span>
+        </div>
+      </a>
+
+      <!-- Card 2: FlexScape Mobile Web Companion -->
+      <a href="mobile.html" class="experience-card card-mobile" id="card-mobile" title="Launch FlexScape Mobile Web Companion">
+        <div class="card-top-badge">
+          <span>📱 Study Companion • 3 Pages</span>
+        </div>
+
+        <div class="card-icon-emblem">
+          <span>⏱️</span>
+        </div>
+
+        <h2 class="card-title">FlexScape Mobile</h2>
+        <p class="card-desc">
+          Stay focused during study sessions with smart break intervals. Features a digital stopwatch, 0–59 custom sliding interval wheel, break launcher, and session statistics.
+        </p>
+
+        <div class="card-tags-row">
+          <span class="card-pill-tag">🔢 Custom 00:00 Slider</span>
+          <span class="card-pill-tag">⏱️ Study Stopwatch</span>
+          <span class="card-pill-tag">☕ Break Modal</span>
+          <span class="card-pill-tag">📊 Session Stats</span>
+        </div>
+
+        <div class="card-action-btn">
+          <span>Open Mobile App</span>
+          <span>➔</span>
+        </div>
+      </a>
+
+    </section>
+
+    <!-- Footer Shortcuts -->
+    <footer class="portal-footer">
+      <span>Press <span class="key-badge">1</span> for Game Room</span>
+      <span>•</span>
+      <span>Press <span class="key-badge">2</span> for Mobile App</span>
+    </footer>
+
+  </main>
+
+  <script>
+    // Keyboard Navigation Shortcuts
+    window.addEventListener("keydown", (e) => {
+      if (e.key === "1") {
+        window.location.href = "room.html";
+      } else if (e.key === "2") {
+        window.location.href = "mobile.html";
       }
-
-      // Game Logic Processing
-      if (isGameActive && currentStageIndex < POSES.length) {
-        const targetPose = POSES[currentStageIndex];
-        const isMatching = currentPose ? targetPose.check(currentPose) : false;
-
-        if (isMatching) {
-          if (!holdStartTime) holdStartTime = performance.now();
-          
-          const elapsed = performance.now() - holdStartTime;
-          const progressRatio = Math.min(elapsed / HOLD_DURATION_MS, 1);
-          
-          progressBar.style.width = `${progressRatio * 100}%`;
-          statusText.innerText = "HOLD POSE!";
-          statusText.style.color = "#22c55e";
-
-          if (elapsed >= HOLD_DURATION_MS) {
-            // Stage Completed
-            currentStageIndex++;
-            holdStartTime = null;
-            progressBar.style.width = "0%";
-
-            if (currentStageIndex >= POSES.length) {
-              isGameActive = false;
-              statusText.innerText = "YOU WIN!";
-              statusText.style.color = "#38bdf8";
-            } else {
-              updateUI();
-            }
-          }
-        } else {
-          // Reset progress if pose is broken
-          holdStartTime = null;
-          progressBar.style.width = "0%";
-          statusText.innerText = "MATCH THE POSE";
-          statusText.style.color = "#f8fafc";
-        }
-      }
-
-      requestAnimationFrame(renderLoop);
-    }
+    });
   </script>
+
 </body>
 </html>

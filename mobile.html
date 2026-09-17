@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>FlexScape Mobile • Study & Motion Flow</title>
+  <meta name="description" content="FlexScape Mobile - Study Stopwatch, Custom Break Intervals, and Session Statistics.">
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+
+  <!-- Google Fonts: Outfit, Zen Dots, Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Zen+Dots&display=swap" rel="stylesheet">
+
+  <style>
+    /* ==========================================================================
+       CSS Design System & Variables
+       ========================================================================== */
+    :root {
+      --primary-cyan: #30DFF2;
+      --primary-lime: #C7FD05;
+      --primary-pink: #FF3FAB;
+      --primary-teal: #2C735F;
+      --cream-light: #FFF4ED;
+      
+      --bg-main: #FFFFFF;
+      --bg-card: #FFFFFF;
+      --bg-modal: #FFFFFF;
+      
+      --btn-dark: #2C2C2E;
+      --btn-dark-hover: #1C1C1E;
+      --btn-dark-active: #0A0A0C;
+      --btn-break-green: #059669;
+      --btn-break-green-hover: #047857;
+      
+      --text-main: #111827;
+      --text-muted: #6B7280;
+      --text-dim: #9CA3AF;
+      --border-light: rgba(0, 0, 0, 0.08);
+      --border-focus: #30DFF2;
+      
+      --radius-pill: 9999px;
+      --radius-btn: 18px;
+      --radius-modal: 28px;
+      
+      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
+      --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
+      --shadow-btn: 0 6px 18px rgba(0, 0, 0, 0.16);
+      --shadow-glow: 0 0 20px rgba(48, 223, 242, 0.35);
+      
+      --font-display: 'Outfit', sans-serif;
+      --font-digital: 'Zen Dots', sans-serif;
+      --font-body: 'Inter', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+    }
+
+    html, body {
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: var(--font-body);
+    }
+
+    body {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      position: relative;
+    }
+
+    /* Ambient Soft Lighting */
+    .ambient-glow {
+      position: fixed;
+      width: 600px;
+      height: 600px;
+      border-radius: 50%;
+      background: radial-gradient(circle, rgba(48, 223, 242, 0.06), transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* Top Floating Fullscreen Button */
+    .top-floating-bar {
+      position: fixed;
+      top: 16px;
+      right: 20px;
+      z-index: 100;
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+
+    .fullscreen-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.9);
+      border: 1px solid var(--border-light);
+      box-shadow: var(--shadow-sm);
+      color: #1F2937;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+      backdrop-filter: blur(8px);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .fullscreen-btn:hover {
+      background: #FFFFFF;
+      transform: scale(1.08);
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+      color: #000;
+    }
+
+    .fullscreen-btn:active {
+      transform: scale(0.95);
+    }
+
+    /* Fullscreen Viewport & Centered Container */
+    .app-viewport-container {
+      position: relative;
+      z-index: 10;
+      width: 100%;
+      height: 100%;
+      max-width: 900px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 24px;
+    }
+
+    /* Common Page Base */
+    .app-page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 24px;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.96);
+      transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1), transform 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .app-page.active {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+      z-index: 20;
+    }
+
+    /* ==========================================================================
+       PAGE 1: HOME (Start Screen)
+       ========================================================================== */
+    .page1-content-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .brand-hero-logo {
+      width: 76px;
+      height: 88px;
+      margin-bottom: 14px;
+      filter: drop-shadow(0 8px 18px rgba(48, 223, 242, 0.25));
+      animation: gentleFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes gentleFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-5px); }
+    }
+
+    .page1-title {
+      font-family: var(--font-display);
+      font-size: 42px;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      color: #111827;
+      margin-bottom: 32px;
+    }
+
+    /* Universal Button Styling (Same font size 16px) */
+    .btn-main-dark {
+      width: 220px;
+      height: 56px;
+      background: var(--btn-dark);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-shadow: var(--shadow-btn);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      margin-bottom: 24px;
+    }
+
+    .btn-main-dark:not(:disabled):hover {
+      background: var(--btn-dark-hover);
+      transform: translateY(-2px) scale(1.02);
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+    }
+
+    .btn-main-dark:not(:disabled):active {
+      transform: translateY(1px) scale(0.98);
+    }
+
+    .btn-main-dark:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* 3 Mini Options Row */
+    .mini-options-row {
+      display: flex;
+      gap: 14px;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .mini-option-btn {
+      flex: 1;
+      height: 54px;
+      background: var(--btn-dark);
+      color: #FFFFFF;
+      border: 2px solid transparent;
+      border-radius: var(--radius-btn);
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      touch-action: manipulation;
+    }
+
+    .mini-option-btn:hover {
+      background: var(--btn-dark-hover);
+      transform: translateY(-2px);
+    }
+
+    .mini-option-btn.selected {
+      background: #111827;
+      border-color: var(--primary-cyan);
+      box-shadow: 0 0 18px rgba(48, 223, 242, 0.45);
+      color: #FFFFFF;
+      transform: translateY(-3px) scale(1.04);
+    }
+
+    .mini-option-btn.selected::after {
+      content: '';
+      position: absolute;
+      bottom: 5px;
+      width: 6px;
+      height: 6px;
+      background: var(--primary-cyan);
+      border-radius: 50%;
+    }
+
+    /* ==========================================================================
+       PAGE 2: ACTIVE STUDY & STOPWATCH SCREEN
+       ========================================================================== */
+    .page2-content-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .stopwatch-digital-display {
+      font-family: var(--font-digital);
+      font-size: 52px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: #111827;
+      margin-bottom: 8px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stopwatch-countdown-subtitle {
+      font-family: var(--font-display);
+      font-size: 17px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 40px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      background: #10B981;
+      border-radius: 50%;
+      animation: pulseGlow 1.5s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0% { transform: scale(0.9); opacity: 0.7; }
+      50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 10px #10B981; }
+      100% { transform: scale(0.9); opacity: 0.7; }
+    }
+
+    .page2-btn-group {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      width: 100%;
+      max-width: 260px;
+    }
+
+    .page2-btn {
+      width: 100%;
+      height: 54px;
+      background: var(--btn-dark);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      box-shadow: var(--shadow-btn);
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .page2-btn:hover {
+      background: var(--btn-dark-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
+    }
+
+    .page2-btn:active {
+      transform: translateY(1px);
+    }
+
+    /* Back from Break Active State */
+    .page2-btn.in-break-state {
+      background: var(--btn-break-green);
+      box-shadow: 0 6px 18px rgba(5, 150, 105, 0.3);
+    }
+
+    .page2-btn.in-break-state:hover {
+      background: var(--btn-break-green-hover);
+    }
+
+    /* Active Break Pill */
+    .break-active-hud {
+      display: none;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 18px;
+      background: rgba(5, 150, 105, 0.12);
+      border: 1px solid var(--btn-break-green);
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      color: #047857;
+      margin-bottom: 20px;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .break-active-hud.show {
+      display: flex;
+    }
+
+    /* ==========================================================================
+       PAGE 3: STATISTIC PAGE (Image 2)
+       ========================================================================== */
+    .page3-content-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      max-width: 440px;
+    }
+
+    .stat-header-label {
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+    }
+
+    .stat-big-time-display {
+      font-family: var(--font-digital);
+      font-size: 48px;
+      font-weight: 700;
+      letter-spacing: -1px;
+      color: #111827;
+      margin-bottom: 10px;
+      font-variant-numeric: tabular-nums;
+    }
+
+    .stat-breaks-summary {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 36px;
+    }
+
+    .stat-time-columns-card {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      max-width: 280px;
+      margin-bottom: 40px;
+      padding: 0 10px;
+    }
+
+    .stat-col {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .stat-col-title {
+      font-family: var(--font-display);
+      font-size: 14px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 6px;
+    }
+
+    .stat-col-time {
+      font-family: var(--font-display);
+      font-size: 18px;
+      font-weight: 500;
+      color: #374151;
+    }
+
+    /* ==========================================================================
+       CENTER POPUP MODAL: CUSTOM DIGITAL TIME SLIDER (0 to 59)
+       ========================================================================== */
+    .modal-backdrop-center {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background: rgba(0, 0, 0, 0.45);
+      backdrop-filter: blur(8px);
+      z-index: 200;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .modal-backdrop-center.open {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card-center {
+      background: var(--bg-modal);
+      border-radius: var(--radius-modal);
+      width: 100%;
+      max-width: 380px;
+      padding: 30px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      transform: scale(0.9);
+      transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+
+    .modal-backdrop-center.open .modal-card-center {
+      transform: scale(1);
+    }
+
+    .modal-title-center {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 700;
+      color: #111827;
+      margin-bottom: 18px;
+    }
+
+    /* Digital "00:00" Hero Display */
+    .digital-picker-hero {
+      font-family: var(--font-digital);
+      font-size: 46px;
+      font-weight: 700;
+      color: #111827;
+      background: #F3F4F6;
+      border: 2px solid var(--primary-cyan);
+      box-shadow: 0 0 16px rgba(48, 223, 242, 0.35);
+      border-radius: 20px;
+      padding: 10px 24px;
+      margin-bottom: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* Touch Slidable Columns */
+    .touch-slide-columns-wrap {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 16px;
+      width: 100%;
+      margin-bottom: 24px;
+    }
+
+    .slide-unit-box {
+      flex: 1;
+      background: #F9FAFB;
+      border: 1.5px solid #E5E7EB;
+      border-radius: 20px;
+      padding: 12px 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      touch-action: none;
+      cursor: ns-resize;
+      transition: border-color 0.2s ease, background 0.2s ease;
+    }
+
+    .slide-unit-box.dragging {
+      border-color: var(--primary-cyan);
+      background: #F0FDFA;
+    }
+
+    .slide-unit-label {
+      font-family: var(--font-display);
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      color: var(--text-muted);
+      margin-bottom: 6px;
+      letter-spacing: 0.5px;
+    }
+
+    .slide-stepper-btn {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #FFFFFF;
+      border: 1px solid #E5E7EB;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 14px;
+      font-weight: 700;
+      color: #111;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.15s ease;
+    }
+
+    .slide-stepper-btn:hover {
+      background: var(--primary-cyan);
+      border-color: var(--primary-cyan);
+      color: #000;
+      transform: scale(1.1);
+    }
+
+    .slide-number-window {
+      height: 70px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: var(--font-digital);
+      font-size: 34px;
+      font-weight: 700;
+      color: #111827;
+      margin: 4px 0;
+      user-select: none;
+    }
+
+    @keyframes screenVibration {
+      0% { transform: translate(0, 0); }
+      15% { transform: translate(-4px, 3px); }
+      30% { transform: translate(4px, -3px); }
+      45% { transform: translate(-3px, -2px); }
+      60% { transform: translate(3px, 2px); }
+      75% { transform: translate(-2px, 1px); }
+      90% { transform: translate(2px, -1px); }
+      100% { transform: translate(0, 0); }
+    }
+
+    .vibrate-alert-pulse {
+      animation: screenVibration 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
+    }
+
+    .modal-btn-confirm {
+      width: 100%;
+      height: 52px;
+      background: var(--btn-dark);
+      color: #FFFFFF;
+      border: none;
+      border-radius: var(--radius-pill);
+      font-family: var(--font-display);
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: var(--shadow-btn);
+      transition: all 0.2s ease;
+    }
+
+    .modal-btn-confirm:hover {
+      background: var(--btn-dark-hover);
+      transform: translateY(-2px);
+    }
+
+
+
+    /* ==========================================================================
+       RESPONSIVE LANDSCAPE STYLING (HORIZONTAL PHONE SCREENS)
+       ========================================================================== */
+    @media (max-height: 520px) and (orientation: landscape) {
+      .app-viewport-container {
+        padding: 12px 20px;
+      }
+
+      .page1-content-box,
+      .page2-content-box,
+      .page3-content-box {
+        max-width: 640px;
+      }
+
+      .brand-hero-logo {
+        width: 48px;
+        height: 56px;
+        margin-bottom: 6px;
+      }
+
+      .page1-title {
+        font-size: 28px;
+        margin-bottom: 14px;
+      }
+
+      .btn-main-dark {
+        height: 48px;
+        width: 190px;
+        margin-bottom: 12px;
+      }
+
+      .mini-options-row {
+        max-width: 420px;
+        gap: 10px;
+      }
+
+      .mini-option-btn {
+        height: 44px;
+      }
+
+      .stopwatch-digital-display {
+        font-size: 38px;
+        margin-bottom: 4px;
+      }
+
+      .stopwatch-countdown-subtitle {
+        font-size: 14px;
+        margin-bottom: 16px;
+      }
+
+      .page2-btn-group {
+        flex-direction: row;
+        max-width: 420px;
+        gap: 12px;
+      }
+
+      .page2-btn {
+        height: 46px;
+      }
+
+      .stat-big-time-display {
+        font-size: 36px;
+        margin-bottom: 4px;
+      }
+
+      .stat-breaks-summary {
+        font-size: 15px;
+        margin-bottom: 14px;
+      }
+
+      .stat-time-columns-card {
+        margin-bottom: 16px;
+      }
+
+      .modal-card-center {
+        padding: 18px 20px;
+        max-width: 420px;
+      }
+
+      .digital-picker-hero {
+        font-size: 34px;
+        padding: 6px 16px;
+        margin-bottom: 12px;
+      }
+
+      .touch-slide-columns-wrap {
+        margin-bottom: 14px;
+      }
+
+      .slide-number-window {
+        height: 44px;
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow"></div>
+
+  <!-- Top Floating Fullscreen Button -->
+  <aside class="top-floating-bar">
+    <button class="fullscreen-btn" id="fullscreen-btn" title="Toggle Fullscreen">
+      <svg id="fs-icon-expand" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
+      </svg>
+      <svg id="fs-icon-compress" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
+        <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
+      </svg>
+    </button>
+  </aside>
+
+  <!-- App Main Centered Container -->
+  <main class="app-viewport-container">
+
+    <!-- ==========================================================================
+         PAGE 1: HOME (Start Screen)
+         ========================================================================== -->
+    <article class="app-page active" id="page-home">
+      <div class="page1-content-box">
+        <!-- FlexScape Brand Vector Emblem -->
+        <svg class="brand-hero-logo" viewBox="0 0 120 140" fill="none">
+          <path d="M 18 38 C 18 16, 44 6, 70 14 C 82 18, 90 26, 92 36" stroke="#30DFF2" stroke-width="14" stroke-linecap="round" fill="none"/>
+          <circle cx="34" cy="30" r="12" fill="#FFF4ED"/>
+          <path d="M 24 38 C 22 52, 22 70, 36 78 C 48 84, 62 80, 68 68 C 70 60, 60 52, 48 50 C 38 48, 32 40, 30 36 Z" fill="#FFF4ED"/>
+          <path d="M 42 46 C 48 30, 74 26, 94 38" stroke="#C7FD05" stroke-width="14" stroke-linecap="round" fill="none"/>
+          <path d="M 18 94 C 18 122, 54 128, 76 108 C 84 100, 84 84, 76 74" stroke="#FF3FAB" stroke-width="14" stroke-linecap="round" fill="none"/>
+          <path d="M 76 64 C 92 66, 108 78, 108 94 C 108 110, 96 124, 84 126" stroke="#2C735F" stroke-width="14" stroke-linecap="round" fill="none"/>
+        </svg>
+
+        <h1 class="page1-title">FlexScape</h1>
+
+        <!-- Start Button (Disabled until interval selected) -->
+        <button class="btn-main-dark" id="home-start-btn" disabled>
+          Start
+        </button>
+
+        <!-- 3 Mini Option Buttons (Same text size) -->
+        <div class="mini-options-row">
+          <button class="mini-option-btn" id="btn-opt-5s" data-seconds="5">
+            5 sec
+          </button>
+
+          <button class="mini-option-btn" id="btn-opt-30s" data-seconds="30">
+            30 sec
+          </button>
+
+          <button class="mini-option-btn" id="btn-opt-custom">
+            Custom
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         PAGE 2: ACTIVE STUDY & STOPWATCH SCREEN
+         ========================================================================== -->
+    <article class="app-page" id="page-study">
+      <div class="page2-content-box">
+        
+        <!-- Active Break HUD Indicator -->
+        <div class="break-active-hud" id="break-hud">
+          <span>☕ Short break active</span>
+          <span id="break-hud-timer" style="font-family: var(--font-digital); font-weight: 700;">00:00</span>
+        </div>
+
+        <!-- Center Digital Stopwatch -->
+        <div class="stopwatch-digital-display" id="study-stopwatch">
+          00:00:00
+        </div>
+
+        <!-- Countdown Subtitle -->
+        <div class="stopwatch-countdown-subtitle" id="countdown-subtitle">
+          <span class="pulse-dot"></span>
+          <span id="countdown-text">Break in 30 seconds</span>
+        </div>
+
+        <!-- Action Buttons -->
+        <div class="page2-btn-group">
+          <button class="page2-btn" id="break-action-btn">
+            <span id="break-btn-icon">☕</span>
+            <span id="break-btn-text">Break now</span>
+          </button>
+
+          <button class="page2-btn" id="finish-study-btn">
+            Finish study session
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         PAGE 3: STATISTIC PAGE (Image 2)
+         ========================================================================== -->
+    <article class="app-page" id="page-stats">
+      <div class="page3-content-box">
+        <div class="stat-header-label">Full Study time</div>
+        
+        <!-- Big Digital Time Display -->
+        <div class="stat-big-time-display" id="stat-final-time">
+          00:30:23
+        </div>
+
+        <!-- Breaks Summary -->
+        <div class="stat-breaks-summary" id="stat-breaks-text">
+          Taken 2 Break for 10 minutes
+        </div>
+
+        <!-- Start & End Time Columns Card -->
+        <div class="stat-time-columns-card">
+          <div class="stat-col">
+            <div class="stat-col-title">Start time</div>
+            <div class="stat-col-time" id="stat-start-time">08:00 am</div>
+          </div>
+          <div class="stat-col">
+            <div class="stat-col-title">End time</div>
+            <div class="stat-col-time" id="stat-end-time">04:00 pm</div>
+          </div>
+        </div>
+
+        <!-- Start New Session Button -->
+        <button class="btn-main-dark" id="stat-restart-btn">
+          Start
+        </button>
+      </div>
+    </article>
+
+  </main>
+
+  <!-- ==========================================================================
+       CENTER POPUP MODAL: CUSTOM DIGITAL TIME SLIDER (0 to 59)
+       ========================================================================== -->
+  <div class="modal-backdrop-center" id="custom-modal-backdrop">
+    <div class="modal-card-center">
+      <h2 class="modal-title-center">Custom Break Interval</h2>
+
+      <!-- Digital "00:00" Display -->
+      <div class="digital-picker-hero" id="digital-preview">
+        <span id="preview-mins">00</span>:<span id="preview-secs">30</span>
+      </div>
+
+      <!-- Touch Slidable Columns (Minutes & Seconds 0 to 59) -->
+      <div class="touch-slide-columns-wrap">
+        
+        <!-- Minutes Slide Box -->
+        <div class="slide-unit-box" id="slide-box-mins" title="Drag up or down to adjust minutes">
+          <span class="slide-unit-label">Minutes</span>
+          <button class="slide-stepper-btn" id="btn-min-up">▲</button>
+          <div class="slide-number-window" id="display-mins">00</div>
+          <button class="slide-stepper-btn" id="btn-min-down">▼</button>
+        </div>
+
+        <!-- Colon -->
+        <div style="font-family: var(--font-digital); font-size: 28px; font-weight: 700; color: #9CA3AF;">:</div>
+
+        <!-- Seconds Slide Box -->
+        <div class="slide-unit-box" id="slide-box-secs" title="Drag up or down to adjust seconds">
+          <span class="slide-unit-label">Seconds</span>
+          <button class="slide-stepper-btn" id="btn-sec-up">▲</button>
+          <div class="slide-number-window" id="display-secs">30</div>
+          <button class="slide-stepper-btn" id="btn-sec-down">▼</button>
+        </div>
+
+      </div>
+
+      <button class="modal-btn-confirm" id="btn-confirm-custom">
+        Confirm Interval
+      </button>
+    </div>
+  </div>
+
+
+
+  <!-- Sound Generator & Audio FX -->
+  <script>
+    class WebAudioHelper {
+      constructor() {
+        this.ctx = null;
+      }
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          this.ctx = new AudioContext();
+        }
+        if (this.ctx.state === "suspended") {
+          this.ctx.resume();
+        }
+      }
+      playClick() {
+        this.init();
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(800, this.ctx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.04);
+        gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start();
+        osc.stop(this.ctx.currentTime + 0.04);
+      }
+      playChime() {
+        this.init();
+        const now = this.ctx.currentTime;
+        [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "triangle";
+          osc.frequency.setValueAtTime(freq, now + i * 0.08);
+          gain.gain.setValueAtTime(0.18, now + i * 0.08);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + i * 0.08 + 0.4);
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + i * 0.08);
+          osc.stop(now + i * 0.08 + 0.4);
+        });
+      }
+    }
+    const sound = new WebAudioHelper();
+  </script>
+
+  <!-- Mobile Application Logic -->
+  <script>
+    /* ==========================================================================
+       State Management
+       ========================================================================== */
+    let selectedIntervalSeconds = null; // null until chosen
+    let isStudyActive = false;
+    let isBreakActive = false;
+    
+    let studyStartTime = null;
+    let studyEndTime = null;
+    let studyElapsedMs = 0;
+    let studyTimerInterval = null;
+
+    let countdownRemainingSeconds = 0;
+    
+    let breaksTakenCount = 0;
+    let breakTotalDurationMs = 0;
+    let currentBreakStartTime = null;
+    let breakTimerInterval = null;
+
+    // Custom Picker Values (0 to 59)
+    let customMins = 0;
+    let customSecs = 30;
+
+    /* ==========================================================================
+       DOM Elements
+       ========================================================================== */
+    const pageHome = document.getElementById("page-home");
+    const pageStudy = document.getElementById("page-study");
+    const pageStats = document.getElementById("page-stats");
+
+    const homeStartBtn = document.getElementById("home-start-btn");
+    const btnOpt5s = document.getElementById("btn-opt-5s");
+    const btnOpt30s = document.getElementById("btn-opt-30s");
+    const btnOptCustom = document.getElementById("btn-opt-custom");
+
+    const studyStopwatch = document.getElementById("study-stopwatch");
+    const countdownText = document.getElementById("countdown-text");
+    const breakActionBtn = document.getElementById("break-action-btn");
+    const breakBtnIcon = document.getElementById("break-btn-icon");
+    const breakBtnText = document.getElementById("break-btn-text");
+    const finishStudyBtn = document.getElementById("finish-study-btn");
+    const breakHud = document.getElementById("break-hud");
+    const breakHudTimer = document.getElementById("break-hud-timer");
+
+    const statFinalTime = document.getElementById("stat-final-time");
+    const statBreaksText = document.getElementById("stat-breaks-text");
+    const statStartTime = document.getElementById("stat-start-time");
+    const statEndTime = document.getElementById("stat-end-time");
+    const statRestartBtn = document.getElementById("stat-restart-btn");
+
+    // Fullscreen Controls
+    const fullscreenBtn = document.getElementById("fullscreen-btn");
+    const fsIconExpand = document.getElementById("fs-icon-expand");
+    const fsIconCompress = document.getElementById("fs-icon-compress");
+
+    // Custom Modal
+    const customModalBackdrop = document.getElementById("custom-modal-backdrop");
+    const previewMins = document.getElementById("preview-mins");
+    const previewSecs = document.getElementById("preview-secs");
+    const displayMins = document.getElementById("display-mins");
+    const displaySecs = document.getElementById("display-secs");
+    const slideBoxMins = document.getElementById("slide-box-mins");
+    const btnMinUp = document.getElementById("btn-min-up");
+    const btnMinDown = document.getElementById("btn-min-down");
+    const btnSecUp = document.getElementById("btn-sec-up");
+    const btnSecDown = document.getElementById("btn-sec-down");
+    const btnConfirmCustom = document.getElementById("btn-confirm-custom");
+
+
+
+    /* ==========================================================================
+       Fullscreen API Handler
+       ========================================================================== */
+    function toggleFullscreen() {
+      sound.playClick();
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => console.warn(err));
+      } else {
+        if (document.exitFullscreen) {
+          document.exitFullscreen().catch(err => console.warn(err));
+        }
+      }
+    }
+
+    document.addEventListener("fullscreenchange", () => {
+      const isFs = !!document.fullscreenElement;
+      fsIconExpand.style.display = isFs ? "none" : "block";
+      fsIconCompress.style.display = isFs ? "block" : "none";
+    });
+
+    fullscreenBtn.addEventListener("click", toggleFullscreen);
+
+    /* ==========================================================================
+       Formatters (Time & Timestamps)
+       ========================================================================== */
+    function formatStopwatch(ms) {
+      const totalSec = Math.floor(ms / 1000);
+      const hours = Math.floor(totalSec / 3600);
+      const mins = Math.floor((totalSec % 3600) / 60);
+      const secs = totalSec % 60;
+      return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function formatTimeAMPM(date) {
+      if (!date) return "--:-- --";
+      let hours = date.getHours();
+      const mins = String(date.getMinutes()).padStart(2, '0');
+      const ampm = hours >= 12 ? 'pm' : 'am';
+      hours = hours % 12;
+      hours = hours ? hours : 12; // 0 becomes 12
+      return `${String(hours).padStart(2, '0')}:${mins} ${ampm}`;
+    }
+
+    /* ==========================================================================
+       Page Navigation Controller (Page 1 ➔ Page 2 ➔ Page 3)
+       ========================================================================== */
+    function showPage(pageId) {
+      [pageHome, pageStudy, pageStats].forEach(p => p.classList.remove("active"));
+
+      if (pageId === "home") {
+        pageHome.classList.add("active");
+      } else if (pageId === "study") {
+        pageStudy.classList.add("active");
+      } else if (pageId === "stats") {
+        pageStats.classList.add("active");
+      }
+    }
+
+    /* ==========================================================================
+       Page 1: Interval Selection Logic
+       ========================================================================== */
+    function selectInterval(seconds, btnElement) {
+      sound.playClick();
+      selectedIntervalSeconds = seconds;
+
+      // Highlight active mini button
+      [btnOpt5s, btnOpt30s, btnOptCustom].forEach(b => b.classList.remove("selected"));
+      if (btnElement) {
+        btnElement.classList.add("selected");
+      }
+
+      // Enable main Start button
+      homeStartBtn.removeAttribute("disabled");
+    }
+
+    btnOpt5s.addEventListener("click", () => {
+      selectInterval(5, btnOpt5s);
+    });
+
+    btnOpt30s.addEventListener("click", () => {
+      selectInterval(30, btnOpt30s);
+    });
+
+    btnOptCustom.addEventListener("click", () => {
+      openCustomModal();
+    });
+
+    /* ==========================================================================
+       Custom Modal: Sliding / Touch Drag & Stepper Logic (0 to 59)
+       ========================================================================== */
+    function setCustomTime(mins, secs) {
+      customMins = Math.max(0, Math.min(59, mins));
+      customSecs = Math.max(0, Math.min(59, secs));
+
+      const mStr = String(customMins).padStart(2, '0');
+      const sStr = String(customSecs).padStart(2, '0');
+
+      previewMins.innerText = mStr;
+      previewSecs.innerText = sStr;
+      displayMins.innerText = mStr;
+      displaySecs.innerText = sStr;
+    }
+
+    function openCustomModal() {
+      sound.playClick();
+      customModalBackdrop.classList.add("open");
+      setCustomTime(customMins, customSecs);
+    }
+
+    function closeCustomModal() {
+      customModalBackdrop.classList.remove("open");
+    }
+
+    customModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === customModalBackdrop) {
+        closeCustomModal();
+      }
+    });
+
+    // Touch / Pointer Drag to slide values up and down smoothly
+    function setupTouchSlider(containerEl, getValue, setValue) {
+      let startY = 0;
+      let startVal = 0;
+      let isDragging = false;
+
+      function onPointerDown(e) {
+        isDragging = true;
+        startY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+        startVal = getValue();
+        containerEl.classList.add("dragging");
+        if (e.pointerId && containerEl.setPointerCapture) {
+          try { containerEl.setPointerCapture(e.pointerId); } catch(err) {}
+        }
+      }
+
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        const currentY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
+        const deltaY = startY - currentY; // Moving UP increases value
+        
+        const steps = Math.floor(deltaY / 12);
+        let newVal = (startVal + steps) % 60;
+        if (newVal < 0) newVal += 60;
+        
+        setValue(newVal);
+      }
+
+      function onPointerUp(e) {
+        if (!isDragging) return;
+        isDragging = false;
+        containerEl.classList.remove("dragging");
+        sound.playClick();
+      }
+
+      containerEl.addEventListener("pointerdown", onPointerDown);
+      containerEl.addEventListener("pointermove", onPointerMove);
+      containerEl.addEventListener("pointerup", onPointerUp);
+      containerEl.addEventListener("pointercancel", onPointerUp);
+
+      // Mouse Wheel Support
+      containerEl.addEventListener("wheel", (e) => {
+        e.preventDefault();
+        const currentVal = getValue();
+        const step = e.deltaY < 0 ? 1 : -1;
+        let newVal = (currentVal + step) % 60;
+        if (newVal < 0) newVal += 60;
+        setValue(newVal);
+      }, { passive: false });
+    }
+
+    setupTouchSlider(slideBoxMins, () => customMins, (val) => setCustomTime(val, customSecs));
+    setupTouchSlider(slideBoxSecs, () => customSecs, (val) => setCustomTime(customMins, val));
+
+    // Steppers Listeners
+    btnMinUp.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime((customMins + 1) % 60, customSecs); sound.playClick(); });
+    btnMinDown.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime((customMins + 59) % 60, customSecs); sound.playClick(); });
+    btnSecUp.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime(customMins, (customSecs + 1) % 60); sound.playClick(); });
+    btnSecDown.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime(customMins, (customSecs + 59) % 60); sound.playClick(); });
+
+    btnConfirmCustom.addEventListener("click", () => {
+      const totalSec = customMins * 60 + customSecs;
+      const finalSec = Math.max(5, totalSec); // Minimum 5s interval
+
+      btnOptCustom.innerText = `${String(customMins).padStart(2, '0')}:${String(customSecs).padStart(2, '0')}`;
+
+      closeCustomModal();
+      selectInterval(finalSec, btnOptCustom);
+    });
+
+    /* ==========================================================================
+       Page 2: Start & Run Study Stopwatch Session
+       ========================================================================== */
+    homeStartBtn.addEventListener("click", () => {
+      if (!selectedIntervalSeconds) return;
+      sound.playClick();
+      startStudySession();
+      showPage("study");
+    });
+
+    function startStudySession() {
+      isStudyActive = true;
+      isBreakActive = false;
+      studyStartTime = new Date();
+      studyElapsedMs = 0;
+      breaksTakenCount = 0;
+      breakTotalDurationMs = 0;
+
+      // Reset button state
+      setBreakButtonState(false);
+
+      countdownRemainingSeconds = selectedIntervalSeconds;
+      updateCountdownLabel();
+
+      if (studyTimerInterval) clearInterval(studyTimerInterval);
+      studyTimerInterval = setInterval(() => {
+        if (!isBreakActive) {
+          studyElapsedMs += 1000;
+          studyStopwatch.innerText = formatStopwatch(studyElapsedMs);
+
+          countdownRemainingSeconds--;
+          if (countdownRemainingSeconds <= 0) {
+            // Trigger Break Alert with Audio Chime & Vibration
+            sound.playChime();
+            triggerBreakVibration();
+            countdownRemainingSeconds = selectedIntervalSeconds;
+            startShortBreak();
+          }
+          updateCountdownLabel();
+        }
+      }, 1000);
+    }
+
+    function updateCountdownLabel() {
+      if (countdownRemainingSeconds >= 60) {
+        const m = Math.ceil(countdownRemainingSeconds / 60);
+        countdownText.innerText = `Break in ${m} minute${m > 1 ? 's' : ''}`;
+      } else {
+        countdownText.innerText = `Break in ${countdownRemainingSeconds} second${countdownRemainingSeconds !== 1 ? 's' : ''}`;
+      }
+    }
+
+    /* ==========================================================================
+       Break Actions & "Back from break" Button Toggle
+       ========================================================================== */
+    function setBreakButtonState(inBreak) {
+      if (inBreak) {
+        breakActionBtn.classList.add("in-break-state");
+        breakBtnIcon.innerText = "✓";
+        breakBtnText.innerText = "Back from break";
+      } else {
+        breakActionBtn.classList.remove("in-break-state");
+        breakBtnIcon.innerText = "☕";
+        breakBtnText.innerText = "Break now";
+      }
+    }
+
+    // Main Break Button Clicked on Page 2 (Toggles between Break and Back from Break)
+    breakActionBtn.addEventListener("click", () => {
+      sound.playClick();
+      if (isBreakActive) {
+        // User is returning from short break
+        endShortBreak();
+      } else {
+        // User starts short break
+        startShortBreak();
+      }
+    });
+
+    function triggerBreakVibration() {
+      // Hardware Haptic Vibration (Supported on mobile browsers / Android / WebKit mobile)
+      if (navigator.vibrate) {
+        try {
+          navigator.vibrate([200, 100, 250, 100, 400]);
+        } catch (e) {
+          console.warn("Vibration API error:", e);
+        }
+      }
+
+      // Visual vibration pulse on screen
+      document.body.classList.add("vibrate-alert-pulse");
+      setTimeout(() => {
+        document.body.classList.remove("vibrate-alert-pulse");
+      }, 600);
+    }
+
+    function startShortBreak() {
+      if (isBreakActive) return;
+      isBreakActive = true;
+      breaksTakenCount++;
+      currentBreakStartTime = performance.now();
+
+      triggerBreakVibration();
+      setBreakButtonState(true);
+      breakHud.classList.add("show");
+      let breakElapsedSec = 0;
+
+      if (breakTimerInterval) clearInterval(breakTimerInterval);
+      breakTimerInterval = setInterval(() => {
+        breakElapsedSec++;
+        const m = String(Math.floor(breakElapsedSec / 60)).padStart(2, '0');
+        const s = String(breakElapsedSec % 60).padStart(2, '0');
+        breakHudTimer.innerText = `${m}:${s}`;
+      }, 1000);
+    }
+
+    function endShortBreak() {
+      if (isBreakActive) {
+        isBreakActive = false;
+        if (currentBreakStartTime) {
+          breakTotalDurationMs += (performance.now() - currentBreakStartTime);
+        }
+        if (breakTimerInterval) clearInterval(breakTimerInterval);
+        breakHud.classList.remove("show");
+        setBreakButtonState(false);
+      }
+    }
+
+    /* ==========================================================================
+       Page 3: Finish Study Session & Statistics Display
+       ========================================================================== */
+    finishStudyBtn.addEventListener("click", () => {
+      sound.playClick();
+      finishStudySession();
+    });
+
+    function finishStudySession() {
+      isStudyActive = false;
+      studyEndTime = new Date();
+      if (studyTimerInterval) clearInterval(studyTimerInterval);
+      endShortBreak();
+
+      // Final Elapsed Study Time
+      statFinalTime.innerText = formatStopwatch(studyElapsedMs);
+
+      // Break Statistics Breakdown
+      const breakMins = Math.max(1, Math.round(breakTotalDurationMs / 60000));
+      if (breaksTakenCount === 0) {
+        statBreaksText.innerText = "No breaks taken";
+      } else if (breaksTakenCount === 1) {
+        statBreaksText.innerText = `Taken 1 Break for ${breakMins} minute${breakMins > 1 ? 's' : ''}`;
+      } else {
+        statBreaksText.innerText = `Taken ${breaksTakenCount} Breaks for ${breakMins} minutes`;
+      }
+
+      // Start & End Time Timestamps
+      statStartTime.innerText = formatTimeAMPM(studyStartTime);
+      statEndTime.innerText = formatTimeAMPM(studyEndTime);
+
+      sound.playChime();
+      showPage("stats");
+    }
+
+    // Restart / Start New Session Button
+    statRestartBtn.addEventListener("click", () => {
+      sound.playClick();
+      showPage("home");
+    });
+
+  </script>
+</body>
+</html>

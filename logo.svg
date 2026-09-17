@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 140" fill="none">
+  <!-- Top Cyan Arc -->
+  <path d="M 18 38 C 18 16, 44 6, 70 14 C 82 18, 90 26, 92 36" stroke="#30DFF2" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <!-- Cream Head & Torso Shape -->
+  <circle cx="34" cy="30" r="12" fill="#FFF4ED"/>
+  <path d="M 24 38 C 22 52, 22 70, 36 78 C 48 84, 62 80, 68 68 C 70 60, 60 52, 48 50 C 38 48, 32 40, 30 36 Z" fill="#FFF4ED"/>
+  <!-- Upper Lime Arc -->
+  <path d="M 42 46 C 48 30, 74 26, 94 38" stroke="#C7FD05" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <!-- Bottom Pink Loop -->
+  <path d="M 18 94 C 18 122, 54 128, 76 108 C 84 100, 84 84, 76 74" stroke="#FF3FAB" stroke-width="14" stroke-linecap="round" fill="none"/>
+  <!-- Bottom Right Deep Teal Arc -->
+  <path d="M 76 64 C 92 66, 108 78, 108 94 C 108 110, 96 124, 84 126" stroke="#2C735F" stroke-width="14" stroke-linecap="round" fill="none"/>
+</svg>
