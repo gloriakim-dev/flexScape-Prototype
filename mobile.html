@@ -387,6 +387,22 @@
       background: var(--btn-break-green-hover);
     }
 
+    /* FlexScape Room Activity Button */
+    .page2-btn.btn-room-link {
+      background: linear-gradient(135deg, rgba(48, 223, 242, 0.12), rgba(199, 253, 5, 0.08));
+      border: 1.5px solid rgba(48, 223, 242, 0.45);
+      color: #111827;
+      box-shadow: 0 4px 14px rgba(48, 223, 242, 0.15);
+      gap: 10px;
+    }
+
+    .page2-btn.btn-room-link:hover {
+      background: linear-gradient(135deg, rgba(48, 223, 242, 0.22), rgba(199, 253, 5, 0.16));
+      border-color: var(--primary-cyan);
+      box-shadow: 0 6px 20px rgba(48, 223, 242, 0.3);
+      transform: translateY(-2px);
+    }
+
     /* Active Break Pill */
     .break-active-hud {
       display: none;
@@ -658,6 +674,105 @@
       transform: translateY(-2px);
     }
 
+    /* Break Choice Modal Grid */
+    .break-choice-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      width: 100%;
+      margin-bottom: 20px;
+    }
+
+    .break-choice-card {
+      background: #FFFFFF;
+      border: 1.5px solid var(--border-light);
+      border-radius: var(--radius-md);
+      padding: 16px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      cursor: pointer;
+      box-shadow: var(--shadow-sm);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+    }
+
+    .break-choice-card.choice-room {
+      border-color: rgba(48, 223, 242, 0.55);
+      background: linear-gradient(180deg, rgba(48, 223, 242, 0.08) 0%, #FFFFFF 100%);
+    }
+
+    .break-choice-card.choice-room:hover {
+      border-color: var(--primary-cyan);
+      box-shadow: 0 6px 20px rgba(48, 223, 242, 0.25);
+      transform: translateY(-3px);
+    }
+
+    .break-choice-card.choice-short {
+      border-color: rgba(0, 0, 0, 0.1);
+      background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, #FFFFFF 100%);
+    }
+
+    .break-choice-card.choice-short:hover {
+      border-color: var(--btn-dark);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      transform: translateY(-3px);
+    }
+
+    .choice-card-badge {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+      margin-bottom: 8px;
+      background: rgba(48, 223, 242, 0.18);
+      color: #0891B2;
+    }
+
+    .choice-short .choice-card-badge {
+      background: rgba(0, 0, 0, 0.06);
+      color: var(--text-muted);
+    }
+
+    .choice-card-icon {
+      font-size: 32px;
+      margin-bottom: 6px;
+    }
+
+    .choice-card-title {
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+
+    .choice-card-desc {
+      font-size: 11.5px;
+      color: var(--text-muted);
+      line-height: 1.35;
+    }
+
+    .modal-btn-cancel {
+      width: 100%;
+      height: 46px;
+      background: transparent;
+      color: var(--text-muted);
+      border: 1px solid var(--border-light);
+      border-radius: var(--radius-pill);
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .modal-btn-cancel:hover {
+      background: rgba(0, 0, 0, 0.04);
+      color: var(--text-main);
+    }
+
 
 
     /* ==========================================================================
@@ -822,7 +937,7 @@
         
         <!-- Active Break HUD Indicator -->
         <div class="break-active-hud" id="break-hud">
-          <span>☕ Short break active</span>
+          <span id="break-hud-label">☕ Short break active</span>
           <span id="break-hud-timer" style="font-family: var(--font-digital); font-weight: 700;">00:00</span>
         </div>
 
@@ -931,6 +1046,58 @@
     </div>
   </div>
 
+  <!-- ==========================================================================
+       POPUP MODAL: BREAK OPTIONS (ROOM vs SHORT BREAK)
+       ========================================================================== -->
+  <div class="modal-backdrop-center" id="break-choice-backdrop">
+    <div class="modal-card-center" style="max-width: 400px; padding: 26px 20px;">
+      <h2 class="modal-title-center" style="margin-bottom: 6px;">Choose Break Type</h2>
+      <p style="font-size: 13.5px; color: var(--text-muted); text-align: center; margin-bottom: 18px;">
+        Select how you would like to take your break
+      </p>
+
+      <div class="break-choice-grid">
+        <!-- FlexScape Room Option -->
+        <div class="break-choice-card choice-room" id="btn-choose-room-break">
+          <span class="choice-card-badge">ROOM</span>
+          <div class="choice-card-icon">🧘</div>
+          <div class="choice-card-title">FlexScape Room</div>
+          <div class="choice-card-desc">Interactive room activities & arm gesture games</div>
+        </div>
+
+        <!-- Short Break Option -->
+        <div class="break-choice-card choice-short" id="btn-choose-short-break">
+          <span class="choice-card-badge">QUICK</span>
+          <div class="choice-card-icon">☕</div>
+          <div class="choice-card-title">Short Break</div>
+          <div class="choice-card-desc">Take a quick coffee or rest break on your own</div>
+        </div>
+      </div>
+
+      <button class="modal-btn-cancel" id="btn-cancel-break-choice">
+        Cancel
+      </button>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       POPUP MODAL: FLEXSCAPE ROOM ACTIVITY
+       ========================================================================== -->
+  <div class="modal-backdrop-center" id="room-modal-backdrop">
+    <div class="modal-card-center" style="max-width: 380px; text-align: center; padding: 32px 24px;">
+      <div style="font-size: 42px; margin-bottom: 12px; filter: drop-shadow(0 4px 14px rgba(48,223,242,0.4));">🧘</div>
+      <h2 class="modal-title-center" style="margin-bottom: 12px; font-size: 22px;">FlexScape Room</h2>
+
+      <p style="font-size: 16px; line-height: 1.6; color: var(--text-main); font-weight: 500; margin-bottom: 24px; padding: 0 8px;">
+        Go to FlexScape room activity Thanks
+      </p>
+
+      <button class="modal-btn-confirm" id="btn-close-room-modal">
+        Got it
+      </button>
+    </div>
+  </div>
+
 
 
   <!-- Sound Generator & Audio FX -->
@@ -1026,6 +1193,7 @@
     const breakBtnText = document.getElementById("break-btn-text");
     const finishStudyBtn = document.getElementById("finish-study-btn");
     const breakHud = document.getElementById("break-hud");
+    const breakHudLabel = document.getElementById("break-hud-label");
     const breakHudTimer = document.getElementById("break-hud-timer");
 
     const statFinalTime = document.getElementById("stat-final-time");
@@ -1046,11 +1214,20 @@
     const displayMins = document.getElementById("display-mins");
     const displaySecs = document.getElementById("display-secs");
     const slideBoxMins = document.getElementById("slide-box-mins");
+    const slideBoxSecs = document.getElementById("slide-box-secs");
     const btnMinUp = document.getElementById("btn-min-up");
     const btnMinDown = document.getElementById("btn-min-down");
     const btnSecUp = document.getElementById("btn-sec-up");
     const btnSecDown = document.getElementById("btn-sec-down");
     const btnConfirmCustom = document.getElementById("btn-confirm-custom");
+
+    // Break Choice Modal & Room Activity Modal
+    const breakChoiceBackdrop = document.getElementById("break-choice-backdrop");
+    const btnChooseRoomBreak = document.getElementById("btn-choose-room-break");
+    const btnChooseShortBreak = document.getElementById("btn-choose-short-break");
+    const btnCancelBreakChoice = document.getElementById("btn-cancel-break-choice");
+    const roomModalBackdrop = document.getElementById("room-modal-backdrop");
+    const btnCloseRoomModal = document.getElementById("btn-close-room-modal");
 
 
 
@@ -1277,9 +1454,9 @@
           if (countdownRemainingSeconds <= 0) {
             // Trigger Break Alert with Audio Chime & Vibration
             sound.playChime();
-            triggerBreakVibration();
             countdownRemainingSeconds = selectedIntervalSeconds;
-            startShortBreak();
+            // Every timed break is FlexScape room break
+            startRoomBreak(true);
           }
           updateCountdownLabel();
         }
@@ -1296,7 +1473,7 @@
     }
 
     /* ==========================================================================
-       Break Actions & "Back from break" Button Toggle
+       Break Actions & Modals Handling
        ========================================================================== */
     function setBreakButtonState(inBreak) {
       if (inBreak) {
@@ -1310,17 +1487,14 @@
       }
     }
 
-    // Main Break Button Clicked on Page 2 (Toggles between Break and Back from Break)
-    breakActionBtn.addEventListener("click", () => {
+    function openBreakChoiceModal() {
       sound.playClick();
-      if (isBreakActive) {
-        // User is returning from short break
-        endShortBreak();
-      } else {
-        // User starts short break
-        startShortBreak();
-      }
-    });
+      if (breakChoiceBackdrop) breakChoiceBackdrop.classList.add("open");
+    }
+
+    function closeBreakChoiceModal() {
+      if (breakChoiceBackdrop) breakChoiceBackdrop.classList.remove("open");
+    }
 
     function triggerBreakVibration() {
       // Hardware Haptic Vibration (Supported on mobile browsers / Android / WebKit mobile)
@@ -1339,7 +1513,8 @@
       }, 600);
     }
 
-    function startShortBreak() {
+    function startRoomBreak(isTimed = false) {
+      closeBreakChoiceModal();
       if (isBreakActive) return;
       isBreakActive = true;
       breaksTakenCount++;
@@ -1347,28 +1522,114 @@
 
       triggerBreakVibration();
       setBreakButtonState(true);
-      breakHud.classList.add("show");
+      if (breakHudLabel) breakHudLabel.innerText = "🧘 FlexScape room break active";
+      if (breakHud) breakHud.classList.add("show");
+      
       let breakElapsedSec = 0;
-
+      if (breakHudTimer) breakHudTimer.innerText = "00:00";
       if (breakTimerInterval) clearInterval(breakTimerInterval);
       breakTimerInterval = setInterval(() => {
         breakElapsedSec++;
         const m = String(Math.floor(breakElapsedSec / 60)).padStart(2, '0');
         const s = String(breakElapsedSec % 60).padStart(2, '0');
-        breakHudTimer.innerText = `${m}:${s}`;
+        if (breakHudTimer) breakHudTimer.innerText = `${m}:${s}`;
+      }, 1000);
+
+      // Open room activity popup
+      if (roomModalBackdrop) {
+        roomModalBackdrop.classList.add("open");
+      }
+    }
+
+    function startShortBreak() {
+      closeBreakChoiceModal();
+      if (isBreakActive) return;
+      isBreakActive = true;
+      breaksTakenCount++;
+      currentBreakStartTime = performance.now();
+
+      triggerBreakVibration();
+      setBreakButtonState(true);
+      if (breakHudLabel) breakHudLabel.innerText = "☕ Short break active";
+      if (breakHud) breakHud.classList.add("show");
+
+      let breakElapsedSec = 0;
+      if (breakHudTimer) breakHudTimer.innerText = "00:00";
+      if (breakTimerInterval) clearInterval(breakTimerInterval);
+      breakTimerInterval = setInterval(() => {
+        breakElapsedSec++;
+        const m = String(Math.floor(breakElapsedSec / 60)).padStart(2, '0');
+        const s = String(breakElapsedSec % 60).padStart(2, '0');
+        if (breakHudTimer) breakHudTimer.innerText = `${m}:${s}`;
       }, 1000);
     }
 
-    function endShortBreak() {
+    function endBreak() {
       if (isBreakActive) {
         isBreakActive = false;
         if (currentBreakStartTime) {
           breakTotalDurationMs += (performance.now() - currentBreakStartTime);
         }
         if (breakTimerInterval) clearInterval(breakTimerInterval);
-        breakHud.classList.remove("show");
+        if (breakHud) breakHud.classList.remove("show");
         setBreakButtonState(false);
+        if (roomModalBackdrop) roomModalBackdrop.classList.remove("open");
+        if (breakChoiceBackdrop) breakChoiceBackdrop.classList.remove("open");
       }
+    }
+
+    // Main Break Button Clicked on Page 2 (Toggles between Option Choice / End Break)
+    breakActionBtn.addEventListener("click", () => {
+      sound.playClick();
+      if (isBreakActive) {
+        endBreak();
+      } else {
+        openBreakChoiceModal();
+      }
+    });
+
+    if (btnChooseRoomBreak) {
+      btnChooseRoomBreak.addEventListener("click", () => {
+        sound.playClick();
+        startRoomBreak(false);
+      });
+    }
+
+    if (btnChooseShortBreak) {
+      btnChooseShortBreak.addEventListener("click", () => {
+        sound.playClick();
+        startShortBreak();
+      });
+    }
+
+    if (btnCancelBreakChoice) {
+      btnCancelBreakChoice.addEventListener("click", () => {
+        sound.playClick();
+        closeBreakChoiceModal();
+      });
+    }
+
+    if (breakChoiceBackdrop) {
+      breakChoiceBackdrop.addEventListener("click", (e) => {
+        if (e.target === breakChoiceBackdrop) {
+          closeBreakChoiceModal();
+        }
+      });
+    }
+
+    if (btnCloseRoomModal && roomModalBackdrop) {
+      btnCloseRoomModal.addEventListener("click", () => {
+        sound.playClick();
+        roomModalBackdrop.classList.remove("open");
+      });
+    }
+
+    if (roomModalBackdrop) {
+      roomModalBackdrop.addEventListener("click", (e) => {
+        if (e.target === roomModalBackdrop) {
+          roomModalBackdrop.classList.remove("open");
+        }
+      });
     }
 
     /* ==========================================================================
@@ -1383,7 +1644,8 @@
       isStudyActive = false;
       studyEndTime = new Date();
       if (studyTimerInterval) clearInterval(studyTimerInterval);
-      endShortBreak();
+      endBreak();
+      closeBreakChoiceModal();
 
       // Final Elapsed Study Time
       statFinalTime.innerText = formatStopwatch(studyElapsedMs);
