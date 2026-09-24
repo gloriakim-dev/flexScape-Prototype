@@ -5286,6 +5286,33 @@
         canvas.height = video.videoHeight;
       }
 
+      // --- CONTINUOUS 1-MINUTE SESSION COUNTDOWN ---
+      // Keeps going uninterrupted when pose timer ends, during rating popups, pose transitions, and frame updates
+      if (isGameRunning && sessionDurationMs && !isGamePaused) {
+        const now = performance.now();
+        if (!sessionStartTime) sessionStartTime = now;
+        const sessionElapsed = now - sessionStartTime;
+        const sessionRemainingMs = Math.max(0, sessionDurationMs - sessionElapsed);
+        const totalSec = Math.ceil(sessionRemainingMs / 1000);
+        const mins = Math.floor(totalSec / 60);
+        const secs = totalSec % 60;
+        const timeFormatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+
+        if (bottomSessionCountdown) {
+          bottomSessionCountdown.innerText = timeFormatted;
+        }
+        if (bottomSessionProgressFill) {
+          const progressPct = Math.min(100, (sessionElapsed / sessionDurationMs) * 100);
+          bottomSessionProgressFill.style.width = `${progressPct}%`;
+        }
+
+        if (sessionRemainingMs <= 0) {
+          finishSession();
+          requestAnimationFrame(gameLoop);
+          return;
+        }
+      }
+
       let isCurrentPoseMatched = false;
       let isStartPoseDetected = false;
       let isRightArmPointing = false;
@@ -5629,29 +5656,6 @@
             // When 4-second interval completes: Rate pose accuracy out of 100% and show animated pop-up for 1s
             if (poseElapsed >= POSE_HOLD_TIME_MS) {
               completeCurrentPoseRating();
-            }
-          }
-
-          // Update overall 1-minute session timer & bottom time bar
-          if (sessionDurationMs) {
-            const sessionElapsed = now - sessionStartTime;
-            const sessionRemainingMs = Math.max(0, sessionDurationMs - sessionElapsed);
-            const totalSec = Math.ceil(sessionRemainingMs / 1000);
-            const mins = Math.floor(totalSec / 60);
-            const secs = totalSec % 60;
-            const timeFormatted = `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
-
-            if (bottomSessionCountdown) {
-              bottomSessionCountdown.innerText = timeFormatted;
-            }
-            if (bottomSessionProgressFill) {
-              const progressPct = Math.min(100, (sessionElapsed / sessionDurationMs) * 100);
-              bottomSessionProgressFill.style.width = `${progressPct}%`;
-            }
-
-            if (sessionRemainingMs <= 0) {
-              finishSession();
-              return;
             }
           }
         }
