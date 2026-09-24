@@ -522,11 +522,23 @@
   </main>
 
   <script>
+    // Lightweight Haptic Feedback for Mobile
+    function triggerCardHaptic() {
+      if (typeof navigator !== "undefined" && navigator.vibrate) {
+        try { navigator.vibrate(25); } catch(e) {}
+      }
+    }
+    document.querySelectorAll(".experience-card").forEach(card => {
+      card.addEventListener("click", triggerCardHaptic);
+    });
+
     // Keyboard Navigation Shortcuts
     window.addEventListener("keydown", (e) => {
       if (e.key === "1") {
+        triggerCardHaptic();
         window.location.href = "room.html";
       } else if (e.key === "2") {
+        triggerCardHaptic();
         window.location.href = "mobile.html";
       }
     });

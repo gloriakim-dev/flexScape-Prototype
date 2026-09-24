@@ -181,26 +181,32 @@
       max-width: 480px;
     }
 
-    .brand-hero-logo {
-      width: 76px;
-      height: 88px;
-      margin-bottom: 14px;
-      filter: drop-shadow(0 8px 18px rgba(48, 223, 242, 0.25));
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .brand-hero-logo-img {
+      max-width: 290px;
+      width: 82%;
+      height: auto;
+      margin-bottom: 34px;
+      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.08));
       animation: gentleFloat 4s ease-in-out infinite;
+      user-select: none;
+      -webkit-user-drag: none;
     }
 
     @keyframes gentleFloat {
       0%, 100% { transform: translateY(0); }
       50% { transform: translateY(-5px); }
-    }
-
-    .page1-title {
-      font-family: var(--font-display);
-      font-size: 42px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      color: #111827;
-      margin-bottom: 32px;
     }
 
     /* Universal Button Styling (Same font size 16px) */
@@ -639,21 +645,6 @@
       user-select: none;
     }
 
-    @keyframes screenVibration {
-      0% { transform: translate(0, 0); }
-      15% { transform: translate(-4px, 3px); }
-      30% { transform: translate(4px, -3px); }
-      45% { transform: translate(-3px, -2px); }
-      60% { transform: translate(3px, 2px); }
-      75% { transform: translate(-2px, 1px); }
-      90% { transform: translate(2px, -1px); }
-      100% { transform: translate(0, 0); }
-    }
-
-    .vibrate-alert-pulse {
-      animation: screenVibration 0.5s cubic-bezier(0.36, 0.07, 0.19, 0.97) both;
-    }
-
     .modal-btn-confirm {
       width: 100%;
       height: 52px;
@@ -789,14 +780,8 @@
         max-width: 640px;
       }
 
-      .brand-hero-logo {
-        width: 48px;
-        height: 56px;
-        margin-bottom: 6px;
-      }
-
-      .page1-title {
-        font-size: 28px;
+      .brand-hero-logo-img {
+        max-width: 190px;
         margin-bottom: 14px;
       }
 
@@ -895,17 +880,9 @@
          ========================================================================== -->
     <article class="app-page active" id="page-home">
       <div class="page1-content-box">
-        <!-- FlexScape Brand Vector Emblem -->
-        <svg class="brand-hero-logo" viewBox="0 0 120 140" fill="none">
-          <path d="M 18 38 C 18 16, 44 6, 70 14 C 82 18, 90 26, 92 36" stroke="#30DFF2" stroke-width="14" stroke-linecap="round" fill="none"/>
-          <circle cx="34" cy="30" r="12" fill="#FFF4ED"/>
-          <path d="M 24 38 C 22 52, 22 70, 36 78 C 48 84, 62 80, 68 68 C 70 60, 60 52, 48 50 C 38 48, 32 40, 30 36 Z" fill="#FFF4ED"/>
-          <path d="M 42 46 C 48 30, 74 26, 94 38" stroke="#C7FD05" stroke-width="14" stroke-linecap="round" fill="none"/>
-          <path d="M 18 94 C 18 122, 54 128, 76 108 C 84 100, 84 84, 76 74" stroke="#FF3FAB" stroke-width="14" stroke-linecap="round" fill="none"/>
-          <path d="M 76 64 C 92 66, 108 78, 108 94 C 108 110, 96 124, 84 126" stroke="#2C735F" stroke-width="14" stroke-linecap="round" fill="none"/>
-        </svg>
-
-        <h1 class="page1-title">FlexScape</h1>
+        <!-- FlexScape Official Brand Logo -->
+        <h1 class="sr-only">FlexScape</h1>
+        <img class="brand-hero-logo-img" src="logo.png" alt="FlexScape" width="280" height="81">
 
         <!-- Start Button (Disabled until interval selected) -->
         <button class="btn-main-dark" id="home-start-btn" disabled>
@@ -1100,7 +1077,7 @@
 
 
 
-  <!-- Sound Generator & Audio FX -->
+  <!-- Sound Generator & Haptic FX Engine (iOS & Android Universal) -->
   <script>
     class WebAudioHelper {
       constructor() {
@@ -1109,28 +1086,33 @@
       init() {
         if (!this.ctx) {
           const AudioContext = window.AudioContext || window.webkitAudioContext;
-          this.ctx = new AudioContext();
+          if (AudioContext) {
+            this.ctx = new AudioContext();
+          }
         }
-        if (this.ctx.state === "suspended") {
-          this.ctx.resume();
+        if (this.ctx && this.ctx.state === "suspended") {
+          this.ctx.resume().catch(() => {});
         }
       }
       playClick() {
         this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
         const osc = this.ctx.createOscillator();
         const gain = this.ctx.createGain();
         osc.type = "sine";
-        osc.frequency.setValueAtTime(800, this.ctx.currentTime);
-        osc.frequency.exponentialRampToValueAtTime(400, this.ctx.currentTime + 0.04);
-        gain.gain.setValueAtTime(0.12, this.ctx.currentTime);
-        gain.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + 0.04);
+        osc.frequency.setValueAtTime(800, now);
+        osc.frequency.exponentialRampToValueAtTime(400, now + 0.04);
+        gain.gain.setValueAtTime(0.12, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
         osc.connect(gain);
         gain.connect(this.ctx.destination);
-        osc.start();
-        osc.stop(this.ctx.currentTime + 0.04);
+        osc.start(now);
+        osc.stop(now + 0.04);
       }
       playChime() {
         this.init();
+        if (!this.ctx) return;
         const now = this.ctx.currentTime;
         [523.25, 659.25, 783.99, 1046.50].forEach((freq, i) => {
           const osc = this.ctx.createOscillator();
@@ -1145,8 +1127,147 @@
           osc.stop(now + i * 0.08 + 0.4);
         });
       }
+      playHapticTransient(freq = 65, dur = 0.02, gainLevel = 0.8) {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        const osc = this.ctx.createOscillator();
+        const gain = this.ctx.createGain();
+        osc.type = "sine";
+        osc.frequency.setValueAtTime(freq, now);
+        osc.frequency.exponentialRampToValueAtTime(Math.max(20, freq - 20), now + dur);
+
+        gain.gain.setValueAtTime(0.001, now);
+        gain.gain.linearRampToValueAtTime(gainLevel, now + 0.003);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + dur);
+
+        osc.connect(gain);
+        gain.connect(this.ctx.destination);
+        osc.start(now);
+        osc.stop(now + dur);
+      }
+      playHapticSuccess() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        [ { t: 0, f: 70, d: 0.025 }, { t: 0.06, f: 55, d: 0.035 } ].forEach(p => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(p.f, now + p.t);
+          osc.frequency.exponentialRampToValueAtTime(Math.max(20, p.f - 18), now + p.t + p.d);
+
+          gain.gain.setValueAtTime(0.001, now + p.t);
+          gain.gain.linearRampToValueAtTime(0.85, now + p.t + 0.004);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + p.t + p.d);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + p.t);
+          osc.stop(now + p.t + p.d);
+        });
+      }
+      playHapticBuzz() {
+        this.init();
+        if (!this.ctx) return;
+        const now = this.ctx.currentTime;
+        // Acoustic sub-bass physical haptic pulse pattern
+        // Resonates mobile speaker chambers (Taptic / speaker enclosure on iPhone)
+        const pulses = [
+          { start: 0.0, dur: 0.18, freq: 62 },
+          { start: 0.28, dur: 0.22, freq: 56 },
+          { start: 0.58, dur: 0.32, freq: 50 }
+        ];
+        pulses.forEach(p => {
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.type = "sine";
+          osc.frequency.setValueAtTime(p.freq, now + p.start);
+          osc.frequency.exponentialRampToValueAtTime(Math.max(20, p.freq - 16), now + p.start + p.dur);
+          
+          gain.gain.setValueAtTime(0.001, now + p.start);
+          gain.gain.linearRampToValueAtTime(0.92, now + p.start + 0.015);
+          gain.gain.setValueAtTime(0.92, now + p.start + p.dur - 0.03);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + p.start + p.dur);
+
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+          osc.start(now + p.start);
+          osc.stop(now + p.start + p.dur);
+        });
+      }
     }
+
+    class HapticFeedback {
+      constructor(audioHelper) {
+        this.audio = audioHelper;
+        this.hasVibrate = typeof navigator !== "undefined" && Boolean(navigator.vibrate);
+      }
+
+      // Light tap / tick (mini options, cancel, fullscreen)
+      light() {
+        if (this.hasVibrate) {
+          try { navigator.vibrate(15); } catch(e) {}
+        }
+        if (this.audio) {
+          this.audio.playHapticTransient(75, 0.018, 0.7);
+        }
+      }
+
+      // Selection tick (stepper, touch slider drag step)
+      selection() {
+        if (this.hasVibrate) {
+          try { navigator.vibrate(10); } catch(e) {}
+        }
+        if (this.audio) {
+          this.audio.playHapticTransient(82, 0.014, 0.65);
+        }
+      }
+
+      // Medium impact (modals, break choices, toggles)
+      medium() {
+        if (this.hasVibrate) {
+          try { navigator.vibrate(35); } catch(e) {}
+        }
+        if (this.audio) {
+          this.audio.playHapticTransient(60, 0.032, 0.85);
+        }
+      }
+
+      // Success / Confirmation (confirm interval, start study, finish study)
+      success() {
+        if (this.hasVibrate) {
+          try { navigator.vibrate([20, 35, 30]); } catch(e) {}
+        }
+        if (this.audio) {
+          this.audio.playHapticSuccess();
+        }
+      }
+
+      // Heavy Break Alarm Vibration (Break alert on countdown completion)
+      alarm() {
+        if (this.hasVibrate) {
+          try { navigator.vibrate([200, 100, 250, 100, 400]); } catch(e) {}
+        }
+        if (this.audio) {
+          this.audio.playHapticBuzz();
+        }
+      }
+    }
+
     const sound = new WebAudioHelper();
+    const haptic = new HapticFeedback(sound);
+
+    // Auto unlock audio & haptics on first touch / tap for iOS Safari
+    const unlockAudio = () => {
+      sound.init();
+      document.removeEventListener("touchstart", unlockAudio);
+      document.removeEventListener("touchend", unlockAudio);
+      document.removeEventListener("click", unlockAudio);
+    };
+    document.addEventListener("touchstart", unlockAudio, { passive: true });
+    document.addEventListener("touchend", unlockAudio, { passive: true });
+    document.addEventListener("click", unlockAudio, { passive: true });
   </script>
 
   <!-- Mobile Application Logic -->
@@ -1236,6 +1357,7 @@
        ========================================================================== */
     function toggleFullscreen() {
       sound.playClick();
+      haptic.light();
       if (!document.fullscreenElement) {
         document.documentElement.requestFullscreen().catch(err => console.warn(err));
       } else {
@@ -1294,6 +1416,7 @@
        ========================================================================== */
     function selectInterval(seconds, btnElement) {
       sound.playClick();
+      haptic.light();
       selectedIntervalSeconds = seconds;
 
       // Highlight active mini button
@@ -1336,11 +1459,13 @@
 
     function openCustomModal() {
       sound.playClick();
+      haptic.medium();
       customModalBackdrop.classList.add("open");
       setCustomTime(customMins, customSecs);
     }
 
     function closeCustomModal() {
+      haptic.light();
       customModalBackdrop.classList.remove("open");
     }
 
@@ -1350,17 +1475,20 @@
       }
     });
 
-    // Touch / Pointer Drag to slide values up and down smoothly
+    // Touch / Pointer Drag to slide values up and down smoothly with haptic ticks
     function setupTouchSlider(containerEl, getValue, setValue) {
       let startY = 0;
       let startVal = 0;
+      let lastVal = -1;
       let isDragging = false;
 
       function onPointerDown(e) {
         isDragging = true;
         startY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
         startVal = getValue();
+        lastVal = startVal;
         containerEl.classList.add("dragging");
+        haptic.selection();
         if (e.pointerId && containerEl.setPointerCapture) {
           try { containerEl.setPointerCapture(e.pointerId); } catch(err) {}
         }
@@ -1375,6 +1503,10 @@
         let newVal = (startVal + steps) % 60;
         if (newVal < 0) newVal += 60;
         
+        if (newVal !== lastVal) {
+          lastVal = newVal;
+          haptic.selection();
+        }
         setValue(newVal);
       }
 
@@ -1383,6 +1515,7 @@
         isDragging = false;
         containerEl.classList.remove("dragging");
         sound.playClick();
+        haptic.light();
       }
 
       containerEl.addEventListener("pointerdown", onPointerDown);
@@ -1397,6 +1530,7 @@
         const step = e.deltaY < 0 ? 1 : -1;
         let newVal = (currentVal + step) % 60;
         if (newVal < 0) newVal += 60;
+        haptic.selection();
         setValue(newVal);
       }, { passive: false });
     }
@@ -1405,10 +1539,10 @@
     setupTouchSlider(slideBoxSecs, () => customSecs, (val) => setCustomTime(customMins, val));
 
     // Steppers Listeners
-    btnMinUp.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime((customMins + 1) % 60, customSecs); sound.playClick(); });
-    btnMinDown.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime((customMins + 59) % 60, customSecs); sound.playClick(); });
-    btnSecUp.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime(customMins, (customSecs + 1) % 60); sound.playClick(); });
-    btnSecDown.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime(customMins, (customSecs + 59) % 60); sound.playClick(); });
+    btnMinUp.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime((customMins + 1) % 60, customSecs); sound.playClick(); haptic.selection(); });
+    btnMinDown.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime((customMins + 59) % 60, customSecs); sound.playClick(); haptic.selection(); });
+    btnSecUp.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime(customMins, (customSecs + 1) % 60); sound.playClick(); haptic.selection(); });
+    btnSecDown.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime(customMins, (customSecs + 59) % 60); sound.playClick(); haptic.selection(); });
 
     btnConfirmCustom.addEventListener("click", () => {
       const totalSec = customMins * 60 + customSecs;
@@ -1417,6 +1551,8 @@
       btnOptCustom.innerText = `${String(customMins).padStart(2, '0')}:${String(customSecs).padStart(2, '0')}`;
 
       closeCustomModal();
+      sound.playClick();
+      haptic.success();
       selectInterval(finalSec, btnOptCustom);
     });
 
@@ -1426,6 +1562,7 @@
     homeStartBtn.addEventListener("click", () => {
       if (!selectedIntervalSeconds) return;
       sound.playClick();
+      haptic.success();
       startStudySession();
       showPage("study");
     });
@@ -1452,7 +1589,7 @@
 
           countdownRemainingSeconds--;
           if (countdownRemainingSeconds <= 0) {
-            // Trigger Break Alert with Audio Chime & Vibration
+            // Trigger Break Alert with Audio Chime & Universal Haptic Alarm
             sound.playChime();
             countdownRemainingSeconds = selectedIntervalSeconds;
             // Every timed break is FlexScape room break
@@ -1489,28 +1626,18 @@
 
     function openBreakChoiceModal() {
       sound.playClick();
+      haptic.medium();
       if (breakChoiceBackdrop) breakChoiceBackdrop.classList.add("open");
     }
 
     function closeBreakChoiceModal() {
+      haptic.light();
       if (breakChoiceBackdrop) breakChoiceBackdrop.classList.remove("open");
     }
 
     function triggerBreakVibration() {
-      // Hardware Haptic Vibration (Supported on mobile browsers / Android / WebKit mobile)
-      if (navigator.vibrate) {
-        try {
-          navigator.vibrate([200, 100, 250, 100, 400]);
-        } catch (e) {
-          console.warn("Vibration API error:", e);
-        }
-      }
-
-      // Visual vibration pulse on screen
-      document.body.classList.add("vibrate-alert-pulse");
-      setTimeout(() => {
-        document.body.classList.remove("vibrate-alert-pulse");
-      }, 600);
+      // Hardware & Acoustic Multi-Pulse Haptics (iOS & Android Universal)
+      haptic.alarm();
     }
 
     function startRoomBreak(isTimed = false) {
@@ -1573,6 +1700,7 @@
         if (breakTimerInterval) clearInterval(breakTimerInterval);
         if (breakHud) breakHud.classList.remove("show");
         setBreakButtonState(false);
+        haptic.medium();
         if (roomModalBackdrop) roomModalBackdrop.classList.remove("open");
         if (breakChoiceBackdrop) breakChoiceBackdrop.classList.remove("open");
       }
@@ -1591,6 +1719,7 @@
     if (btnChooseRoomBreak) {
       btnChooseRoomBreak.addEventListener("click", () => {
         sound.playClick();
+        haptic.medium();
         startRoomBreak(false);
       });
     }
@@ -1598,6 +1727,7 @@
     if (btnChooseShortBreak) {
       btnChooseShortBreak.addEventListener("click", () => {
         sound.playClick();
+        haptic.medium();
         startShortBreak();
       });
     }
@@ -1620,6 +1750,7 @@
     if (btnCloseRoomModal && roomModalBackdrop) {
       btnCloseRoomModal.addEventListener("click", () => {
         sound.playClick();
+        haptic.light();
         roomModalBackdrop.classList.remove("open");
       });
     }
@@ -1627,6 +1758,7 @@
     if (roomModalBackdrop) {
       roomModalBackdrop.addEventListener("click", (e) => {
         if (e.target === roomModalBackdrop) {
+          haptic.light();
           roomModalBackdrop.classList.remove("open");
         }
       });
@@ -1637,6 +1769,7 @@
        ========================================================================== */
     finishStudyBtn.addEventListener("click", () => {
       sound.playClick();
+      haptic.success();
       finishStudySession();
     });
 
@@ -1665,12 +1798,14 @@
       statEndTime.innerText = formatTimeAMPM(studyEndTime);
 
       sound.playChime();
+      haptic.success();
       showPage("stats");
     }
 
     // Restart / Start New Session Button
     statRestartBtn.addEventListener("click", () => {
       sound.playClick();
+      haptic.medium();
       showPage("home");
     });
 
