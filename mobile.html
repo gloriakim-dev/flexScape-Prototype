@@ -3,6 +3,8 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="screen-orientation" content="landscape">
+  <meta name="x5-orientation" content="landscape">
   <title>FlexScape Mobile • Study & Motion Flow</title>
   <meta name="description" content="FlexScape Mobile - Study Stopwatch, Custom Break Intervals, and Session Statistics.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -92,42 +94,118 @@
       z-index: 0;
     }
 
-    /* Top Floating Fullscreen Button */
-    .top-floating-bar {
+    /* ==========================================================================
+       Orientation Lock & Portrait Notice Overlay
+       ========================================================================== */
+    .orientation-overlay {
       position: fixed;
-      top: 16px;
-      right: 20px;
-      z-index: 100;
-      display: flex;
-      gap: 10px;
+      inset: 0;
+      z-index: 99999;
+      background: rgba(17, 24, 39, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      display: none;
+      flex-direction: column;
       align-items: center;
-    }
-
-    .fullscreen-btn {
-      width: 44px;
-      height: 44px;
-      border-radius: 50%;
-      background: rgba(255, 255, 255, 0.9);
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      color: #1F2937;
-      display: flex;
       justify-content: center;
+      padding: 24px;
+      text-align: center;
+      color: #FFFFFF;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+
+    @media (orientation: portrait) {
+      .orientation-overlay {
+        display: flex;
+      }
+    }
+
+    @media (orientation: landscape) {
+      .orientation-overlay {
+        display: none !important;
+      }
+    }
+
+    .orientation-card {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 24px;
+      padding: 32px 28px;
+      max-width: 380px;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+      display: flex;
+      flex-direction: column;
       align-items: center;
+      gap: 18px;
+    }
+
+    .rotate-phone-anim {
+      width: 64px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(48, 223, 242, 0.15);
+      border: 1px solid rgba(48, 223, 242, 0.35);
+      border-radius: 50%;
+      color: var(--primary-cyan);
+      animation: rotatePhone 2.4s infinite ease-in-out;
+    }
+
+    @keyframes rotatePhone {
+      0%, 15% {
+        transform: rotate(0deg);
+      }
+      45%, 70% {
+        transform: rotate(-90deg);
+      }
+      85%, 100% {
+        transform: rotate(0deg);
+      }
+    }
+
+    .orientation-title {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-weight: 700;
+      color: #FFFFFF;
+      margin: 0;
+      letter-spacing: -0.01em;
+    }
+
+    .orientation-text {
+      font-family: var(--font-body);
+      font-size: 14px;
+      line-height: 1.5;
+      color: rgba(255, 255, 255, 0.75);
+      margin: 0;
+    }
+
+    .btn-lock-orientation {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: linear-gradient(135deg, var(--primary-cyan), #00C2E8);
+      color: #0F172A;
+      border: none;
+      border-radius: var(--radius-pill);
+      padding: 12px 24px;
+      font-family: var(--font-display);
+      font-size: 15px;
+      font-weight: 700;
       cursor: pointer;
-      backdrop-filter: blur(8px);
-      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      box-shadow: 0 4px 14px rgba(48, 223, 242, 0.35);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
     }
 
-    .fullscreen-btn:hover {
-      background: #FFFFFF;
-      transform: scale(1.08);
-      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-      color: #000;
+    .btn-lock-orientation:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(48, 223, 242, 0.45);
     }
 
-    .fullscreen-btn:active {
-      transform: scale(0.95);
+    .btn-lock-orientation:active {
+      transform: scale(0.97);
     }
 
     /* Fullscreen Viewport & Centered Container */
@@ -860,16 +938,24 @@
 
   <div class="ambient-glow"></div>
 
-  <!-- Top Floating Fullscreen Button -->
-  <aside class="top-floating-bar">
-    <button class="fullscreen-btn" id="fullscreen-btn" title="Toggle Fullscreen">
-      <svg id="fs-icon-expand" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
-        <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/>
-      </svg>
-      <svg id="fs-icon-compress" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" style="display: none;">
-        <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3"/>
-      </svg>
-    </button>
+  <!-- Landscape Orientation Lock Overlay (Visible in Portrait Mode) -->
+  <aside id="orientation-overlay" class="orientation-overlay" aria-live="polite">
+    <div class="orientation-card">
+      <div class="rotate-phone-anim">
+        <svg viewBox="0 0 24 24" width="32" height="32" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="5" y="2" width="14" height="20" rx="3" ry="3"></rect>
+          <line x1="12" y1="18" x2="12.01" y2="18"></line>
+        </svg>
+      </div>
+      <h2 class="orientation-title">Landscape Mode Required</h2>
+      <p class="orientation-text">Please rotate your device horizontally for the optimal FlexScape experience.</p>
+      <button class="btn-lock-orientation" id="btn-lock-orientation">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21.5 2v6h-6M21.34 15.57a10 10 0 1 1-.57-8.38l5.67-5.67"/>
+        </svg>
+        Rotate &amp; Lock Landscape
+      </button>
+    </div>
   </aside>
 
   <!-- App Main Centered Container -->
@@ -1323,10 +1409,9 @@
     const statEndTime = document.getElementById("stat-end-time");
     const statRestartBtn = document.getElementById("stat-restart-btn");
 
-    // Fullscreen Controls
-    const fullscreenBtn = document.getElementById("fullscreen-btn");
-    const fsIconExpand = document.getElementById("fs-icon-expand");
-    const fsIconCompress = document.getElementById("fs-icon-compress");
+    // Landscape Orientation Lock Controls
+    const orientationOverlay = document.getElementById("orientation-overlay");
+    const btnLockOrientation = document.getElementById("btn-lock-orientation");
 
     // Custom Modal
     const customModalBackdrop = document.getElementById("custom-modal-backdrop");
@@ -1353,27 +1438,50 @@
 
 
     /* ==========================================================================
-       Fullscreen API Handler
+       Landscape Orientation Lock & Sensor Controller
        ========================================================================== */
-    function toggleFullscreen() {
-      sound.playClick();
-      haptic.light();
-      if (!document.fullscreenElement) {
-        document.documentElement.requestFullscreen().catch(err => console.warn(err));
-      } else {
-        if (document.exitFullscreen) {
-          document.exitFullscreen().catch(err => console.warn(err));
+    async function applyLandscapeLock() {
+      try {
+        if (screen.orientation && screen.orientation.lock) {
+          await screen.orientation.lock("landscape");
+        } else if (screen.lockOrientation) {
+          screen.lockOrientation("landscape");
+        } else if (screen.mozLockOrientation) {
+          screen.mozLockOrientation("landscape");
+        } else if (screen.msLockOrientation) {
+          screen.msLockOrientation("landscape");
         }
+      } catch (err) {
+        // Handled gracefully if browser requires user gesture or PWA/fullscreen mode
+        console.log("Landscape lock info:", err.message || err);
       }
     }
 
-    document.addEventListener("fullscreenchange", () => {
-      const isFs = !!document.fullscreenElement;
-      fsIconExpand.style.display = isFs ? "none" : "block";
-      fsIconCompress.style.display = isFs ? "block" : "none";
-    });
+    function checkOrientation() {
+      const isPortrait = window.innerHeight > window.innerWidth;
+      if (orientationOverlay) {
+        orientationOverlay.style.display = isPortrait ? "flex" : "none";
+      }
+    }
 
-    fullscreenBtn.addEventListener("click", toggleFullscreen);
+    if (btnLockOrientation) {
+      btnLockOrientation.addEventListener("click", async () => {
+        sound.playClick();
+        haptic.light();
+        await applyLandscapeLock();
+        checkOrientation();
+      });
+    }
+
+    window.addEventListener("resize", checkOrientation);
+    window.addEventListener("orientationchange", checkOrientation);
+    
+    // Auto trigger landscape orientation lock on launch and first interaction
+    applyLandscapeLock();
+    checkOrientation();
+    window.addEventListener("pointerdown", () => {
+      applyLandscapeLock();
+    }, { once: true });
 
     /* ==========================================================================
        Formatters (Time & Timestamps)
