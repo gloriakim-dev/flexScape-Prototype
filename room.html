@@ -2843,8 +2843,8 @@
 
         <!-- Mode Select: 2 Options (Test Posture & 1 Min Session) -->
         <div class="mode-select-group">
-          <button class="mode-btn active" data-mode="test">🧪 Test Posture</button>
-          <button class="mode-btn" data-mode="1min">⚡ 1 Min Session</button>
+          <button class="mode-btn" data-mode="test">🧪 Test Posture</button>
+          <button class="mode-btn active" data-mode="1min">⚡ 1 Min Session</button>
         </div>
 
         <!-- Action Call with Starting Pose Trigger -->
@@ -3600,12 +3600,15 @@
       },
       {
         id: "full-body-t-pose",
-        name: "Full Body T-Pose",
-        description: "Extend both arms straight horizontally outwards to form a 'T' shape",
+        name: "Left Arm Outward",
+        description: "Extend your left arm straight horizontally outwards to the left",
         iconSvg: `
           <circle cx="20" cy="8" r="3.5"/>
           <line x1="20" y1="12" x2="20" y2="25"/>
-          <line x1="6" y1="15" x2="34" y2="15" stroke-width="2.2"/>
+          <!-- Left arm straight horizontal pointing left -->
+          <line x1="20" y1="15" x2="6" y2="15" stroke-width="2.5" stroke-linecap="round"/>
+          <!-- Right arm relaxed down -->
+          <line x1="20" y1="15" x2="27" y2="25" stroke-linecap="round"/>
           <line x1="20" y1="25" x2="14" y2="37"/>
           <line x1="20" y1="25" x2="26" y2="37"/>
         `,
@@ -3614,22 +3617,23 @@
           const lElb = landmarks[13], rElb = landmarks[14];
           const lWr = landmarks[15], rWr = landmarks[16];
 
-          if (!lSh || !rSh) return false;
-          if (lSh.visibility < 0.25 || rSh.visibility < 0.25) return false;
+          if (!lSh || !rSh || !lWr) return false;
+          if (lSh.visibility < 0.25 || lWr.visibility < 0.25) return false;
 
-          const vertTol = tol === "lenient" ? 0.32 : (tol === "strict" ? 0.18 : 0.26);
-          const minLateral = tol === "lenient" ? 0.06 : (tol === "strict" ? 0.12 : 0.09);
+          const vertTol = tol === "lenient" ? 0.34 : (tol === "strict" ? 0.20 : 0.27);
+          const minLateral = tol === "lenient" ? 0.08 : (tol === "strict" ? 0.15 : 0.11);
 
-          // In raw webcam coords, person faces camera:
-          // Left arm extends toward right side of image (lWr.x > lSh.x)
-          // Right arm extends toward left side of image (rWr.x < rSh.x)
-          const lLevel = (lWr && lWr.visibility > 0.20 ? Math.abs(lWr.y - lSh.y) < vertTol : true) && (lElb && lElb.visibility > 0.20 ? Math.abs(lElb.y - lSh.y) < vertTol : true);
-          const rLevel = (rWr && rWr.visibility > 0.20 ? Math.abs(rWr.y - rSh.y) < vertTol : true) && (rElb && rElb.visibility > 0.20 ? Math.abs(rElb.y - rSh.y) < vertTol : true);
+          // In raw webcam coords, person facing camera:
+          // Left arm extends toward right side of image: (lWr.x - lSh.x) > minLateral
+          const lLevel = Math.abs(lWr.y - lSh.y) < vertTol;
+          const lElbLevel = (lElb && lElb.visibility > 0.20) ? Math.abs(lElb.y - lSh.y) < vertTol : true;
+          const lExtended = (lWr.x - lSh.x) > minLateral;
+          const lElbExtended = (lElb && lElb.visibility > 0.20) ? (lElb.x - lSh.x) > (minLateral * 0.35) : true;
 
-          const lExtended = (lWr && lWr.visibility > 0.20 && (lWr.x - lSh.x) > minLateral) || (lElb && lElb.visibility > 0.20 && (lElb.x - lSh.x) > 0.05);
-          const rExtended = (rWr && rWr.visibility > 0.20 && (rSh.x - rWr.x) > minLateral) || (rElb && rElb.visibility > 0.20 && (rSh.x - rElb.x) > 0.05);
+          // Right arm is not extended horizontally outward to the right
+          const rExtended = rWr && rWr.visibility > 0.25 && (rSh.x - rWr.x) > minLateral && Math.abs(rWr.y - rSh.y) < vertTol;
 
-          return lLevel && rLevel && lExtended && rExtended;
+          return lLevel && lElbLevel && lExtended && lElbExtended && !rExtended;
         }
       }
     ];
@@ -3792,8 +3796,8 @@
     let showSkeleton = true;
     let showPostureGuide = true; // Holographic Target Posture Guide Overlay Superimposed on Body
 
-    // Game Session Mode: "test" (Test/Check Posture), "1min" (1 Min Session)
-    let selectedGameMode = "test";
+    // Game Session Mode: "1min" (1 Min Session - Default), "test" (Test/Check Posture)
+    let selectedGameMode = "1min";
     let activePoseList = [...ALL_POSES];
     let currentStageIndex = 0;
     let poseStrictness = "normal";
@@ -3921,13 +3925,9 @@
         return 15;
       } else if (id === "full-body-t-pose") {
         const lSpan = lWr.x - lSh.x;
-        const rSpan = rSh.x - rWr.x;
-        const avgSpan = (lSpan + rSpan) / 2;
         const lLevel = Math.abs(lWr.y - lSh.y);
-        const rLevel = Math.abs(rWr.y - rSh.y);
-        const avgLevelDiff = (lLevel + rLevel) / 2;
-        if (avgSpan > -0.05 && avgLevelDiff < 0.40) {
-          const score = Math.round(30 + (avgSpan * 120) + ((0.40 - avgLevelDiff) * 50));
+        if (lSpan > -0.05 && lLevel < 0.40) {
+          const score = Math.round(30 + (lSpan * 150) + ((0.40 - lLevel) * 60));
           return Math.max(15, Math.min(85, score));
         }
         return 15;
@@ -4820,14 +4820,14 @@
         rAnk: { x: -0.32, y: 3.25 }
       },
       "full-body-t-pose": {
-        name: "Full Body T-Pose",
+        name: "Left Arm Outward",
         head: { x: 0, y: -0.62 },
         lSh: { x: 0.50, y: 0 },
         rSh: { x: -0.50, y: 0 },
         lElb: { x: 1.05, y: 0.0 },
-        rElb: { x: -1.05, y: 0.0 },
         lWr: { x: 1.65, y: 0.0 },
-        rWr: { x: -1.65, y: 0.0 },
+        rElb: { x: -0.52, y: 0.65 },
+        rWr: { x: -0.42, y: 1.30 },
         lHip: { x: 0.32, y: 1.45 },
         rHip: { x: -0.32, y: 1.45 },
         lKnee: { x: 0.32, y: 2.35 },
@@ -5817,9 +5817,10 @@
     playAgainBtn.addEventListener("click", restartCurrentGame);
     settingsRestartBtn.addEventListener("click", restartCurrentGame);
 
-    // Initialize Render Mode and Gesture Control Guide
+    // Initialize Render Mode, Session Badge and Gesture Control Guide
     setRenderMode("outline");
     renderGestureGuide("start");
+    updateSessionBadge();
 
   </script>
 </body>
