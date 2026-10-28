@@ -69,172 +69,212 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- TUTORIAL STEP 1: LOGO ANIMATION                                           -->
+    <!-- TUTORIAL STEP 1: INTRO ANIMATION VIDEO                                    -->
     <!-- ========================================================================= -->
-    <div id="screenTutorialStep1" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-center p-8 select-none">
-        <div class="logo-intro-glow flex flex-col items-center justify-center">
-            <img src="logo.svg" alt="FlexScape Logo" class="w-32 h-36 object-contain drop-shadow-[0_0_35px_rgba(48,223,242,0.85)] mb-5">
-            <h1 class="font-orbitron text-4xl sm:text-5xl font-black text-white tracking-widest drop-shadow-[0_0_25px_rgba(0,240,255,0.7)]">
-                FLEXSCAPE
+    <div id="screenTutorialStep1" onclick="skipIntroAnimation()" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex items-center justify-center select-none overflow-hidden cursor-pointer" title="Click anywhere to skip">
+        <video id="introVideo" src="intro%20animation.mp4" playsinline class="w-full h-full max-w-full max-h-full object-contain pointer-events-none drop-shadow-[0_0_35px_rgba(0,240,255,0.25)]"></video>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- TUTORIAL STEP 2: HEALTH WARNING AND DISCLAIMER                            -->
+    <!-- (No buttons to continue, automatic next page for following instructions)  -->
+    <!-- ========================================================================= -->
+    <div id="screenTutorialStep2" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-center p-6 sm:p-10 select-none">
+        <div class="max-w-4xl w-full flex flex-col items-center justify-center my-auto z-20 text-center space-y-5 sm:space-y-6">
+            
+            <!-- Header Title -->
+            <h1 class="font-orbitron font-extrabold text-white text-3xl sm:text-4xl md:text-5xl tracking-wider leading-tight drop-shadow-[0_0_25px_rgba(0,240,255,0.4)]">
+                Health warning and Disclaimer
             </h1>
-            <p class="font-orbitron text-xs sm:text-sm tracking-[0.3em] text-cyan-300 font-bold mt-3 uppercase">
-                Interactive Motion Studio
+            
+            <!-- Instructions Subtitle -->
+            <p class="font-rajdhani text-slate-200 text-lg sm:text-xl md:text-2xl font-semibold leading-relaxed max-w-2xl">
+                Please ensure your surroundings are clear of any trip hazards before you play.<br class="hidden sm:inline">
+                Allow for adequate room to move freely and comfortably.
+            </p>
+
+            <!-- Vector Diagram (Transparent Background, No White Card/Inner Frame) -->
+            <div class="w-[340px] sm:w-[440px] md:w-[480px] h-[210px] sm:h-[260px] md:h-[280px] flex items-center justify-center p-2 relative my-2 select-none">
+                <svg viewBox="0 0 420 280" class="w-full h-full select-none pointer-events-none drop-shadow-[0_0_25px_rgba(0,240,255,0.25)]" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Floor line -->
+                    <line x1="60" y1="210" x2="360" y2="210" stroke="#ffffff" stroke-opacity="0.8" stroke-width="2.5" stroke-linecap="round" />
+                    
+                    <!-- Hazard box (Cyber Blue/Cyan) -->
+                    <rect x="242" y="188" width="22" height="22" rx="2" stroke="#00f0ff" stroke-width="2.5" fill="#091330" />
+                    
+                    <!-- Impact shock zigzags over the hazard box -->
+                    <path d="M 244 185 L 248 177 L 253 184 L 258 176 L 263 185" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" fill="none" />
+                    
+                    <!-- Trajectory motion arc for the kicked/tripping leg -->
+                    <path d="M 136 136 C 125 168 152 202 186 208" stroke="#ff2a8d" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                    
+                    <!-- Warning Red Triangle -->
+                    <g transform="translate(315, 85)">
+                        <polygon points="18,0 36,34 0,34" stroke="#ff2a8d" stroke-width="2.5" stroke-linejoin="round" fill="none" />
+                        <line x1="18" y1="10" x2="18" y2="22" stroke="#ff2a8d" stroke-width="2.5" stroke-linecap="round" />
+                        <circle cx="18" cy="28" r="1.5" fill="#ff2a8d" />
+                    </g>
+                    
+                    <!-- Stick Figure Tripping (Crisp White on Dark Background) -->
+                    <!-- Head -->
+                    <circle cx="244" cy="98" r="14" fill="#ffffff" />
+                    
+                    <!-- Surprise / Shock marks next to head -->
+                    <path d="M 265 91 C 269 95 269 101 265 105" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" fill="none" />
+                    <path d="M 271 89 C 276 95 276 103 271 109" stroke="#00f0ff" stroke-width="2" stroke-linecap="round" fill="none" />
+                    
+                    <!-- Torso -->
+                    <path d="M 239 112 L 218 156" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
+                    
+                    <!-- Arms -->
+                    <!-- Back arm flailing -->
+                    <path d="M 235 120 L 206 144" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+                    <!-- Front arm reaching for ground -->
+                    <path d="M 237 120 L 258 138 L 251 162" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+                    
+                    <!-- Legs -->
+                    <!-- Front leg tripping against box -->
+                    <path d="M 218 156 L 232 184 L 241 208" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                    <!-- Back leg kicked up in the air -->
+                    <path d="M 218 156 L 191 160 L 168 136" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+            </div>
+
+            <!-- Bottom Notice Text -->
+            <p class="font-rajdhani text-slate-300 text-sm sm:text-base md:text-lg font-medium leading-relaxed max-w-3xl px-2">
+                NOTICE: Players with a history of heart issues, anxiety disorders, or severe stress should exercise caution. Please take regular breaks and discontinue use immediately if you experience dizziness, chest pains, or palpitations.
+            </p>
+
+        </div>
+    </div>
+
+    <!-- ========================================================================= -->
+    <!-- ========================================================================= -->
+    <!-- TUTORIAL STEP 3: 5 STEPS BACK                                             -->
+    <!-- (No buttons/skip buttons. User must clear step by full body in screen)    -->
+    <!-- ========================================================================= -->
+    <div id="screenTutorialStep3" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-center p-6 sm:p-10 select-none">
+        <!-- Top Left Logo Icon (matching reference) -->
+        <div class="absolute top-6 left-6 sm:top-10 sm:left-10 z-30 pointer-events-none">
+            <img src="logo.svg" alt="FlexScape" class="w-10 h-12 sm:w-12 sm:h-14">
+        </div>
+
+        <div class="max-w-4xl w-full flex flex-col items-center justify-center my-auto z-20 text-center">
+            <!-- 2-Frame Stepping Back Animation (Transparent Background, No White Card/Inner Frame) -->
+            <div id="tutStep3Card" onclick="simulateFullBody()" title="Click to test/simulate full body detection" class="cursor-pointer w-[360px] sm:w-[480px] md:w-[540px] h-[240px] sm:h-[290px] md:h-[310px] flex items-center justify-center relative select-none">
+                <svg viewBox="0 0 460 280" class="w-full h-full select-none pointer-events-none drop-shadow-[0_0_30px_rgba(0,168,255,0.2)]" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 3D Perspective Screen on the right (shared across both frames) -->
+                    <polygon points="270,60 405,18 405,246 270,204" fill="#00a8ff" stroke="#ffffff" stroke-width="3" stroke-linejoin="round" />
+                    <!-- Screen ambient light grid lines -->
+                    <line x1="270" y1="108" x2="405" y2="75" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1.5" />
+                    <line x1="270" y1="156" x2="405" y2="132" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1.5" />
+                    <line x1="337" y1="39" x2="337" y2="225" stroke="#ffffff" stroke-opacity="0.35" stroke-width="1.5" />
+
+                    <!-- FRAME 1: Stick figure standing close to screen -->
+                    <g class="step3-anim-frame1">
+                        <!-- Floor spot under figure -->
+                        <ellipse cx="210" cy="216" rx="16" ry="4" fill="#00e5ff" fill-opacity="0.6" />
+                        <!-- Head -->
+                        <circle cx="210" cy="112" r="14" fill="#ffffff" />
+                        <!-- Torso -->
+                        <rect x="202" y="130" width="16" height="42" rx="8" fill="#ffffff" />
+                        <!-- Legs standing upright -->
+                        <line x1="206" y1="172" x2="206" y2="214" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
+                        <line x1="214" y1="172" x2="214" y2="214" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
+                        <!-- Distance pink line (short) -->
+                        <line x1="220" y1="150" x2="270" y2="150" stroke="#ff0099" stroke-width="4.5" stroke-linecap="round" />
+                    </g>
+
+                    <!-- FRAME 2: Stick figure stepped back (stepping backward stride) -->
+                    <g class="step3-anim-frame2">
+                        <!-- Previous spot outline -->
+                        <ellipse cx="210" cy="216" rx="14" ry="3.5" stroke="#00e5ff" stroke-opacity="0.4" stroke-dasharray="3,3" />
+                        <!-- Floor backward step direction arrow -->
+                        <path d="M 188 216 L 150 216 M 158 211 L 148 216 L 158 221" stroke="#00e5ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                        <!-- Floor spot at new stepped-back position -->
+                        <ellipse cx="125" cy="216" rx="24" ry="4" fill="#00e5ff" fill-opacity="0.75" />
+                        <!-- Head -->
+                        <circle cx="130" cy="112" r="14" fill="#ffffff" />
+                        <!-- Torso -->
+                        <rect x="122" y="130" width="16" height="42" rx="8" fill="#ffffff" />
+                        <!-- Arms swinging in stride -->
+                        <line x1="122" y1="140" x2="110" y2="162" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+                        <line x1="138" y1="140" x2="148" y2="162" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+                        <!-- Front leg planted -->
+                        <line x1="134" y1="172" x2="144" y2="214" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
+                        <!-- Back leg actively stepping backwards -->
+                        <path d="M 126 172 L 112 195 L 98 214" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                        <!-- Distance pink line (stretched longer to screen) -->
+                        <line x1="140" y1="150" x2="270" y2="150" stroke="#ff0099" stroke-width="4.5" stroke-linecap="round" />
+                    </g>
+                </svg>
+
+                <!-- Hidden progress bar element so existing JS doesn't complain -->
+                <div id="tutProgressBar" class="absolute bottom-0 left-0 h-1 bg-cyan-400 transition-all duration-75" style="width: 0%;"></div>
+            </div>
+
+            <!-- Reference Text Content & Placement -->
+            <p class="font-orbitron text-white text-base sm:text-xl md:text-2xl font-bold tracking-wider text-center mt-6 sm:mt-8 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+                Make sure to take a 5 steps back from the projected screen
             </p>
         </div>
     </div>
 
     <!-- ========================================================================= -->
-    <!-- TUTORIAL STEP 2: DISCLAIMER                                               -->
-    <!-- (No buttons to continue, automatic next page for following instructions)  -->
+    <!-- TUTORIAL STEP 4: CENTER ALIGNMENT & CALIBRATION                           -->
+    <!-- (No buttons/skip buttons. User must clear step by aligning in frame)      -->
     <!-- ========================================================================= -->
-    <div id="screenTutorialStep2" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-center p-6 sm:p-10 select-none">
-        <div class="max-w-2xl w-full bg-[#060e24]/95 border-2 border-cyan-500/40 rounded-[36px] p-8 sm:p-12 flex flex-col items-center text-center shadow-[0_0_45px_rgba(0,240,255,0.2)]">
-            <div class="w-16 h-16 rounded-full bg-cyan-950/80 border-2 border-cyan-400 flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.4)] mb-5">
-                <i class="fa-solid fa-shield-halved text-2xl text-cyan-300"></i>
-            </div>
-            <h2 class="font-orbitron text-2xl sm:text-3xl font-black text-white tracking-wider mb-4">
-                Disclaimer
-            </h2>
-            <div class="space-y-4 text-slate-200 font-sans text-sm sm:text-base leading-relaxed text-center max-w-lg">
-                <p>
-                    FlexScape utilizes real-time vision motion tracking to detect your posture and guide your exercises. No camera video feeds or personal biometric data are ever recorded or stored.
-                </p>
-                <p class="text-xs sm:text-sm text-slate-400">
-                    Ensure you have sufficient unobstructed space around you. Cease movement immediately if you experience pain or fatigue.
-                </p>
-            </div>
-            <div class="mt-8 flex items-center gap-3 text-cyan-400 text-xs font-orbitron font-bold">
-                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-pulse"></span>
-                <span>INITIALIZING CALIBRATION ENVIRONMENT...</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- TUTORIAL STEP 3: 5 STEPS BACK / FULL BODY IN SCREEN                       -->
-    <!-- (No buttons to continue, automatic next page for full body in screen)     -->
-    <!-- ========================================================================= -->
-    <div id="screenTutorialStep3" class="screen-view hidden relative z-10 w-full h-full flex flex-col items-center justify-between p-6 max-w-5xl mx-auto select-none">
-        <!-- Top Title Bar -->
-        <div class="w-full flex justify-between items-center z-20">
-            <button onclick="exitTutorial()" onmouseenter="playSfx('hover')" class="figma-btn interactable px-7 py-2.5 rounded-xl font-orbitron text-xs font-bold text-white">
-                <i class="fa-solid fa-arrow-left mr-2"></i> Home
-            </button>
-            <div class="flex flex-col items-center text-center">
-                <h1 class="font-orbitron text-xl sm:text-2xl font-extrabold text-white tracking-wider">Body Calibration</h1>
-            </div>
-            <button onclick="goToTutorialStep(4)" onmouseenter="playSfx('hover')" class="figma-btn interactable px-6 py-2.5 rounded-xl font-orbitron text-xs font-bold text-slate-300 hover:text-white">
-                Skip Step <i class="fa-solid fa-arrow-right ml-1"></i>
-            </button>
+    <div id="screenTutorialStep4" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-center p-6 sm:p-10 select-none">
+        <!-- Top Left Logo Icon (matching reference) -->
+        <div class="absolute top-6 left-6 sm:top-10 sm:left-10 z-30 pointer-events-none">
+            <img src="logo.svg" alt="FlexScape" class="w-10 h-12 sm:w-12 sm:h-14">
         </div>
 
-        <!-- Prominent Instruction Banner -->
-        <div class="text-center my-1 z-20">
-            <h2 class="font-orbitron text-2xl sm:text-3xl font-extrabold text-white tracking-wide">
-                Make sure to take 5 steps back from the projected screen.
-            </h2>
-        </div>
+        <div class="max-w-4xl w-full flex flex-col items-center justify-center my-auto z-20 text-center">
+            <!-- Center Vector Diagram (Transparent Background, No White Card/Inner Frame) -->
+            <div id="tutStep4Card" onclick="simulateFullBody()" title="Click to test/simulate body alignment" class="cursor-pointer w-[340px] sm:w-[440px] md:w-[480px] h-[230px] sm:h-[280px] md:h-[295px] flex items-center justify-center p-2 relative select-none">
+                <svg viewBox="0 0 420 280" class="w-full h-full select-none pointer-events-none drop-shadow-[0_0_25px_rgba(0,240,255,0.25)]" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <!-- Back dark wall -->
+                    <rect x="125" y="52" width="170" height="138" fill="#091330" stroke="#00f0ff" stroke-opacity="0.5" stroke-width="2" />
+                    
+                    <!-- 3D perspective floor plane extending forward -->
+                    <polygon points="125,190 295,190 340,248 80,248" fill="#050a18" stroke="#00f0ff" stroke-opacity="0.7" stroke-width="2.5" stroke-linejoin="round" />
+                    
+                    <!-- Guide frame on back wall -->
+                    <rect x="152" y="74" width="116" height="98" fill="none" stroke="#00e5ff" stroke-width="1.5" stroke-opacity="0.6" />
+                    <line x1="160" y1="104" x2="260" y2="104" stroke="#00e5ff" stroke-width="2" />
+                    
+                    <!-- Cyan outline figure guide on wall -->
+                    <circle cx="210" cy="94" r="11" fill="none" stroke="#00e5ff" stroke-width="2.5" />
+                    <!-- Arms raised in U-shape on wall guide -->
+                    <path d="M 194 104 L 178 104 L 178 86 M 226 104 L 242 104 L 242 86" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" />
+                    <!-- Torso and legs on wall guide -->
+                    <path d="M 204 104 L 204 156 M 216 104 L 216 156" fill="none" stroke="#00e5ff" stroke-width="2.5" stroke-linecap="round" />
 
-        <!-- Real-time Body Part Detection Chips (Face, Arms, Legs) -->
-        <div class="flex items-center justify-center gap-2 sm:gap-4 my-1 z-20">
-            <div id="chipFace" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-700 text-xs font-orbitron text-slate-400 font-bold transition-all">
-                <i id="iconFace" class="fa-solid fa-circle-xmark text-amber-400"></i> Face
-            </div>
-            <div id="chipArms" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-700 text-xs font-orbitron text-slate-400 font-bold transition-all">
-                <i id="iconArms" class="fa-solid fa-circle-xmark text-amber-400"></i> Both Arms
-            </div>
-            <div id="chipLegs" class="flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-700 text-xs font-orbitron text-slate-400 font-bold transition-all">
-                <i id="iconLegs" class="fa-solid fa-circle-xmark text-amber-400"></i> All Legs
-            </div>
-        </div>
+                    <!-- Magenta stick figure in front on floor -->
+                    <!-- Blue floor ellipse shadow -->
+                    <ellipse cx="210" cy="236" rx="20" ry="4.5" fill="#00e5ff" fill-opacity="0.6" />
+                    <!-- Head -->
+                    <circle cx="210" cy="126" r="14" fill="#ff2a8d" />
+                    <!-- Torso -->
+                    <rect x="202" y="145" width="16" height="50" rx="8" fill="#ff2a8d" />
+                    <!-- Goalpost / U-shaped raised arms -->
+                    <path d="M 193 152 L 180 152 L 180 120" fill="none" stroke="#ff2a8d" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M 227 152 L 240 152 L 240 120" fill="none" stroke="#ff2a8d" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
+                    <!-- Legs -->
+                    <line x1="206" y1="194" x2="206" y2="234" stroke="#ff2a8d" stroke-width="8" stroke-linecap="round" />
+                    <line x1="214" y1="194" x2="214" y2="234" stroke="#ff2a8d" stroke-width="8" stroke-linecap="round" />
+                </svg>
 
-        <!-- Calibration Viewport Card with Body Outline Shapes Canvas -->
-        <div class="relative w-full max-w-3xl h-[50vh] rounded-3xl overflow-hidden border-2 border-cyan-500/30 bg-slate-950 flex items-center justify-center shadow-[0_0_30px_rgba(0,240,255,0.18)] my-auto z-20">
-            <!-- Canvas Rendering Body Outline (Shapes) -->
-            <canvas id="tutorialCanvas" class="w-full h-full block object-cover"></canvas>
-
-            <!-- Calibration Status Badge -->
-            <div class="absolute top-4 left-4 z-20 bg-slate-900/85 backdrop-blur px-4 py-2 rounded-xl border border-white/10 flex items-center space-x-2">
-                <div id="tutCalibDot" class="w-2.5 h-2.5 rounded-full bg-yellow-400 animate-pulse"></div>
-                <span id="tutCalibText" class="font-orbitron text-xs font-bold text-slate-200">LEGS NOT IN SCREEN</span>
-            </div>
-
-            <!-- Progress Meter (Fills as full body is maintained) -->
-            <div class="absolute bottom-5 inset-x-10 z-20 flex flex-col items-center space-y-1.5">
-                <div class="flex justify-between w-full font-orbitron text-xs font-bold px-1">
-                    <span id="tutProgressLabel" class="text-yellow-400">STEP BACKWARDS UNTIL ALL LEGS ARE IN SCREEN</span>
-                    <span id="tutProgressPct" class="text-white">0%</span>
-                </div>
-                <div class="w-full bg-slate-900/90 h-3 rounded-full border border-cyan-500/30 p-0.5 overflow-hidden">
-                    <div id="tutProgressBar" class="h-full bg-gradient-to-r from-cyan-400 to-emerald-400 rounded-full transition-all duration-100" style="width: 0%;"></div>
-                </div>
+                <!-- Hidden progress bar element so existing JS doesn't complain -->
+                <div id="step4ProgressBar" class="absolute bottom-0 left-0 h-1 bg-cyan-400 transition-all duration-75" style="width: 0%;"></div>
             </div>
 
-            <!-- Simulation button for testing without camera distance -->
-            <div class="absolute top-4 right-4 z-20">
-                <button onclick="simulateFullBody()" class="figma-btn interactable px-3 py-1.5 rounded-lg text-[11px] font-orbitron text-cyan-300 bg-slate-900/80 border border-cyan-500/30 hover:bg-cyan-900">
-                    <i class="fa-solid fa-person-walking mr-1"></i> Simulate Full Body
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- TUTORIAL STEP 4: CENTER ALIGNMENT & SCANNING CALIBRATION                  -->
-    <!-- (Scanning animation text: "Beginning Calibration ...")                    -->
-    <!-- ========================================================================= -->
-    <div id="screenTutorialStep4" class="screen-view hidden relative z-10 w-full h-full flex flex-col items-center justify-between p-6 max-w-5xl mx-auto select-none">
-        <!-- Top Title Bar -->
-        <div class="w-full flex justify-between items-center z-20">
-            <button onclick="goToTutorialStep(3)" onmouseenter="playSfx('hover')" class="figma-btn interactable px-7 py-2.5 rounded-xl font-orbitron text-xs font-bold text-white">
-                <i class="fa-solid fa-arrow-left mr-2"></i> Back
-            </button>
-            <div class="flex flex-col items-center text-center">
-                <h1 class="font-orbitron text-xl sm:text-2xl font-extrabold text-white tracking-wider">Body Calibration</h1>
-            </div>
-            <button onclick="goToTutorialStep(5)" onmouseenter="playSfx('hover')" class="figma-btn interactable px-6 py-2.5 rounded-xl font-orbitron text-xs font-bold text-slate-300 hover:text-white">
-                Skip Step <i class="fa-solid fa-arrow-right ml-1"></i>
-            </button>
-        </div>
-
-        <!-- Prominent Instruction Banner -->
-        <div class="text-center my-2 z-20 max-w-2xl">
-            <h2 class="font-orbitron text-xl sm:text-2xl font-extrabold text-white tracking-wide">
-                Please stand in the center and align your body to fit the frame. Follow the instructions to begin calibration.
-            </h2>
-        </div>
-
-        <!-- Calibration Scanning Viewport Frame -->
-        <div class="relative w-full max-w-3xl h-[50vh] rounded-3xl overflow-hidden border-2 border-cyan-400 bg-slate-950 flex items-center justify-center shadow-[0_0_35px_rgba(0,240,255,0.25)] my-auto z-20">
-            <canvas id="tutorialCanvasStep4" class="w-full h-full block object-cover"></canvas>
-            
-            <!-- Dynamic Neon Laser Scanning Beam -->
-            <div class="scan-beam"></div>
-
-            <!-- Top Left Status Badge -->
-            <div class="absolute top-4 left-4 z-20 bg-slate-900/90 backdrop-blur px-4 py-2 rounded-xl border border-cyan-400/30 flex items-center space-x-2">
-                <div class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></div>
-                <span class="font-orbitron text-xs font-bold text-cyan-300">ALIGNING BODY FRAME</span>
-            </div>
-
-            <!-- Central Scanning Calibration Message Banner -->
-            <div class="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-20">
-                <div class="px-6 py-3 rounded-2xl bg-slate-950/85 border border-cyan-400/50 backdrop-blur-md shadow-[0_0_25px_rgba(0,240,255,0.3)] flex items-center gap-3 animate-pulse">
-                    <span class="w-3 h-3 rounded-full bg-cyan-400"></span>
-                    <span id="step4ScanText" class="font-orbitron text-base sm:text-lg font-bold text-white tracking-wider">Beginning Calibration ...</span>
-                </div>
-            </div>
-
-            <!-- Progress Meter -->
-            <div class="absolute bottom-5 inset-x-10 z-20 flex flex-col items-center space-y-1.5">
-                <div class="flex justify-between w-full font-orbitron text-xs font-bold px-1">
-                    <span id="step4ProgressLabel" class="text-cyan-300">CALIBRATING BIOMETRICS...</span>
-                    <span id="step4ProgressPct" class="text-white">0%</span>
-                </div>
-                <div class="w-full bg-slate-900/90 h-3 rounded-full border border-cyan-500/30 p-0.5 overflow-hidden">
-                    <div id="step4ProgressBar" class="h-full bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 rounded-full transition-all duration-100" style="width: 0%;"></div>
-                </div>
-            </div>
+            <!-- Reference Text Content & Placement -->
+            <p class="font-orbitron text-white text-base sm:text-xl md:text-2xl font-bold leading-relaxed tracking-wider text-center mt-6 sm:mt-8 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+                Please stand in the center and align your body to fit the frame.<br class="hidden sm:inline">
+                Follow the instructions to begin calibration
+            </p>
         </div>
     </div>
 
@@ -278,10 +318,10 @@
                     </svg>
                 </div>
 
-                <!-- Center Open Hand Rounded Card -->
-                <div class="bg-white rounded-[36px] sm:rounded-[44px] border-4 border-cyan-400 p-6 sm:p-8 flex items-center justify-center shadow-[0_0_40px_rgba(0,240,255,0.4)] max-w-sm sm:max-w-md w-full mx-auto">
+                <!-- Center Open Hand Rounded Card (Transparent Cyber Dark, No White Background) -->
+                <div class="bg-[#091330]/80 rounded-[36px] sm:rounded-[44px] border-2 border-cyan-400/70 p-6 sm:p-8 flex items-center justify-center shadow-[0_0_40px_rgba(0,240,255,0.35)] max-w-sm sm:max-w-md w-full mx-auto">
                     <!-- SVG Open Dominant Hand Illustration (Matching Image 5) -->
-                    <svg viewBox="0 0 180 220" class="w-48 h-56 sm:w-56 sm:h-64 object-contain">
+                    <svg viewBox="0 0 180 220" class="w-48 h-56 sm:w-56 sm:h-64 object-contain drop-shadow-[0_0_20px_rgba(255,42,141,0.5)]">
                         <defs>
                             <linearGradient id="handPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
                                 <stop offset="0%" stop-color="#ff80bf" />
@@ -290,10 +330,10 @@
                         </defs>
                         <!-- Hand Palm and Fingers -->
                         <path d="M 60 195 C 65 165 72 135 70 120 C 65 95 60 65 62 48 C 63 42 70 42 72 48 C 76 68 82 98 84 105 C 86 90 88 50 90 32 C 91 26 98 26 99 32 C 102 52 105 85 107 105 C 109 95 115 58 120 44 C 122 39 129 40 129 46 C 129 65 127 92 127 112 C 131 100 138 75 144 68 C 147 64 153 66 153 72 C 151 92 143 125 138 142 C 132 165 125 190 120 205 C 100 215 80 215 60 195 Z" 
-                              fill="url(#handPinkGrad)" stroke="#111827" stroke-width="4.5" stroke-linejoin="round" />
+                              fill="url(#handPinkGrad)" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" />
                         <!-- Thumb -->
                         <path d="M 70 120 C 58 115 42 122 32 128 C 26 132 29 140 35 139 C 48 136 62 148 70 160" 
-                              fill="url(#handPinkGrad)" stroke="#111827" stroke-width="4.5" stroke-linejoin="round" />
+                              fill="url(#handPinkGrad)" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" />
                         <!-- Finger Details / Nails -->
                         <ellipse cx="67" cy="52" rx="3" ry="5" fill="#fbcfe8" />
                         <ellipse cx="94.5" cy="36" rx="3.5" ry="5.5" fill="#fbcfe8" />
@@ -305,7 +345,7 @@
             </div>
 
             <!-- Bottom Instruction Text (Matching Image 5) -->
-            <p class="font-sans text-xl sm:text-2xl font-medium text-white tracking-wide text-center mt-8 max-w-2xl px-4">
+            <p class="font-orbitron text-base sm:text-xl md:text-2xl font-bold text-white tracking-wider text-center mt-8 max-w-2xl px-4 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">
                 To use gesture control please lift your dominant hand forward towards the screen
             </p>
         </div>
@@ -390,7 +430,7 @@
             </div>
 
             <!-- Bottom Instruction Text (Matching Image 4) -->
-            <p class="font-sans text-xl sm:text-2xl font-medium text-white tracking-wide text-center mt-8 max-w-2xl px-4">
+            <p class="font-orbitron text-base sm:text-xl md:text-2xl font-bold text-white tracking-wider text-center mt-8 max-w-2xl px-4 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">
                 You will be able to see a ring wrapping around your cursor. This will indicate the duration to register a click
             </p>
         </div>
@@ -429,7 +469,7 @@
             </div>
 
             <!-- Bottom Text (Matching Image 2) -->
-            <h2 class="font-sans text-3xl sm:text-4xl font-bold text-slate-200 tracking-wide text-center">
+            <h2 class="font-orbitron text-3xl sm:text-4xl md:text-5xl font-extrabold text-white tracking-wider text-center drop-shadow-[0_0_25px_rgba(0,240,255,0.6)]">
                 Game controls tutorial complete
             </h2>
         </div>
@@ -818,15 +858,15 @@
             </div>
         </div>
 
-        <!-- Center: Large Dark Capsule Card with 3 Action Buttons -->
-        <div class="bg-[#060e24]/95 border border-slate-800 rounded-[48px] sm:rounded-[56px] py-12 px-8 sm:px-16 max-w-2xl w-full flex flex-col items-center gap-4 my-auto shadow-[0_15px_40px_rgba(0,0,0,0.8)] z-20">
-            <button onclick="resumeGame()" onmouseenter="playSfx('hover')" class="w-full max-w-md py-4 rounded-xl font-orbitron font-bold text-lg text-white bg-[#09153a] hover:bg-[#0e2154] border border-cyan-500/25 hover:border-cyan-400 transition-all text-center tracking-wider shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-98">
+        <!-- Center: Large Dark Capsule Card with 3 Action Buttons (matching Reference Image) -->
+        <div class="bg-[#0b102b]/95 border border-[#1b234b] rounded-[48px] sm:rounded-[56px] py-12 px-8 sm:px-16 max-w-2xl w-full flex flex-col items-center gap-4 my-auto shadow-[0_15px_40px_rgba(0,0,0,0.8)] z-20">
+            <button onclick="resumeGame()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full max-w-md py-4 rounded-xl font-orbitron font-bold text-lg text-white bg-[#0e1b4d] hover:bg-[#152a75] border border-[#1a2f7d] hover:border-cyan-400 transition-all text-center tracking-wider shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-98">
                 Continue
             </button>
-            <button onclick="openSettingsFromPause()" onmouseenter="playSfx('hover')" class="w-full max-w-md py-4 rounded-xl font-orbitron font-bold text-lg text-white bg-[#09153a] hover:bg-[#0e2154] border border-cyan-500/25 hover:border-cyan-400 transition-all text-center tracking-wider shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-98">
+            <button onclick="openSettingsFromPause()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full max-w-md py-4 rounded-xl font-orbitron font-bold text-lg text-white bg-[#0e1b4d] hover:bg-[#152a75] border border-[#1a2f7d] hover:border-cyan-400 transition-all text-center tracking-wider shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-98">
                 Settings
             </button>
-            <button onclick="exitGameplay()" onmouseenter="playSfx('hover')" class="w-full max-w-md py-4 rounded-xl font-orbitron font-bold text-lg text-white bg-[#09153a] hover:bg-[#0e2154] border border-cyan-500/25 hover:border-cyan-400 transition-all text-center tracking-wider shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-98">
+            <button onclick="exitGameplay()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full max-w-md py-4 rounded-xl font-orbitron font-bold text-lg text-white bg-[#0e1b4d] hover:bg-[#152a75] border border-[#1a2f7d] hover:border-cyan-400 transition-all text-center tracking-wider shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-98">
                 Exit
             </button>
         </div>
@@ -1042,7 +1082,7 @@
 
         <!-- Exit Button with Pink Outline (from Image 3) -->
         <div class="w-full flex justify-center pb-2 pt-2 z-20">
-            <button onclick="navigateTo('screenHome')" onmouseenter="playSfx('hover')" class="px-14 py-2.5 rounded-xl border-2 border-[#ff2a8d] bg-[#070e24] text-white font-orbitron font-bold text-sm tracking-widest hover:bg-[#ff2a8d]/20 transition-all shadow-[0_0_15px_rgba(255,42,141,0.35)] active:scale-95">
+            <button onclick="navigateTo('screenHome')" onmouseenter="playSfx('hover')" class="figma-btn interactable px-14 py-2.5 rounded-xl border-2 border-[#ff2a8d] bg-[#070e24] text-white font-orbitron font-bold text-sm tracking-widest hover:bg-[#ff2a8d]/20 transition-all shadow-[0_0_15px_rgba(255,42,141,0.35)] active:scale-95">
                 Exit
             </button>
         </div>
@@ -1062,7 +1102,7 @@
     </div>
 
     <!-- Custom Gesture Glove Cursor & Radial Loader (1 Progress Ring, cursor-hand default) -->
-    <div id="gesture-cursor" class="hidden">
+    <div id="gesture-cursor">
         <svg class="radial-svg" viewBox="0 0 80 80">
             <circle class="radial-progress" id="cursor-progress" cx="40" cy="40" r="35" />
         </svg>
@@ -1196,6 +1236,8 @@
             playSfx('click');
             if (previousScreenBeforeSettings === 'screenGameplay') {
                 navigateTo('screenGameplay');
+                isGameRunning = true;
+                isGamePaused = true;
                 const pauseModal = document.getElementById('pauseModal');
                 if (pauseModal) pauseModal.classList.remove('hidden');
             } else {
@@ -1221,6 +1263,10 @@
         function pauseGame() {
             if (!isGameRunning || isGamePaused) return;
             isGamePaused = true;
+            if (gameLoopRafId) {
+                cancelAnimationFrame(gameLoopRafId);
+                gameLoopRafId = null;
+            }
             playSfx('click');
             const scoreDisplayVal = currentTotalScore > 0 ? currentTotalScore : 1240;
             const pauseScoreEl = document.getElementById('pauseScoreDisplay');
@@ -1235,9 +1281,11 @@
         function resumeGame() {
             playSfx('click');
             isGamePaused = false;
+            lastGameTimestamp = null;
             document.getElementById('pauseModal').classList.add('hidden');
             announceAudioCue('Game resumed.');
-            requestAnimationFrame(gameLoop);
+            if (gameLoopRafId) cancelAnimationFrame(gameLoopRafId);
+            gameLoopRafId = requestAnimationFrame(gameLoop);
         }
 
         function restartGameplay() {
@@ -1385,9 +1433,12 @@
             } catch(e) {}
         }
 
+        let currentActiveScreen = 'screenHome';
+
         // Screen Navigation Router
         function navigateTo(screenId) {
             playSfx('click');
+            currentActiveScreen = screenId;
             document.querySelectorAll('.screen-view').forEach(s => s.classList.add('hidden'));
             const targetScreen = document.getElementById(screenId);
             if (targetScreen) {
@@ -1395,10 +1446,20 @@
             }
 
             if (screenId !== 'screenGameplay') {
-                isGameRunning = false;
-                isGamePaused = false;
+                if (previousScreenBeforeSettings !== 'screenGameplay' || (screenId !== 'screenSettings' && screenId !== 'screenAccessibility')) {
+                    isGameRunning = false;
+                    isGamePaused = false;
+                }
+                isAutoPausedForBody = false;
+                bodyLostFrames = 0;
+                if (autoPauseResumeCountdown) {
+                    clearInterval(autoPauseResumeCountdown);
+                    autoPauseResumeCountdown = null;
+                }
+                const autoModal = document.getElementById('autoPauseCalibrationModal');
+                if (autoModal) autoModal.classList.add('hidden');
             }
-            if (screenId !== 'screenTutorialStep1' && screenId !== 'screenTutorialStep2') {
+            if (!screenId.startsWith('screenTutorialStep')) {
                 inTutorialMode = false;
                 stopVoiceRecognition();
             }
@@ -1488,13 +1549,21 @@
                 announceAudioCue(`Gameplay started. Total score is 0. 3 seconds for each pose.`);
             }
 
-            requestAnimationFrame(gameLoop);
+            if (gameLoopRafId) {
+                cancelAnimationFrame(gameLoopRafId);
+                gameLoopRafId = null;
+            }
+            gameLoopRafId = requestAnimationFrame(gameLoop);
         }
 
         function exitGameplay() {
             playSfx('click');
             isGameRunning = false;
             isGamePaused = false;
+            if (gameLoopRafId) {
+                cancelAnimationFrame(gameLoopRafId);
+                gameLoopRafId = null;
+            }
             const pauseModal = document.getElementById('pauseModal');
             if (pauseModal) pauseModal.classList.add('hidden');
             const autoModal = document.getElementById('autoPauseCalibrationModal');
@@ -1505,6 +1574,10 @@
         function finishHoleInWallGame() {
             isGameRunning = false;
             isGamePaused = false;
+            if (gameLoopRafId) {
+                cancelAnimationFrame(gameLoopRafId);
+                gameLoopRafId = null;
+            }
             const pauseModal = document.getElementById('pauseModal');
             if (pauseModal) pauseModal.classList.add('hidden');
 
@@ -1661,25 +1734,12 @@
         // GAMEPLAY AUTO-PAUSE WHEN FULL BODY NOT IN SCREEN
         // =========================================================================
         function triggerAutoPauseDueToBodyLost() {
-            if (!isGameRunning || isGamePaused) return;
-            isGamePaused = true;
-            isAutoPausedForBody = true;
-            bodyLostFrames = 0;
-            autoPauseProgress = 0;
-            playSfx('hover');
-            
-            const autoModal = document.getElementById('autoPauseCalibrationModal');
-            if (autoModal) autoModal.classList.remove('hidden');
-            
-            const countBox = document.getElementById('autoPauseCountdownBox');
-            if (countBox) countBox.classList.add('hidden');
-            
-            announceAudioCue('Game auto paused. Please stand in the center and align your body to fit the frame.');
-            requestAnimationFrame(autoPauseCalibrationLoop);
+            // Gameplay auto-pause disabled per user request
+            return;
         }
 
         function autoPauseCalibrationLoop() {
-            if (!isAutoPausedForBody) return;
+            if (!isAutoPausedForBody || currentActiveScreen !== 'screenGameplay') return;
 
             const apCanvas = document.getElementById('autoPauseCanvas');
             if (apCanvas) {
@@ -1785,12 +1845,25 @@
         function startTutorial() {
             playSfx('click');
             inTutorialMode = true;
-            
-            // Hide gesture cursor for the initial steps (Step 1-4)
-            const cursorElem = document.getElementById('gesture-cursor');
-            if (cursorElem) cursorElem.classList.add('hidden');
-            
             goToTutorialStep(1);
+        }
+
+        function handleStartClick() {
+            playSfx('click');
+            inTutorialMode = false;
+            navigateTo('screenSongSelect');
+        }
+
+        function skipIntroAnimation() {
+            const introVid = document.getElementById('introVideo');
+            if (introVid) {
+                introVid.pause();
+            }
+            if (inTutorialMode) {
+                goToTutorialStep(2);
+            } else {
+                navigateTo('screenSongSelect');
+            }
         }
 
         function exitTutorial() {
@@ -1818,12 +1891,22 @@
 
             // Step-specific logic
             if (stepNumber === 1) {
-                // Step 1: Logo animation (automatic transition after 2.4s)
+                // Step 1: Intro animation video (ends automatically after ~6s or on video end)
+                const introVid = document.getElementById('introVideo');
+                if (introVid) {
+                    introVid.currentTime = 0;
+                    introVid.play().catch(e => console.log('Autoplay handled:', e));
+                    introVid.onended = () => {
+                        if (inTutorialMode && currentTutorialStep === 1) {
+                            goToTutorialStep(2);
+                        }
+                    };
+                }
                 setTimeout(() => {
                     if (inTutorialMode && currentTutorialStep === 1) {
                         goToTutorialStep(2);
                     }
-                }, 2400);
+                }, 6300);
             } else if (stepNumber === 2) {
                 // Step 2: Disclaimer (automatic transition after 3.4s)
                 setTimeout(() => {
@@ -1870,156 +1953,81 @@
         function tutorialStep3Loop() {
             if (currentTutorialStep !== 3 || !inTutorialMode) return;
 
-            const tutCanvas = document.getElementById('tutorialCanvas');
-            if (tutCanvas) {
-                if (tutCanvas.width !== tutCanvas.clientWidth || tutCanvas.height !== tutCanvas.clientHeight) {
-                    tutCanvas.width = tutCanvas.clientWidth;
-                    tutCanvas.height = tutCanvas.clientHeight;
-                }
-                const tutCtx = tutCanvas.getContext('2d');
-                tutCtx.clearRect(0, 0, tutCanvas.width, tutCanvas.height);
-                drawGridOnCanvas(tutCtx, tutCanvas.width, tutCanvas.height);
+            let faceInScreen = false;
+            let armsInScreen = false;
+            let legsInScreen = false;
 
-                let faceInScreen = false;
-                let armsInScreen = false;
-                let legsInScreen = false;
-
-                if (userLandmarks && userLandmarks.length >= 29) {
-                    const nose = userLandmarks[0];
-                    if (nose && (nose.visibility === undefined || nose.visibility > 0.25) && 
-                        nose.y >= 0.02 && nose.y <= 0.55 && nose.x >= 0.05 && nose.x <= 0.95) {
-                        faceInScreen = true;
-                    }
-
-                    const isPtIn = (p) => p && (p.visibility === undefined || p.visibility > 0.2) && 
-                                          p.x >= 0.01 && p.x <= 0.99 && p.y >= 0.02 && p.y <= 0.98;
-                    const lSh = userLandmarks[11], rSh = userLandmarks[12];
-                    const lWr = userLandmarks[15], rWr = userLandmarks[16];
-                    if (isPtIn(lSh) && isPtIn(rSh) && (isPtIn(lWr) || isPtIn(rWr))) {
-                        armsInScreen = true;
-                    }
-
-                    const lHip = userLandmarks[23], rHip = userLandmarks[24];
-                    const lKnee = userLandmarks[25], rKnee = userLandmarks[26];
-                    const lAnk = userLandmarks[27], rAnk = userLandmarks[28];
-                    if (isPtIn(lHip) && isPtIn(rHip) && (isPtIn(lKnee) || isPtIn(rKnee) || isPtIn(lAnk) || isPtIn(rAnk))) {
-                        legsInScreen = true;
-                    }
-                } else if (simulatedBodyInView) {
+            if (userLandmarks && userLandmarks.length >= 29) {
+                const nose = userLandmarks[0];
+                if (nose && (nose.visibility === undefined || nose.visibility > 0.25) && 
+                    nose.y >= 0.02 && nose.y <= 0.65 && nose.x >= 0.05 && nose.x <= 0.95) {
                     faceInScreen = true;
+                }
+
+                const isPtIn = (p) => p && (p.visibility === undefined || p.visibility > 0.2) && 
+                                      p.x >= 0.01 && p.x <= 0.99 && p.y >= 0.02 && p.y <= 0.98;
+                const lSh = userLandmarks[11], rSh = userLandmarks[12];
+                const lWr = userLandmarks[15], rWr = userLandmarks[16];
+                if (isPtIn(lSh) && isPtIn(rSh) && (isPtIn(lWr) || isPtIn(rWr))) {
                     armsInScreen = true;
+                }
+
+                const lHip = userLandmarks[23], rHip = userLandmarks[24];
+                const lKnee = userLandmarks[25], rKnee = userLandmarks[26];
+                const lAnk = userLandmarks[27], rAnk = userLandmarks[28];
+                if (isPtIn(lHip) && isPtIn(rHip) && (isPtIn(lKnee) || isPtIn(rKnee) || isPtIn(lAnk) || isPtIn(rAnk))) {
                     legsInScreen = true;
                 }
-
-                const fullBodyDetected = faceInScreen && armsInScreen && legsInScreen;
-
-                if (fullBodyDetected) {
-                    tutCalibProgress = Math.min(100, tutCalibProgress + 1.4);
-                    if (tutCalibProgress >= 100 && !isBodyCalibrated) {
-                        isBodyCalibrated = true;
-                        playSfx('success');
-                        setTimeout(() => {
-                            if (currentTutorialStep === 3 && inTutorialMode) {
-                                goToTutorialStep(4);
-                            }
-                        }, 600);
-                    }
-                } else {
-                    tutCalibProgress = Math.max(0, tutCalibProgress - 0.5);
-                }
-
-                drawVolumetricPlayerShapes(tutCtx, tutCanvas.width, tutCanvas.height, isBodyCalibrated);
-                updateTutorialStep3UI(faceInScreen, armsInScreen, legsInScreen, fullBodyDetected);
+            } else if (simulatedBodyInView) {
+                faceInScreen = true;
+                armsInScreen = true;
+                legsInScreen = true;
             }
+
+            const fullBodyDetected = faceInScreen && armsInScreen && legsInScreen;
+            const card = document.getElementById('tutStep3Card');
+            const bar = document.getElementById('tutProgressBar');
+
+            if (fullBodyDetected) {
+                tutCalibProgress = Math.min(100, tutCalibProgress + 1.4);
+                if (card) {
+                    card.classList.add('drop-shadow-[0_0_35px_rgba(56,189,248,0.5)]');
+                }
+                if (tutCalibProgress >= 100 && !isBodyCalibrated) {
+                    isBodyCalibrated = true;
+                    playSfx('success');
+                    setTimeout(() => {
+                        if (currentTutorialStep === 3 && inTutorialMode) {
+                            goToTutorialStep(4);
+                        }
+                    }, 500);
+                    return;
+                }
+            } else {
+                tutCalibProgress = Math.max(0, tutCalibProgress - 0.6);
+                if (card) {
+                    card.classList.remove('drop-shadow-[0_0_35px_rgba(56,189,248,0.5)]');
+                }
+            }
+
+            if (bar) bar.style.width = tutCalibProgress + '%';
 
             requestAnimationFrame(tutorialStep3Loop);
         }
 
-        function updateTutorialStep3UI(faceInScreen = false, armsInScreen = false, legsInScreen = false, fullBodyDetected = false) {
-            const bar = document.getElementById('tutProgressBar');
-            const pct = document.getElementById('tutProgressPct');
-            const dot = document.getElementById('tutCalibDot');
-            const text = document.getElementById('tutCalibText');
-            const label = document.getElementById('tutProgressLabel');
-
-            const chipFace = document.getElementById('chipFace');
-            const iconFace = document.getElementById('iconFace');
-            const chipArms = document.getElementById('chipArms');
-            const iconArms = document.getElementById('iconArms');
-            const chipLegs = document.getElementById('chipLegs');
-            const iconLegs = document.getElementById('iconLegs');
-
-            if (chipFace && iconFace) {
-                chipFace.className = faceInScreen 
-                    ? "flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-400 text-xs font-orbitron text-emerald-300 font-bold shadow-[0_0_12px_rgba(57,255,20,0.3)] transition-all"
-                    : "flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-700 text-xs font-orbitron text-slate-400 font-bold transition-all";
-                iconFace.className = faceInScreen ? "fa-solid fa-circle-check text-emerald-400" : "fa-solid fa-circle-xmark text-amber-400";
-            }
-
-            if (chipArms && iconArms) {
-                chipArms.className = armsInScreen 
-                    ? "flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-400 text-xs font-orbitron text-emerald-300 font-bold shadow-[0_0_12px_rgba(57,255,20,0.3)] transition-all"
-                    : "flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-700 text-xs font-orbitron text-slate-400 font-bold transition-all";
-                iconArms.className = armsInScreen ? "fa-solid fa-circle-check text-emerald-400" : "fa-solid fa-circle-xmark text-amber-400";
-            }
-
-            if (chipLegs && iconLegs) {
-                chipLegs.className = legsInScreen 
-                    ? "flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-emerald-950/60 border border-emerald-400 text-xs font-orbitron text-emerald-300 font-bold shadow-[0_0_12px_rgba(57,255,20,0.3)] transition-all"
-                    : "flex items-center gap-1.5 px-4 py-1.5 rounded-full bg-slate-900/90 border border-slate-700 text-xs font-orbitron text-slate-400 font-bold transition-all";
-                iconLegs.className = legsInScreen ? "fa-solid fa-circle-check text-emerald-400" : "fa-solid fa-circle-xmark text-amber-400";
-            }
-
-            if (bar) bar.style.width = tutCalibProgress + '%';
-            if (pct) pct.innerText = Math.floor(tutCalibProgress) + '%';
-
-            if (fullBodyDetected) {
-                if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
-                if (text) {
-                    text.innerText = "FULL BODY DETECTED";
-                    text.className = "font-orbitron text-xs font-bold text-emerald-300";
-                }
-                if (label) {
-                    label.innerText = "HOLD POSITION — CALIBRATING...";
-                    label.className = "text-emerald-300 font-bold";
-                }
-            } else {
-                if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-yellow-400 animate-pulse";
-                if (!legsInScreen) {
-                    if (text) { text.innerText = "LEGS NOT IN SCREEN"; text.className = "font-orbitron text-xs font-bold text-amber-400"; }
-                    if (label) { label.innerText = "STEP BACKWARDS UNTIL ALL LEGS ARE IN SCREEN"; label.className = "text-yellow-400"; }
-                } else if (!armsInScreen) {
-                    if (text) { text.innerText = "ARMS NOT IN SCREEN"; text.className = "font-orbitron text-xs font-bold text-amber-400"; }
-                    if (label) { label.innerText = "BRING BOTH ARMS FULLY INTO SCREEN"; label.className = "text-yellow-400"; }
-                } else if (!faceInScreen) {
-                    if (text) { text.innerText = "FACE NOT IN SCREEN"; text.className = "font-orbitron text-xs font-bold text-amber-400"; }
-                    if (label) { label.innerText = "FACE THE CAMERA TO CALIBRATE"; label.className = "text-yellow-400"; }
-                }
-            }
-        }
-
-        // STEP 4: Scanning Calibration Loop
+        // STEP 4: Stand in Center and Align Body Loop
         function tutorialStep4Loop() {
             if (currentTutorialStep !== 4 || !inTutorialMode) return;
 
-            const tutCanvas = document.getElementById('tutorialCanvasStep4');
-            if (tutCanvas) {
-                if (tutCanvas.width !== tutCanvas.clientWidth || tutCanvas.height !== tutCanvas.clientHeight) {
-                    tutCanvas.width = tutCanvas.clientWidth;
-                    tutCanvas.height = tutCanvas.clientHeight;
+            const fullBodyDetected = checkFullBodyDetected();
+            const card = document.getElementById('tutStep4Card');
+            const bar = document.getElementById('step4ProgressBar');
+
+            if (fullBodyDetected) {
+                step4CalibProgress = Math.min(100, step4CalibProgress + 1.4);
+                if (card) {
+                    card.classList.add('shadow-[0_0_35px_rgba(56,189,248,0.65)]', 'border-cyan-300');
                 }
-                const tutCtx = tutCanvas.getContext('2d');
-                tutCtx.clearRect(0, 0, tutCanvas.width, tutCanvas.height);
-                drawGridOnCanvas(tutCtx, tutCanvas.width, tutCanvas.height);
-
-                drawVolumetricPlayerShapes(tutCtx, tutCanvas.width, tutCanvas.height, true);
-
-                step4CalibProgress = Math.min(100, step4CalibProgress + 1.25);
-                const bar = document.getElementById('step4ProgressBar');
-                const pct = document.getElementById('step4ProgressPct');
-                if (bar) bar.style.width = step4CalibProgress + '%';
-                if (pct) pct.innerText = Math.floor(step4CalibProgress) + '%';
-
                 if (step4CalibProgress >= 100) {
                     playSfx('success');
                     setTimeout(() => {
@@ -2029,7 +2037,14 @@
                     }, 500);
                     return;
                 }
+            } else {
+                step4CalibProgress = Math.max(0, step4CalibProgress - 0.6);
+                if (card) {
+                    card.classList.remove('shadow-[0_0_35px_rgba(56,189,248,0.65)]', 'border-cyan-300');
+                }
             }
+
+            if (bar) bar.style.width = step4CalibProgress + '%';
 
             requestAnimationFrame(tutorialStep4Loop);
         }
@@ -2096,9 +2111,17 @@
             const interactable = elements ? elements.find(el => el.classList && el.classList.contains('interactable')) : null;
 
             if (interactable) {
+                if (cursorElem) cursorElem.classList.add('selecting');
                 const cursorImg = document.getElementById('cursorImg');
-                if (cursorImg && !cursorImg.src.endsWith('cursor-circle.png')) {
-                    cursorImg.src = 'cursor-circle.png';
+                if (cursorImg) {
+                    if (!cursorImg.src.endsWith('cursor-hand.png')) {
+                        cursorImg.src = 'cursor-hand.png';
+                    }
+                    cursorImg.classList.add('cursor-hand-glow');
+                }
+                const progressCircle = document.getElementById('cursor-progress');
+                if (progressCircle) {
+                    progressCircle.classList.add('cursor-ring-glow');
                 }
 
                 if (hoverTarget !== interactable) {
@@ -2111,7 +2134,6 @@
                     const elapsed = Date.now() - hoverStartTime;
                     const progress = Math.min(elapsed / DWELL_TIME, 1);
                     const dashoffset = 220 - (220 * progress);
-                    const progressCircle = document.getElementById('cursor-progress');
                     if (progressCircle) {
                         progressCircle.style.strokeDashoffset = dashoffset;
                     }
@@ -2124,18 +2146,23 @@
                     }
                 }
             } else {
+                if (cursorElem) cursorElem.classList.remove('selecting');
                 const cursorImg = document.getElementById('cursorImg');
-                if (cursorImg && !cursorImg.src.endsWith('cursor-hand.png')) {
-                    cursorImg.src = 'cursor-hand.png';
+                if (cursorImg) {
+                    if (!cursorImg.src.endsWith('cursor-hand.png')) {
+                        cursorImg.src = 'cursor-hand.png';
+                    }
+                    cursorImg.classList.remove('cursor-hand-glow');
+                }
+                const progressCircle = document.getElementById('cursor-progress');
+                if (progressCircle) {
+                    progressCircle.classList.remove('cursor-ring-glow');
+                    progressCircle.style.strokeDashoffset = 220;
                 }
 
                 if (hoverTarget) {
                     hoverTarget.classList.remove('hovered');
                     hoverTarget = null;
-                }
-                const progressCircle = document.getElementById('cursor-progress');
-                if (progressCircle) {
-                    progressCircle.style.strokeDashoffset = 220;
                 }
             }
         }
@@ -2224,6 +2251,7 @@
         // =========================================================================
         // GAME RENDER ENGINE & PLAYER OUTLINE (SHAPES)
         // =========================================================================
+        let gameLoopRafId = null;
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
 
@@ -2240,25 +2268,17 @@
             const dt = Math.min((currentNow - lastGameTimestamp) / 1000, 0.1);
             lastGameTimestamp = currentNow;
 
-            // Responsive Canvas Resize
-            if (canvas.width !== canvas.clientWidth || canvas.height !== canvas.clientHeight) {
-                canvas.width = canvas.clientWidth;
-                canvas.height = canvas.clientHeight;
+            // Responsive Canvas Resize (guaranteed positive dimensions)
+            const targetW = canvas.clientWidth > 0 ? canvas.clientWidth : window.innerWidth;
+            const targetH = canvas.clientHeight > 0 ? canvas.clientHeight : window.innerHeight;
+            if (canvas.width !== targetW || canvas.height !== targetH) {
+                canvas.width = targetW;
+                canvas.height = targetH;
             }
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Auto-pause game when player's full body is not in screen
-            const bodyInView = checkFullBodyDetected();
-            if (!bodyInView) {
-                bodyLostFrames++;
-                if (bodyLostFrames > 40) {
-                    triggerAutoPauseDueToBodyLost();
-                    return;
-                }
-            } else {
-                bodyLostFrames = 0;
-            }
+            // Gameplay auto-pause removed per user request
 
             // 1. Draw Simulated 360 Dark Room Grid Background
             drawGridOnCanvas(ctx, canvas.width, canvas.height);
@@ -2343,30 +2363,76 @@
                 currentPoseIndex = (currentPoseIndex + 1) % STRETCH_POSES.length;
             }
 
-            draw3DWall(wallZ, STRETCH_POSES[currentPoseIndex].type);
+            // Real-time Pose Matching Evaluation
+            const currentPose = STRETCH_POSES[currentPoseIndex];
+            const liveMatchScore = (userLandmarks && userLandmarks.length >= 29)
+                ? checkLivePoseAccuracy(currentPose.type, userLandmarks)
+                : null;
 
-            // 4. Draw Player Outline (Shapes)
-            const isMatchThreshold = accessibilitySettings.limitedMobility ? 35 : 60;
-            drawVolumetricPlayerShapes(ctx, canvas.width, canvas.height, poseHoldProgress > isMatchThreshold);
-
-            // 5. Calculate Hold Timer & Accuracy Progress
-            if (wallZ > 0.15 && wallZ < 0.95) {
+            if (liveMatchScore !== null) {
+                if (liveMatchScore >= (accessibilitySettings.limitedMobility ? 35 : 60)) {
+                    poseHoldProgress = Math.min(100, poseHoldProgress + 1.25);
+                } else {
+                    poseHoldProgress = Math.max(0, poseHoldProgress - 0.45);
+                }
+            } else if (wallZ > 0.15 && wallZ < 0.95) {
                 const matchStep = accessibilitySettings.limitedMobility ? 0.95 : 0.65;
                 poseHoldProgress = Math.min(100, poseHoldProgress + matchStep);
             }
 
-            requestAnimationFrame(gameLoop);
+            const isMatchThreshold = accessibilitySettings.limitedMobility ? 35 : 60;
+            const isCurrentlyMatched = poseHoldProgress > isMatchThreshold;
+
+            // 4. Draw Incoming Stickman Posture Guide in 3D Perspective
+            drawIncomingStickmanGuide(wallZ, currentPose, isCurrentlyMatched);
+
+            // 5. Draw Player Outline Shapes in Foreground
+            drawVolumetricPlayerShapes(ctx, canvas.width, canvas.height, isCurrentlyMatched);
+
+            gameLoopRafId = requestAnimationFrame(gameLoop);
+        }
+
+        // Live Pose Accuracy Evaluator
+        function checkLivePoseAccuracy(targetPoseType, lm) {
+            if (!lm || lm.length < 29) return null;
+            const nose = lm[0];
+            const lSh = lm[11], rSh = lm[12];
+            const lWr = lm[15], rWr = lm[16];
+            const lAnk = lm[27], rAnk = lm[28];
+            if (!lSh || !rSh || !lWr || !rWr) return null;
+
+            const shoulderDist = Math.hypot(lSh.x - rSh.x, lSh.y - rSh.y) || 0.15;
+            const midShY = (lSh.y + rSh.y) / 2;
+
+            if (targetPoseType === 'T_POSE') {
+                const lOk = Math.abs(lWr.y - midShY) < shoulderDist * 0.75;
+                const rOk = Math.abs(rWr.y - midShY) < shoulderDist * 0.75;
+                return (lOk && rOk) ? 94 : (lOk || rOk) ? 65 : 25;
+            } else if (targetPoseType === 'STAR') {
+                const lUp = lWr.y < midShY - shoulderDist * 0.2;
+                const rUp = rWr.y < midShY - shoulderDist * 0.2;
+                const feetApart = lAnk && rAnk ? Math.abs(lAnk.x - rAnk.x) > shoulderDist * 1.0 : true;
+                return (lUp && rUp && feetApart) ? 95 : (lUp && rUp) ? 78 : 30;
+            } else if (targetPoseType === 'LUNGE') {
+                const feetApart = lAnk && rAnk ? Math.abs(lAnk.x - rAnk.x) > shoulderDist * 1.1 : true;
+                return feetApart ? 90 : 40;
+            } else { // HIGH REACH
+                const headY = nose ? nose.y : midShY - shoulderDist * 0.5;
+                const lHigh = lWr.y < headY;
+                const rHigh = rWr.y < headY;
+                return (lHigh && rHigh) ? 96 : (lHigh || rHigh) ? 65 : 25;
+            }
         }
 
         function drawGridOnCanvas(targetCtx, w, h) {
             const vpX = w / 2;
-            const vpY = h / 2;
+            const vpY = h / 2 - 20;
 
             targetCtx.save();
-            targetCtx.strokeStyle = accessibilitySettings.colorblindMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 240, 255, 0.12)";
+            targetCtx.strokeStyle = accessibilitySettings.colorblindMode ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 240, 255, 0.09)";
             targetCtx.lineWidth = 1;
 
-            // Perspective Vanishing Lines
+            // Perspective Vanishing Lines to Horizon
             targetCtx.beginPath();
             targetCtx.moveTo(0, 0); targetCtx.lineTo(vpX, vpY);
             targetCtx.moveTo(w, 0); targetCtx.lineTo(vpX, vpY);
@@ -2374,95 +2440,161 @@
             targetCtx.moveTo(w, h); targetCtx.lineTo(vpX, vpY);
             targetCtx.stroke();
 
-            // Depth Rings
-            for (let d = 0.2; d <= 0.9; d += 0.2) {
+            // Perspective Floor & Wall Rings
+            for (let d = 0.2; d <= 0.95; d += 0.2) {
                 const rw = w * d;
                 const rh = h * d;
-                targetCtx.strokeStyle = `rgba(0, 240, 255, ${0.03 + d * 0.05})`;
+                targetCtx.strokeStyle = `rgba(0, 240, 255, ${0.02 + d * 0.04})`;
                 targetCtx.strokeRect(vpX - rw / 2, vpY - rh / 2, rw, rh);
             }
             targetCtx.restore();
         }
 
-        function draw3DWall(z, poseType) {
+        // =========================================================================
+        // INCOMING STICKMAN POSTURE GUIDE (3D PERSPECTIVE)
+        // Approaches the player showing target posture with floor target & glowing portal
+        // =========================================================================
+        function drawIncomingStickmanGuide(z, targetPose, isMatched) {
             const w = canvas.width;
             const h = canvas.height;
             const vpX = w / 2;
-            const vpY = h / 2;
+            const vpY = h / 2 - 20;
 
-            // Scale based on z depth (0 = far, 1 = screen)
-            const scale = 0.18 + (z * 0.82);
-            const wallW = w * scale * 0.85;
-            const wallH = h * scale * 0.85;
-
-            const x = vpX - wallW / 2;
-            const y = vpY - wallH / 2;
+            // Scale expands smoothly from distance depth (0.22) to foreground (1.0)
+            const scale = 0.22 + (z * 0.78);
+            const groundY = vpY + (h * 0.36 * scale);
+            const guideX = vpX;
+            const guideY = groundY - (130 * scale);
 
             ctx.save();
-            // Approaching Wall Frame
-            ctx.strokeStyle = accessibilitySettings.colorblindMode 
-                ? `rgba(255, 255, 255, ${0.35 + z * 0.65})` 
-                : `rgba(0, 240, 255, ${0.25 + z * 0.75})`;
-            ctx.lineWidth = 3 + z * 3;
-            ctx.strokeRect(x, y, wallW, wallH);
 
-            // Wall Surface Mask
-            ctx.fillStyle = `rgba(9, 19, 48, ${0.45 * (1 - z)})`;
-            ctx.fillRect(x, y, wallW, wallH);
+            // 1. Floor Depth Target Ellipse
+            ctx.save();
+            ctx.beginPath();
+            ctx.ellipse(guideX, groundY, 78 * scale, 22 * scale, 0, 0, Math.PI * 2);
+            ctx.fillStyle = isMatched ? "rgba(57, 255, 20, 0.16)" : "rgba(0, 240, 255, 0.08)";
+            ctx.fill();
+            ctx.strokeStyle = isMatched 
+                ? "#39ff14" 
+                : (accessibilitySettings.colorblindMode ? "#ffb703" : "#00f0ff");
+            ctx.lineWidth = 2 + (z * 2.5);
+            ctx.shadowBlur = 14 * scale;
+            ctx.shadowColor = ctx.strokeStyle;
+            ctx.stroke();
+            ctx.restore();
 
-            // Cutout Silhouette Stance Drawing
-            ctx.translate(vpX, vpY);
+            // 2. Holographic Target Posture Portal Arch
+            const archW = 190 * scale;
+            const archH = 260 * scale;
+            const archX = guideX - archW / 2;
+            const archY = guideY - (120 * scale);
+
+            ctx.save();
+            const archColor = isMatched 
+                ? "rgba(57, 255, 20, 0.9)" 
+                : (accessibilitySettings.colorblindMode ? "rgba(255, 183, 3, 0.8)" : `rgba(255, 42, 141, ${0.45 + z * 0.5})`);
+            ctx.strokeStyle = archColor;
+            ctx.lineWidth = 2.5 + (z * 2);
+            ctx.shadowBlur = 14 * scale;
+            ctx.shadowColor = archColor;
+
+            // Curved holographic posture arch
+            ctx.beginPath();
+            ctx.moveTo(archX, groundY - 4);
+            ctx.lineTo(archX, archY + 35 * scale);
+            ctx.arcTo(archX, archY, archX + 35 * scale, archY, 35 * scale);
+            ctx.lineTo(archX + archW - 35 * scale, archY);
+            ctx.arcTo(archX + archW, archY, archX + archW, archY + 35 * scale, 35 * scale);
+            ctx.lineTo(archX + archW, groundY - 4);
+            ctx.stroke();
+
+            // Floating Target Posture Badge
+            ctx.font = `900 ${Math.max(10, Math.round(14 * scale))}px 'Orbitron', sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.fillStyle = isMatched ? "#39ff14" : "#ffffff";
+            ctx.shadowBlur = 8;
+            ctx.shadowColor = isMatched ? "#39ff14" : "#ff2a8d";
+            ctx.fillText(`✦ ${targetPose.name} ✦`, guideX, archY - 10);
+            ctx.restore();
+
+            // 3. Stickman Posture Figure in 3D Space
+            ctx.save();
+            ctx.translate(guideX, guideY);
             ctx.scale(scale, scale);
 
-            const isMatched = poseHoldProgress > (accessibilitySettings.limitedMobility ? 35 : 60);
-            let strokeColor = isMatched ? '#39ff14' : '#ff2a8d';
-            let fillColor = isMatched ? 'rgba(57, 255, 20, 0.12)' : 'rgba(255, 42, 141, 0.1)';
+            const stickColor = isMatched 
+                ? "#39ff14" 
+                : (accessibilitySettings.colorblindMode ? "#ffb703" : "#ff2a8d");
 
-            if (accessibilitySettings.colorblindMode) {
-                strokeColor = isMatched ? '#ffb703' : '#38bdf8';
-                fillColor = isMatched ? 'rgba(255, 183, 3, 0.25)' : 'rgba(56, 189, 248, 0.2)';
-            }
-
-            ctx.strokeStyle = strokeColor;
-            ctx.fillStyle = fillColor;
-            ctx.lineWidth = accessibilitySettings.colorblindMode ? 8 : 6;
+            ctx.strokeStyle = stickColor;
+            ctx.fillStyle = stickColor;
+            ctx.lineWidth = 7;
+            ctx.lineCap = "round";
+            ctx.lineJoin = "round";
             ctx.shadowBlur = 18;
-            ctx.shadowColor = ctx.strokeStyle;
+            ctx.shadowColor = stickColor;
 
+            // Head & Inner Reticle
             ctx.beginPath();
-            if (poseType === 'T_POSE') {
-                // Head
-                ctx.arc(0, -90, 20, 0, Math.PI * 2);
-                // Arms
-                ctx.moveTo(-95, -40); ctx.lineTo(95, -40);
-                // Spine
-                ctx.moveTo(0, -40); ctx.lineTo(0, 30);
-                // Legs
-                ctx.moveTo(0, 30); ctx.lineTo(-45, 115);
-                ctx.moveTo(0, 30); ctx.lineTo(45, 115);
-            } else if (poseType === 'STAR') {
-                // Star Pose
-                ctx.arc(0, -90, 20, 0, Math.PI * 2);
-                ctx.moveTo(-90, -95); ctx.lineTo(0, -40); ctx.lineTo(90, -95);
-                ctx.moveTo(0, -40); ctx.lineTo(0, 30);
-                ctx.moveTo(0, 30); ctx.lineTo(-65, 115);
-                ctx.moveTo(0, 30); ctx.lineTo(65, 115);
-            } else if (poseType === 'LUNGE') {
-                // Side Lunge Pose
-                ctx.arc(0, -90, 20, 0, Math.PI * 2);
-                ctx.moveTo(-80, -20); ctx.lineTo(0, -40); ctx.lineTo(70, -60);
-                ctx.moveTo(0, -40); ctx.lineTo(0, 30);
-                ctx.moveTo(0, 30); ctx.lineTo(-75, 115);
-                ctx.moveTo(0, 30); ctx.lineTo(35, 115);
-            } else {
-                // High Reach Pose
-                ctx.arc(0, -90, 20, 0, Math.PI * 2);
-                ctx.moveTo(-35, -115); ctx.lineTo(0, -40); ctx.lineTo(35, -115);
-                ctx.moveTo(0, -40); ctx.lineTo(0, 30);
-                ctx.moveTo(0, 30); ctx.lineTo(-40, 115);
-                ctx.moveTo(0, 30); ctx.lineTo(40, 115);
-            }
+            ctx.arc(0, -90, 20, 0, Math.PI * 2);
             ctx.stroke();
+            ctx.beginPath();
+            ctx.arc(0, -90, 5, 0, Math.PI * 2);
+            ctx.fill();
+
+            // Torso Spine
+            ctx.beginPath();
+            ctx.moveTo(0, -70);
+            ctx.lineTo(0, 25);
+            ctx.stroke();
+
+            // Limbs by Pose Type
+            const poseType = targetPose.type;
+            let lElb, lWr, rElb, rWr, lKnee, lAnk, rKnee, rAnk;
+
+            if (poseType === 'T_POSE') {
+                lElb = [-55, -45]; lWr = [-105, -45];
+                rElb = [55, -45];  rWr = [105, -45];
+                lKnee = [-30, 75]; lAnk = [-45, 125];
+                rKnee = [30, 75];  rAnk = [45, 125];
+            } else if (poseType === 'STAR') {
+                lElb = [-55, -75]; lWr = [-95, -105];
+                rElb = [55, -75];  rWr = [95, -105];
+                lKnee = [-45, 75]; lAnk = [-75, 125];
+                rKnee = [45, 75];  rAnk = [75, 125];
+            } else if (poseType === 'LUNGE') {
+                lElb = [-50, -35]; lWr = [-88, -20];
+                rElb = [45, -55];  rWr = [80, -75];
+                lKnee = [-55, 80]; lAnk = [-82, 125];
+                rKnee = [30, 75];  rAnk = [40, 125];
+            } else { // HIGH REACH
+                lElb = [-25, -80]; lWr = [-32, -125];
+                rElb = [25, -80];  rWr = [32, -125];
+                lKnee = [-22, 75]; lAnk = [-30, 125];
+                rKnee = [22, 75];  rAnk = [30, 125];
+            }
+
+            // Draw Arms
+            ctx.beginPath();
+            ctx.moveTo(0, -50); ctx.lineTo(lElb[0], lElb[1]); ctx.lineTo(lWr[0], lWr[1]);
+            ctx.moveTo(0, -50); ctx.lineTo(rElb[0], rElb[1]); ctx.lineTo(rWr[0], rWr[1]);
+            ctx.stroke();
+
+            // Draw Legs
+            ctx.beginPath();
+            ctx.moveTo(0, 25); ctx.lineTo(lKnee[0], lKnee[1]); ctx.lineTo(lAnk[0], lAnk[1]);
+            ctx.moveTo(0, 25); ctx.lineTo(rKnee[0], rKnee[1]); ctx.lineTo(rAnk[0], rAnk[1]);
+            ctx.stroke();
+
+            // Glowing White Joint Nodes
+            ctx.fillStyle = "#ffffff";
+            [[-105, -45], [105, -45], lElb, rElb, lWr, rWr, [0, -50], [0, 25], lKnee, rKnee, lAnk, rAnk].forEach(pt => {
+                ctx.beginPath();
+                ctx.arc(pt[0], pt[1], 4.5, 0, Math.PI * 2);
+                ctx.fill();
+            });
+
+            ctx.restore();
             ctx.restore();
         }
 
@@ -2703,15 +2835,15 @@
             initCamera();
             syncAccessibilityUI();
 
-            // Starting room for the first time: automatically trigger tutorial
+            // URL query shortcuts (e.g. ?tutorial=true or ?play=true)
             const urlParams = new URLSearchParams(window.location.search);
-            const forceTutorial = urlParams.get('tutorial') === 'true';
-            const hasVisitedRoom = sessionStorage.getItem('flexscape_room_visited');
-
-            if (!hasVisitedRoom || forceTutorial) {
-                sessionStorage.setItem('flexscape_room_visited', 'true');
+            if (urlParams.get('tutorial') === 'true') {
                 setTimeout(() => {
                     startTutorial();
+                }, 300);
+            } else if (urlParams.get('play') === 'true') {
+                setTimeout(() => {
+                    startHoleInWallGame();
                 }, 300);
             }
         });

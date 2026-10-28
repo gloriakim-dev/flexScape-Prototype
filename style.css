@@ -173,10 +173,16 @@ input[type=range]::-webkit-slider-runnable-track {
     top: 11px;
     left: 11px;
     object-fit: contain;
-    filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.55));
+    filter: none;
     user-select: none;
     pointer-events: none;
-    transition: transform 0.15s ease;
+    transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.cursor-hand-glow,
+#gesture-cursor.selecting .glove-img {
+    filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.75)) drop-shadow(0 0 12px rgba(0, 240, 255, 0.4)) !important;
+    transform: scale(1.08);
 }
 
 .radial-svg {
@@ -201,8 +207,13 @@ input[type=range]::-webkit-slider-runnable-track {
     stroke-dasharray: 220;
     stroke-dashoffset: 220;
     stroke-linecap: round;
-    transition: stroke-dashoffset 0.08s linear;
-    filter: drop-shadow(0 0 10px var(--neon-cyan));
+    transition: stroke-dashoffset 0.08s linear, filter 0.15s ease;
+    filter: none;
+}
+
+.cursor-ring-glow,
+#gesture-cursor.selecting .radial-progress {
+    filter: drop-shadow(0 0 6px rgba(0, 240, 255, 0.8)) drop-shadow(0 0 12px rgba(0, 240, 255, 0.45)) !important;
 }
 
 /* ==========================================================================
@@ -370,4 +381,33 @@ input[type=range]::-webkit-slider-runnable-track {
     100% { stroke-dashoffset: 283; }
 }
 
+/* Step 3: 2-Frame Stepping Back Animation */
+@keyframes step3FrameToggle1 {
+    0%, 49.99% {
+        opacity: 1;
+        visibility: visible;
+    }
+    50%, 100% {
+        opacity: 0;
+        visibility: hidden;
+    }
+}
 
+@keyframes step3FrameToggle2 {
+    0%, 49.99% {
+        opacity: 0;
+        visibility: hidden;
+    }
+    50%, 100% {
+        opacity: 1;
+        visibility: visible;
+    }
+}
+
+.step3-anim-frame1 {
+    animation: step3FrameToggle1 1.4s steps(1) infinite;
+}
+
+.step3-anim-frame2 {
+    animation: step3FrameToggle2 1.4s steps(1) infinite;
+}
