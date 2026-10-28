@@ -14,7 +14,7 @@
     <!-- Google Fonts matching prototype typography -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Exo+2:ital,wght@0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Exo+2:ital,wght@0,700;0,800;0,900;1,800;1,900&family=Zen+Dots&display=swap" rel="stylesheet">
 
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -128,9 +128,9 @@
                     
                     <!-- Arms -->
                     <!-- Back arm flailing -->
-                    <path d="M 235 120 L 206 144" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M 235 120 L 206 144" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
                     <!-- Front arm reaching for ground -->
-                    <path d="M 237 120 L 258 138 L 251 162" stroke="#ffffff" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" />
+                    <path d="M 237 120 L 258 138 L 251 162" stroke="#ffffff" stroke-width="8" stroke-linecap="round" stroke-linejoin="round" />
                     
                     <!-- Legs -->
                     <!-- Front leg tripping against box -->
@@ -178,6 +178,9 @@
                         <circle cx="210" cy="112" r="14" fill="#ffffff" />
                         <!-- Torso -->
                         <rect x="202" y="130" width="16" height="42" rx="8" fill="#ffffff" />
+                        <!-- Arms standing at sides -->
+                        <line x1="202" y1="138" x2="198" y2="168" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
+                        <line x1="218" y1="138" x2="222" y2="168" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
                         <!-- Legs standing upright -->
                         <line x1="206" y1="172" x2="206" y2="214" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
                         <line x1="214" y1="172" x2="214" y2="214" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
@@ -198,8 +201,8 @@
                         <!-- Torso -->
                         <rect x="122" y="130" width="16" height="42" rx="8" fill="#ffffff" />
                         <!-- Arms swinging in stride -->
-                        <line x1="122" y1="140" x2="110" y2="162" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
-                        <line x1="138" y1="140" x2="148" y2="162" stroke="#ffffff" stroke-width="6" stroke-linecap="round" />
+                        <line x1="122" y1="140" x2="110" y2="162" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
+                        <line x1="138" y1="140" x2="148" y2="162" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
                         <!-- Front leg planted -->
                         <line x1="134" y1="172" x2="144" y2="214" stroke="#ffffff" stroke-width="8" stroke-linecap="round" />
                         <!-- Back leg actively stepping backwards -->
@@ -222,16 +225,22 @@
 
     <!-- ========================================================================= -->
     <!-- TUTORIAL STEP 4: CENTER ALIGNMENT & CALIBRATION                           -->
-    <!-- (No buttons/skip buttons. User must clear step by aligning in frame)      -->
+    <!-- (Body outline shape enabled just for this step; 5-second hold)            -->
     <!-- ========================================================================= -->
-    <div id="screenTutorialStep4" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-center p-6 sm:p-10 select-none">
-        <!-- Top Left Logo Icon (matching reference) -->
+    <div id="screenTutorialStep4" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-center p-6 sm:p-10 select-none overflow-hidden">
+        <!-- Top Left Logo Icon -->
         <div class="absolute top-6 left-6 sm:top-10 sm:left-10 z-30 pointer-events-none">
             <img src="logo.svg" alt="FlexScape" class="w-10 h-12 sm:w-12 sm:h-14">
         </div>
 
-        <div class="max-w-4xl w-full flex flex-col items-center justify-center my-auto z-20 text-center">
-            <!-- Center Vector Diagram (Transparent Background, No White Card/Inner Frame) -->
+        <!-- Canvas for Player Volumetric Body Outline Shape (Enabled just for Step 4) -->
+        <canvas id="tutStep4Canvas" class="absolute inset-0 w-full h-full pointer-events-none z-10"></canvas>
+
+        <!-- Up and Down Scanning Laser Bar Animation -->
+        <div id="tutStep4ScanBar" class="scan-beam scan-beam-up-down hidden"></div>
+
+        <div class="max-w-4xl w-full flex flex-col items-center justify-center my-auto z-20 text-center relative">
+            <!-- Center Vector Diagram -->
             <div id="tutStep4Card" onclick="simulateFullBody()" title="Click to test/simulate body alignment" class="cursor-pointer w-[340px] sm:w-[440px] md:w-[480px] h-[230px] sm:h-[280px] md:h-[295px] flex items-center justify-center p-2 relative select-none">
                 <svg viewBox="0 0 420 280" class="w-full h-full select-none pointer-events-none drop-shadow-[0_0_25px_rgba(0,240,255,0.25)]" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <!-- Back dark wall -->
@@ -266,21 +275,20 @@
                     <line x1="214" y1="194" x2="214" y2="234" stroke="#ff2a8d" stroke-width="8" stroke-linecap="round" />
                 </svg>
 
-                <!-- Hidden progress bar element so existing JS doesn't complain -->
-                <div id="step4ProgressBar" class="absolute bottom-0 left-0 h-1 bg-cyan-400 transition-all duration-75" style="width: 0%;"></div>
+                <!-- Progress bar for 5-second posture hold -->
+                <div id="step4ProgressBar" class="absolute bottom-0 left-0 h-1.5 bg-cyan-400 transition-all duration-75 shadow-[0_0_12px_#00f0ff]" style="width: 0%;"></div>
             </div>
 
-            <!-- Reference Text Content & Placement -->
-            <p class="font-orbitron text-white text-base sm:text-xl md:text-2xl font-bold leading-relaxed tracking-wider text-center mt-6 sm:mt-8 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">
-                Please stand in the center and align your body to fit the frame.<br class="hidden sm:inline">
-                Follow the instructions to begin calibration
+            <!-- Instruction Text -->
+            <p id="tutStep4Text" class="font-orbitron text-white text-base sm:text-xl md:text-2xl font-bold leading-relaxed tracking-wider text-center mt-6 sm:mt-8 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all duration-300">
+                Please stand in the center and align your body to fit the frame.
             </p>
         </div>
     </div>
 
     <!-- ========================================================================= -->
-    <!-- TUTORIAL STEP 5: LIFT DOMINANT HAND / GESTURE CONTROL                     -->
-    <!-- (Matching Image 5: tut-open-hand.png | Hand cursor added from here)       -->
+    <!-- TUTORIAL STEP 5: GESTURE CONTROL & INTERACTIVE TEST BUTTON               -->
+    <!-- (Merged Step 6 into Step 5; Test button in center; hover swaps text)      -->
     <!-- ========================================================================= -->
     <div id="screenTutorialStep5" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-between p-6 sm:p-10 select-none">
         <!-- Top Left Tutorial Badge -->
@@ -289,7 +297,7 @@
             <div></div>
         </div>
 
-        <!-- Center Stage Matching Image 5 -->
+        <!-- Center Stage -->
         <div class="w-full max-w-4xl flex flex-col items-center justify-center my-auto z-20 relative">
             <div class="w-full flex items-center justify-center relative min-h-[300px] sm:min-h-[340px]">
                 <!-- Left Pink-to-White Silhouette Figure -->
@@ -313,125 +321,35 @@
                         <!-- Right raised hand -->
                         <circle cx="88" cy="32" r="6" fill="url(#bodyGrad5)" />
                         <!-- Legs -->
-                        <path d="M40 96 L38 150 L36 195" stroke="url(#bodyGrad5)" stroke-width="9" stroke-linecap="round" fill="none" />
-                        <path d="M60 96 L62 150 L64 195" stroke="url(#bodyGrad5)" stroke-width="9" stroke-linecap="round" fill="none" />
+                        <path d="M40 96 L38 150 L36 195" stroke="url(#bodyGrad5)" stroke-width="8" stroke-linecap="round" fill="none" />
+                        <path d="M60 96 L62 150 L64 195" stroke="url(#bodyGrad5)" stroke-width="8" stroke-linecap="round" fill="none" />
                     </svg>
                 </div>
 
-                <!-- Center Open Hand Rounded Card (Transparent Cyber Dark, No White Background) -->
-                <div class="bg-[#091330]/80 rounded-[36px] sm:rounded-[44px] border-2 border-cyan-400/70 p-6 sm:p-8 flex items-center justify-center shadow-[0_0_40px_rgba(0,240,255,0.35)] max-w-sm sm:max-w-md w-full mx-auto">
-                    <!-- SVG Open Dominant Hand Illustration (Matching Image 5) -->
-                    <svg viewBox="0 0 180 220" class="w-48 h-56 sm:w-56 sm:h-64 object-contain drop-shadow-[0_0_20px_rgba(255,42,141,0.5)]">
-                        <defs>
-                            <linearGradient id="handPinkGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#ff80bf" />
-                                <stop offset="100%" stop-color="#ff4da6" />
-                            </linearGradient>
-                        </defs>
-                        <!-- Hand Palm and Fingers -->
-                        <path d="M 60 195 C 65 165 72 135 70 120 C 65 95 60 65 62 48 C 63 42 70 42 72 48 C 76 68 82 98 84 105 C 86 90 88 50 90 32 C 91 26 98 26 99 32 C 102 52 105 85 107 105 C 109 95 115 58 120 44 C 122 39 129 40 129 46 C 129 65 127 92 127 112 C 131 100 138 75 144 68 C 147 64 153 66 153 72 C 151 92 143 125 138 142 C 132 165 125 190 120 205 C 100 215 80 215 60 195 Z" 
-                              fill="url(#handPinkGrad)" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" />
-                        <!-- Thumb -->
-                        <path d="M 70 120 C 58 115 42 122 32 128 C 26 132 29 140 35 139 C 48 136 62 148 70 160" 
-                              fill="url(#handPinkGrad)" stroke="#ffffff" stroke-width="3.5" stroke-linejoin="round" />
-                        <!-- Finger Details / Nails -->
-                        <ellipse cx="67" cy="52" rx="3" ry="5" fill="#fbcfe8" />
-                        <ellipse cx="94.5" cy="36" rx="3.5" ry="5.5" fill="#fbcfe8" />
-                        <ellipse cx="124.5" cy="48" rx="3" ry="5" fill="#fbcfe8" />
-                        <ellipse cx="148" cy="74" rx="3" ry="4.5" fill="#fbcfe8" />
-                        <ellipse cx="32" cy="133" rx="4" ry="3" fill="#fbcfe8" />
-                    </svg>
-                </div>
-            </div>
-
-            <!-- Bottom Instruction Text (Matching Image 5) -->
-            <p class="font-orbitron text-base sm:text-xl md:text-2xl font-bold text-white tracking-wider text-center mt-8 max-w-2xl px-4 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">
-                To use gesture control please lift your dominant hand forward towards the screen
-            </p>
-        </div>
-
-        <div class="h-6"></div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- TUTORIAL STEP 6: RING WRAPPING AROUND CURSOR                              -->
-    <!-- (Matching Image 4: tut-ring-wrap.png | Interactive test button)           -->
-    <!-- ========================================================================= -->
-    <div id="screenTutorialStep6" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-between p-6 sm:p-10 select-none">
-        <!-- Top Left Tutorial Badge -->
-        <div class="w-full flex justify-between items-center max-w-6xl z-20">
-            <div class="tutorial-glow-badge">TUTORIAL</div>
-            <div></div>
-        </div>
-
-        <!-- Center Stage Matching Image 4 -->
-        <div class="w-full max-w-4xl flex flex-col items-center justify-center my-auto z-20 relative">
-            <div class="w-full flex items-center justify-center relative min-h-[300px] sm:min-h-[340px]">
-                <!-- Left Pink-to-White Silhouette Figure -->
-                <div class="hidden sm:block absolute left-2 sm:left-6 bottom-0 w-32 h-64 pointer-events-none select-none">
-                    <svg viewBox="0 0 100 200" class="w-full h-full drop-shadow-[0_0_15px_rgba(255,42,141,0.4)]">
-                        <defs>
-                            <linearGradient id="bodyGrad6" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#ff4099" />
-                                <stop offset="70%" stop-color="#ff99cc" />
-                                <stop offset="100%" stop-color="#ffffff" />
-                            </linearGradient>
-                        </defs>
-                        <!-- Head -->
-                        <circle cx="50" cy="22" r="12" fill="url(#bodyGrad6)" />
-                        <!-- Torso -->
-                        <path d="M35 38 Q50 34 65 38 L68 95 Q50 98 32 95 Z" fill="url(#bodyGrad6)" />
-                        <!-- Left arm (hanging) -->
-                        <path d="M34 40 L24 75 L20 110" stroke="url(#bodyGrad6)" stroke-width="8" stroke-linecap="round" fill="none" />
-                        <!-- Right arm bent in fist -->
-                        <path d="M66 40 L84 62 L88 42" stroke="url(#bodyGrad6)" stroke-width="8" stroke-linecap="round" fill="none" />
-                        <circle cx="88" cy="40" r="7" fill="url(#bodyGrad6)" />
-                        <!-- Legs -->
-                        <path d="M40 96 L38 150 L36 195" stroke="url(#bodyGrad6)" stroke-width="9" stroke-linecap="round" fill="none" />
-                        <path d="M60 96 L62 150 L64 195" stroke="url(#bodyGrad6)" stroke-width="9" stroke-linecap="round" fill="none" />
-                    </svg>
-                </div>
-
-                <!-- Center: Animated Ring Wrapping Around Cursor Graphic -->
-                <div class="relative w-72 h-72 sm:w-80 sm:h-80 flex items-center justify-center mx-auto">
-                    <!-- SVG Arc Ring Wrapping -->
-                    <svg class="w-full h-full absolute inset-0 pointer-events-none" viewBox="0 0 200 200">
-                        <defs>
-                            <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
-                                <stop offset="0%" stop-color="#2a75d3" />
-                                <stop offset="50%" stop-color="#00f0ff" />
-                                <stop offset="100%" stop-color="#00ffa3" />
-                            </linearGradient>
-                        </defs>
-                        <!-- Wrapping Glow Arc -->
-                        <circle cx="100" cy="100" r="76" fill="none" stroke="url(#ringGrad)" stroke-width="12" stroke-linecap="round" class="ring-wrap-circle" />
-                    </svg>
-
-                    <!-- Center Cursor Hand Glove -->
-                    <div class="relative z-10 w-32 h-32 flex items-center justify-center">
-                        <img src="cursor-hand.png" alt="Cursor Hand" class="w-28 h-28 object-contain drop-shadow-[0_4px_16px_rgba(0,0,0,0.8)] filter brightness-110">
-                    </div>
-                </div>
-
-                <!-- Interactive Test Button on Screen -->
-                <div class="absolute right-0 sm:right-6 top-1/2 -translate-y-1/2 z-30">
-                    <button id="tutTestBtn" onclick="completeTestClick()" onmouseenter="startTestDwell()" onmouseleave="cancelTestDwell()" class="figma-btn-magenta interactable px-8 py-5 rounded-2xl font-orbitron font-extrabold text-white text-base tracking-widest shadow-[0_0_30px_rgba(255,42,141,0.6)] border-2 border-pink-400 hover:scale-105 active:scale-95 transition-all text-center flex flex-col items-center gap-1 group">
-                        <span class="flex items-center gap-2">
-                            <i class="fa-solid fa-hand-pointer text-pink-300 group-hover:animate-bounce"></i>
+                <!-- Center Interactive Test Button Card / Container -->
+                <div class="flex flex-col items-center justify-center gap-6 z-30 mx-auto">
+                    <!-- Center Interactive Test Button -->
+                    <button id="tutTestBtn" 
+                            onclick="completeTestClick()" 
+                            onmouseenter="handleTutBtnHover()" 
+                            onmouseleave="handleTutBtnLeave()" 
+                            class="figma-btn-magenta interactable px-12 sm:px-16 py-7 sm:py-8 rounded-3xl font-orbitron font-extrabold text-white text-lg sm:text-xl tracking-widest shadow-[0_0_35px_rgba(255,42,141,0.6)] border-2 border-pink-400 hover:scale-105 active:scale-95 transition-all text-center flex flex-col items-center gap-2 group cursor-pointer">
+                        <span class="flex items-center gap-3">
+                            <i class="fa-solid fa-hand-pointer text-pink-300 text-2xl group-hover:animate-bounce"></i>
                             TEST BUTTON
                         </span>
-                        <span class="font-sans text-[11px] font-normal text-pink-200 tracking-normal opacity-90">Hover or click to register</span>
+                        <span class="font-sans text-xs sm:text-sm font-normal text-pink-200 tracking-normal opacity-90">Hover or click to register</span>
                         <!-- Dwell Progress Bar on button -->
-                        <div class="w-full bg-slate-900/80 h-1.5 rounded-full mt-2 overflow-hidden border border-pink-400/30">
-                            <div id="testBtnProgress" class="h-full bg-cyan-400 rounded-full transition-all duration-75" style="width: 0%;"></div>
+                        <div class="w-full bg-slate-900/80 h-2.5 rounded-full mt-3 overflow-hidden border border-pink-400/40">
+                            <div id="testBtnProgress" class="h-full bg-cyan-400 rounded-full transition-all duration-75 shadow-[0_0_12px_#00f0ff]" style="width: 0%;"></div>
                         </div>
                     </button>
                 </div>
             </div>
 
-            <!-- Bottom Instruction Text (Matching Image 4) -->
-            <p class="font-orbitron text-base sm:text-xl md:text-2xl font-bold text-white tracking-wider text-center mt-8 max-w-2xl px-4 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)]">
-                You will be able to see a ring wrapping around your cursor. This will indicate the duration to register a click
+            <!-- Bottom Instruction Text (Dynamically changes when hovering middle button) -->
+            <p id="tutStep5Text" class="font-orbitron text-base sm:text-xl md:text-2xl font-bold text-white tracking-wider text-center mt-8 max-w-2xl px-4 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all duration-300">
+                To use gesture control please lift your dominant hand forward towards the screen
             </p>
         </div>
 
@@ -716,14 +634,14 @@
                 <img src="logo.svg" alt="FlexScape Logo" class="w-12 h-14 object-contain drop-shadow-[0_0_15px_rgba(48,223,242,0.5)]">
             </div>
 
-            <!-- Top Center: 3-Second Pose Countdown Circle & Progress Bar -->
+            <!-- Top Center: 3-Second Pose Countdown Circle & Pose Accuracy Bar -->
             <div class="flex flex-col items-center">
                 <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full bg-[#0d1838] border-2 border-[#2b6cb0] flex items-center justify-center shadow-[0_0_20px_rgba(0,240,255,0.25)]">
                     <span id="poseCountdownText" class="font-orbitron text-4xl sm:text-5xl font-black text-white">3</span>
                 </div>
-                <!-- Pose Hold / Duration Progress Bar -->
-                <div class="w-48 sm:w-56 h-3 bg-[#162244] mt-3.5 rounded-none overflow-hidden flex">
-                    <div id="poseProgressBar" class="h-full bg-cyan-400 transition-all duration-75" style="width: 70%;"></div>
+                <!-- Pose Accuracy Bar (Below 3-2-1 Countdown) -->
+                <div class="w-48 sm:w-56 h-3 bg-[#162244] mt-3.5 rounded-full overflow-hidden flex border border-cyan-500/30 p-0.5" title="Pose Accuracy">
+                    <div id="poseProgressBar" class="h-full bg-cyan-400 rounded-full transition-all duration-75" style="width: 0%;"></div>
                 </div>
             </div>
 
@@ -753,120 +671,51 @@
             </div>
         </div>
 
-        <!-- Subtle transient floating accuracy score popup -->
-        <div id="gameScorePopup" class="pointer-events-none absolute top-28 left-1/2 -translate-x-1/2 z-40 px-6 py-2 rounded-full font-orbitron font-extrabold text-sm sm:text-base transition-all duration-300 opacity-0 scale-90 border backdrop-blur-md"></div>
-    </div>
-
-    <!-- ========================================================================= -->
-    <!-- AUTO PAUSE CALIBRATION OVERLAY (TRIGGERED WHEN BODY LEAVES SCREEN)        -->
-    <!-- ========================================================================= -->
-    <div id="autoPauseCalibrationModal" class="hidden fixed inset-0 z-50 bg-[#030611]/95 backdrop-blur-md flex flex-col items-center justify-between p-6 sm:p-10 select-none">
-        <!-- Top Title Bar -->
-        <div class="w-full flex justify-between items-center max-w-5xl z-20">
-            <div class="flex items-center">
-                <img src="logo.svg" alt="FlexScape Logo" class="w-10 h-12 object-contain drop-shadow-[0_0_15px_rgba(48,223,242,0.5)]">
-            </div>
-            <div class="flex flex-col items-center text-center">
-                <div class="flex items-center gap-2">
-                    <span class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-ping"></span>
-                    <h1 class="font-orbitron text-xl sm:text-2xl font-extrabold text-white tracking-wider">Game Auto-Paused</h1>
-                </div>
-                <span class="font-orbitron text-xs text-amber-300 font-bold mt-0.5 tracking-wider">BODY OUT OF BOUNDS</span>
-            </div>
-            <div class="w-12"></div>
-        </div>
-
-        <!-- Prominent Instruction Banner -->
-        <div class="text-center my-2 z-20 max-w-2xl">
-            <h2 class="font-orbitron text-xl sm:text-2xl font-extrabold text-white tracking-wide">
-                Please stand in the center and align your body to fit the frame.
-            </h2>
-        </div>
-
-        <!-- Calibration Scanning Viewport Frame with Countdown Overlay -->
-        <div class="relative w-full max-w-3xl h-[52vh] rounded-3xl overflow-hidden border-2 border-cyan-400 bg-slate-950 flex items-center justify-center shadow-[0_0_35px_rgba(0,240,255,0.25)] my-auto z-20">
-            <canvas id="autoPauseCanvas" class="w-full h-full block object-cover"></canvas>
-            
-            <!-- Dynamic Neon Laser Scanning Beam -->
-            <div class="scan-beam"></div>
-
-            <!-- Top Left Status Badge -->
-            <div class="absolute top-4 left-4 z-20 bg-slate-900/90 backdrop-blur px-4 py-2 rounded-xl border border-cyan-400/30 flex items-center space-x-2">
-                <div id="autoPauseDot" class="w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse"></div>
-                <span id="autoPauseStatusBadge" class="font-orbitron text-xs font-bold text-amber-300">ALIGNING BODY FRAME</span>
-            </div>
-
-            <!-- Top Right: Simulate Full Body Button for Instant Testing -->
-            <div class="absolute top-4 right-4 z-20">
-                <button onclick="simulateFullBody()" class="figma-btn interactable px-3 py-1.5 rounded-lg text-[11px] font-orbitron text-cyan-300 bg-slate-900/80 border border-cyan-500/30 hover:bg-cyan-900">
-                    <i class="fa-solid fa-person-walking mr-1"></i> Simulate Full Body
-                </button>
-            </div>
-
-            <!-- Center Overlay: 3-Second Resume Countdown Badge -->
-            <div id="autoPauseCountdownBox" class="hidden absolute inset-0 flex flex-col items-center justify-center bg-slate-950/75 backdrop-blur-sm z-30">
-                <div class="w-28 h-28 sm:w-32 sm:h-32 rounded-full border-4 border-[#00f0ff] bg-slate-900/90 flex flex-col items-center justify-center shadow-[0_0_40px_rgba(0,240,255,0.8)] animate-pulse">
-                    <span id="autoPauseCountdownNumber" class="font-orbitron text-6xl sm:text-7xl font-black text-white drop-shadow-[0_0_20px_rgba(0,240,255,0.9)]">3</span>
-                </div>
-                <span class="font-orbitron text-sm font-bold text-cyan-300 tracking-widest mt-4 uppercase">Resuming Game...</span>
-            </div>
-
-            <!-- Bottom Scanning Status Banner -->
-            <div class="absolute bottom-5 inset-x-8 z-20 flex flex-col items-center space-y-1.5">
-                <div class="flex justify-between w-full font-orbitron text-xs font-bold px-1">
-                    <span id="autoPauseProgressLabel" class="text-cyan-300">STEP BACK TO ALIGN ENTIRE BODY...</span>
-                    <span id="autoPauseProgressPct" class="text-white">0%</span>
-                </div>
-                <div class="w-full bg-slate-900/90 h-3 rounded-full border border-cyan-500/30 p-0.5 overflow-hidden">
-                    <div id="autoPauseProgressBar" class="h-full bg-gradient-to-r from-cyan-400 via-teal-300 to-emerald-400 rounded-full transition-all duration-100" style="width: 0%;"></div>
-                </div>
-            </div>
-        </div>
-
-        <div class="h-4"></div>
+        <!-- Transient floating position rating feedback popup (Centered, Zen Dots font) -->
+        <div id="gameScorePopup" class="pointer-events-none absolute top-28 left-1/2 -translate-x-1/2 z-40 px-8 py-3 rounded-full font-zendots text-xl sm:text-2xl font-black tracking-widest text-center transition-all duration-300 opacity-0 scale-90 border backdrop-blur-md"></div>
     </div>
 
     <!-- ========================================================================= -->
     <!-- PAUSE SCREEN (MATCHING FIRST USER IMAGE GUIDE)                            -->
     <!-- ========================================================================= -->
-    <div id="pauseModal" class="hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-between p-8">
+    <div id="pauseModal" class="hidden fixed inset-0 z-[90] bg-[#030611]/95 backdrop-blur-md flex flex-col items-center justify-between p-6 sm:p-8">
         
-        <!-- Top Bar -->
-        <div class="w-full flex justify-between items-start max-w-6xl z-20">
-            <!-- Top Left: FlexScape Logo Emblem -->
-            <div class="flex items-center">
-                <img src="logo.svg" alt="FlexScape Logo" class="w-12 h-14 object-contain drop-shadow-[0_0_15px_rgba(48,223,242,0.5)]">
-            </div>
-
-            <!-- Top Center: Glowing Pause Icon & Title -->
-            <div class="flex flex-col items-center">
-                <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#0a1128] border-2 border-[#ff2a8d] flex items-center justify-center shadow-[0_0_25px_rgba(255,42,141,0.55)] mb-3">
-                    <svg class="w-7 h-7 sm:w-8 sm:h-8 fill-white" viewBox="0 0 24 24">
-                        <rect x="5" y="4" width="4.5" height="16" rx="2.2" />
-                        <rect x="14.5" y="4" width="4.5" height="16" rx="2.2" />
-                    </svg>
-                </div>
-                <h1 class="font-orbitron text-2xl sm:text-3xl font-extrabold text-white tracking-wider drop-shadow-[0_0_15px_rgba(255,42,141,0.4)]">
-                    Game Paused
-                </h1>
-            </div>
-
-            <!-- Top Right: Current Score Card with Cyan Border -->
-            <div class="border-2 border-cyan-400 rounded-2xl bg-[#030611]/80 px-6 py-2.5 text-center shadow-[0_0_20px_rgba(0,240,255,0.25)] min-w-[170px]">
-                <div class="font-orbitron text-xs font-bold text-[#ff2a8d] tracking-wider mb-0.5">Current Score</div>
-                <div id="pauseScoreDisplay" class="font-orbitron text-xl sm:text-2xl font-black text-white tracking-wider">0 Pts</div>
-            </div>
+        <!-- Top Left: FlexScape Logo Emblem (Pinned to Top-Left) -->
+        <div class="absolute top-6 sm:top-8 left-6 sm:left-8 z-30 flex items-center">
+            <img src="logo.svg" alt="FlexScape Logo" class="w-10 h-12 sm:w-12 sm:h-14 object-contain drop-shadow-[0_0_15px_rgba(48,223,242,0.5)]">
         </div>
 
-        <!-- Center: Large Dark Capsule Card with 3 Action Buttons (matching Reference Image) -->
-        <div class="bg-[#0b102b]/95 border border-[#1b234b] rounded-[48px] sm:rounded-[56px] py-12 px-8 sm:px-16 max-w-2xl w-full flex flex-col items-center gap-4 my-auto shadow-[0_15px_40px_rgba(0,0,0,0.8)] z-20">
-            <button onclick="resumeGame()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full max-w-md py-4 rounded-xl font-orbitron font-bold text-lg text-white bg-[#0e1b4d] hover:bg-[#152a75] border border-[#1a2f7d] hover:border-cyan-400 transition-all text-center tracking-wider shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-98">
+        <!-- Top Right: Current Score Card with Cyan Border (Pinned to Top-Right) -->
+        <div class="absolute top-6 sm:top-8 right-6 sm:right-8 z-30 border-2 border-cyan-400 rounded-2xl bg-[#030611]/80 px-6 py-2.5 text-center shadow-[0_0_20px_rgba(0,240,255,0.25)] min-w-[160px] sm:min-w-[170px]">
+            <div class="font-orbitron text-xs font-bold text-[#ff2a8d] tracking-wider mb-0.5">Current Score</div>
+            <div id="pauseScoreDisplay" class="font-orbitron text-xl sm:text-2xl font-black text-white tracking-wider">0 Pts</div>
+        </div>
+
+        <!-- Top Center: Glowing Pause Icon & Title (Mathematically Centered Horizontally) -->
+        <div class="flex flex-col items-center text-center mt-2 sm:mt-4 z-20">
+            <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-[#0a1128] border-2 border-[#ff2a8d] flex items-center justify-center shadow-[0_0_25px_rgba(255,42,141,0.55)] mb-3">
+                <svg class="w-7 h-7 sm:w-8 sm:h-8 fill-white" viewBox="0 0 24 24">
+                    <rect x="5" y="4" width="4.5" height="16" rx="2.2" />
+                    <rect x="14.5" y="4" width="4.5" height="16" rx="2.2" />
+                </svg>
+            </div>
+            <h1 class="font-orbitron text-2xl sm:text-3xl font-extrabold text-white tracking-wider drop-shadow-[0_0_15px_rgba(255,42,141,0.4)]">
+                Game Paused
+            </h1>
+        </div>
+
+        <!-- Center Action Buttons (matching screenshot) -->
+        <div class="w-full max-w-xs sm:max-w-sm space-y-3.5 flex flex-col items-center justify-center mx-auto my-auto z-20 text-center">
+            <button onclick="resumeGame()" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block shadow-[0_0_20px_rgba(255,42,141,0.4)]">
                 Continue
             </button>
-            <button onclick="openSettingsFromPause()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full max-w-md py-4 rounded-xl font-orbitron font-bold text-lg text-white bg-[#0e1b4d] hover:bg-[#152a75] border border-[#1a2f7d] hover:border-cyan-400 transition-all text-center tracking-wider shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-98">
-                Settings
+            <button onclick="openSettingsFromPause()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
+                Setting
             </button>
-            <button onclick="exitGameplay()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full max-w-md py-4 rounded-xl font-orbitron font-bold text-lg text-white bg-[#0e1b4d] hover:bg-[#152a75] border border-[#1a2f7d] hover:border-cyan-400 transition-all text-center tracking-wider shadow-[0_4px_16px_rgba(0,0,0,0.5)] active:scale-98">
+            <button onclick="finishHoleInWallGame()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
+                Finish Game
+            </button>
+            <button onclick="exitGameplay()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
                 Exit
             </button>
         </div>
@@ -922,170 +771,183 @@
                 </div>
             </div>
 
-            <!-- Advance to Leaderboard Action -->
-            <button onclick="showLeaderboardScreen()" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable px-10 py-3.5 rounded-xl font-orbitron font-bold text-base text-white tracking-widest mt-8 shadow-[0_0_25px_rgba(255,42,141,0.5)] hover:scale-105 transition-all">
-                View Leaderboard <i class="fa-solid fa-arrow-right ml-2"></i>
-            </button>
+            <!-- Advance to Leaderboard & Exit to Home Actions -->
+            <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 w-full max-w-md">
+                <button onclick="showLeaderboardScreen()" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable w-full sm:w-auto px-8 py-3.5 rounded-xl font-orbitron font-bold text-base text-white tracking-widest shadow-[0_0_25px_rgba(255,42,141,0.5)] hover:scale-105 transition-all text-center">
+                    Leaderboard <i class="fa-solid fa-arrow-right ml-2"></i>
+                </button>
+                <button onclick="exitToHomeFromEndGame()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full sm:w-auto px-8 py-3.5 rounded-xl font-orbitron font-bold text-base text-white tracking-widest hover:scale-105 transition-all text-center">
+                    Exit
+                </button>
+            </div>
         </div>
 
         <div class="h-6"></div>
     </div>
 
     <!-- ========================================================================= -->
-    <!-- SCREEN 6: LEADERBOARD SCREEN (MATCHING THIRD USER IMAGE)                  -->
+    <!-- SCREEN 6: LEADERBOARD SCREEN                                              -->
+    <!-- (Strictly matches reference image: Zen Dots font, cropped avatars, no extras) -->
     <!-- ========================================================================= -->
-    <div id="screenLeaderboard" class="screen-view hidden relative z-10 w-full h-full flex flex-col items-center justify-between p-6 max-w-4xl mx-auto overflow-y-auto">
+    <div id="screenLeaderboard" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-between p-4 sm:p-6 select-none overflow-y-auto">
         
-        <!-- Top Bar -->
-        <div class="w-full flex justify-between items-center z-20">
-            <div class="flex items-center">
-                <img src="logo.svg" alt="FlexScape Logo" class="w-10 sm:w-12 h-auto object-contain drop-shadow-[0_0_15px_rgba(48,223,242,0.5)]">
+        <!-- Top Bar with Top-Left Logo and Centered Leaderboard Title -->
+        <div class="w-full flex items-center justify-between max-w-3xl z-20 pt-2 pb-1">
+            <div class="w-12 flex items-center">
+                <img src="logo.svg" alt="FlexScape" class="w-9 h-11 sm:w-11 sm:h-13 object-contain drop-shadow-[0_0_12px_rgba(48,223,242,0.4)]">
             </div>
             
-            <h1 class="font-orbitron text-2xl sm:text-3xl font-extrabold text-white tracking-wider text-center">
+            <h1 class="font-zendots text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-wider text-center flex-1 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]">
                 Leaderboard
             </h1>
 
             <div class="w-12"></div>
         </div>
 
-        <!-- Top 3 Podium Cards -->
-        <div class="w-full flex items-end justify-center gap-3 sm:gap-6 my-4 z-20">
+        <!-- Main Content Area -->
+        <div class="w-full max-w-3xl flex flex-col items-center z-20 my-auto py-2">
             
-            <!-- 2nd Place: @drop_bear2387 -->
-            <div class="flex flex-col items-center podium-card" style="animation-delay: 0.15s;">
-                <div class="relative mb-2">
-                    <div class="w-16 h-16 sm:w-18 sm:h-18 rounded-full border-2 border-cyan-400 overflow-hidden bg-slate-900 shadow-[0_0_15px_rgba(0,240,255,0.4)] flex items-center justify-center">
-                        <span class="text-3xl">🐨</span>
+            <!-- Top 3 Podium Section -->
+            <div class="w-full flex items-end justify-center gap-3 sm:gap-6 pt-4 pb-6">
+                
+                <!-- 2nd Place: @drop_bear2387 (Left) -->
+                <div class="flex flex-col items-center">
+                    <div class="relative mb-2">
+                        <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-full border-[3px] border-[#00f0ff] overflow-hidden bg-[#0a1128] shadow-[0_0_20px_rgba(0,240,255,0.5)]">
+                            <img src="avatars/avatar_2.png" alt="@drop_bear2387" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Cyan Diamond Badge: 2 -->
+                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-6 rotate-45 bg-[#00f0ff] flex items-center justify-center shadow-[0_0_10px_#00f0ff]">
+                            <span class="-rotate-45 font-zendots text-[11px] font-black text-black">2</span>
+                        </div>
                     </div>
-                    <!-- Cyan Diamond Badge: 2 -->
-                    <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-5 rotate-45 bg-cyan-400 flex items-center justify-center shadow">
-                        <span class="-rotate-45 font-orbitron text-[11px] font-black text-black">2</span>
+                    <div class="bg-[#0a1128]/95 border-2 border-[#00f0ff] rounded-2xl p-3.5 sm:p-4 text-center w-36 sm:w-44 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(0,240,255,0.25)] min-h-[96px]">
+                        <div class="font-zendots text-[11px] sm:text-xs text-white font-bold truncate w-full tracking-wider">@drop_bear2387</div>
+                        <div class="font-zendots text-xs sm:text-sm text-white font-bold mt-2.5 tracking-wider">70 161 Pts</div>
                     </div>
                 </div>
-                <div class="bg-[#060e24] border border-cyan-400/80 rounded-2xl p-3 text-center w-28 sm:w-36 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
-                    <div class="font-orbitron text-[10px] sm:text-[11px] text-slate-300 font-bold truncate">@drop_bear2387</div>
-                    <div id="podiumScore2" class="font-orbitron text-xs sm:text-sm font-extrabold text-white mt-1">70 161 Pts</div>
+
+                <!-- 1st Place: @yucky3809 (Center, Taller & Elevated) -->
+                <div class="flex flex-col items-center -translate-y-2 sm:-translate-y-3">
+                    <div class="relative mb-2">
+                        <div class="w-22 h-22 sm:w-24 sm:h-24 rounded-full border-[3px] border-[#ccff00] overflow-hidden bg-[#0a1128] shadow-[0_0_25px_rgba(204,255,0,0.6)]">
+                            <img src="avatars/avatar_1.png" alt="@yucky3809" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Lime Diamond Badge: 1 -->
+                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-7 h-7 rotate-45 bg-[#ccff00] flex items-center justify-center shadow-[0_0_12px_#ccff00]">
+                            <span class="-rotate-45 font-zendots text-xs font-black text-black">1</span>
+                        </div>
+                    </div>
+                    <div class="bg-[#0a1128]/95 border-2 border-[#ccff00] rounded-2xl p-4 sm:p-5 text-center w-40 sm:w-52 flex flex-col items-center justify-center shadow-[0_0_30px_rgba(204,255,0,0.3)] min-h-[120px]">
+                        <div class="font-zendots text-xs sm:text-sm text-white font-bold truncate w-full tracking-wider">@yucky3809</div>
+                        <div class="font-zendots text-[9px] sm:text-[10px] text-[#ccff00] font-normal leading-tight mt-1.5">
+                            Overall<br>score:
+                        </div>
+                        <div class="font-zendots text-sm sm:text-base text-white font-bold mt-1 tracking-wider">71 261 Pts</div>
+                    </div>
+                </div>
+
+                <!-- 3rd Place: @isThisThingOn (Right) -->
+                <div class="flex flex-col items-center">
+                    <div class="relative mb-2">
+                        <div class="w-18 h-18 sm:w-20 sm:h-20 rounded-full border-[3px] border-[#ff2a8d] overflow-hidden bg-[#0a1128] shadow-[0_0_20px_rgba(255,42,141,0.5)]">
+                            <img src="avatars/avatar_3.png" alt="@isThisThingOn" class="w-full h-full object-cover">
+                        </div>
+                        <!-- Magenta Diamond Badge: 3 -->
+                        <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-6 rotate-45 bg-[#ff2a8d] flex items-center justify-center shadow-[0_0_10px_#ff2a8d]">
+                            <span class="-rotate-45 font-zendots text-[11px] font-black text-white">3</span>
+                        </div>
+                    </div>
+                    <div class="bg-[#0a1128]/95 border-2 border-[#ff2a8d] rounded-2xl p-3.5 sm:p-4 text-center w-36 sm:w-44 flex flex-col items-center justify-center shadow-[0_0_25px_rgba(255,42,141,0.25)] min-h-[96px]">
+                        <div class="font-zendots text-[11px] sm:text-xs text-white font-bold truncate w-full tracking-wider">@isThisThingOn</div>
+                        <div class="font-zendots text-xs sm:text-sm text-white font-bold mt-2.5 tracking-wider">63 045 Pts</div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- 4th through 10th Place List Rows -->
+            <div class="w-full max-w-2xl space-y-2.5 z-20">
+                <!-- 4th: @Rainbow_fly -->
+                <div class="bg-[#080e24]/90 border border-[#182348] rounded-2xl sm:rounded-3xl px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+                    <span class="font-zendots text-sm sm:text-base text-white font-bold w-12 sm:w-16">4th</span>
+                    <div class="flex items-center gap-3 sm:gap-4 flex-1 pl-2 sm:pl-4">
+                        <img src="avatars/avatar_4.png" alt="@Rainbow_fly" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover">
+                        <span class="font-zendots text-xs sm:text-sm text-white font-bold">@Rainbow_fly</span>
+                    </div>
+                    <span class="font-zendots text-xs sm:text-sm text-white font-bold">56 345 Pts</span>
+                </div>
+
+                <!-- 5th: @Simpliton -->
+                <div class="bg-[#080e24]/90 border border-[#182348] rounded-2xl sm:rounded-3xl px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+                    <span class="font-zendots text-sm sm:text-base text-white font-bold w-12 sm:w-16">5th</span>
+                    <div class="flex items-center gap-3 sm:gap-4 flex-1 pl-2 sm:pl-4">
+                        <img src="avatars/avatar_5.png" alt="@Simpliton" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover">
+                        <span class="font-zendots text-xs sm:text-sm text-white font-bold">@Simpliton</span>
+                    </div>
+                    <span class="font-zendots text-xs sm:text-sm text-white font-bold">55 785 Pts</span>
+                </div>
+
+                <!-- 6th: @Crazy_Q -->
+                <div class="bg-[#080e24]/90 border border-[#182348] rounded-2xl sm:rounded-3xl px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+                    <span class="font-zendots text-sm sm:text-base text-white font-bold w-12 sm:w-16">6th</span>
+                    <div class="flex items-center gap-3 sm:gap-4 flex-1 pl-2 sm:pl-4">
+                        <img src="avatars/avatar_6.png" alt="@Crazy_Q" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover">
+                        <span class="font-zendots text-xs sm:text-sm text-white font-bold">@Crazy_Q</span>
+                    </div>
+                    <span class="font-zendots text-xs sm:text-sm text-white font-bold">55 219 Pts</span>
+                </div>
+
+                <!-- 7th: @JustD0it -->
+                <div class="bg-[#080e24]/90 border border-[#182348] rounded-2xl sm:rounded-3xl px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+                    <span class="font-zendots text-sm sm:text-base text-white font-bold w-12 sm:w-16">7th</span>
+                    <div class="flex items-center gap-3 sm:gap-4 flex-1 pl-2 sm:pl-4">
+                        <img src="avatars/avatar_7.png" alt="@JustD0it" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover">
+                        <span class="font-zendots text-xs sm:text-sm text-white font-bold">@JustD0it</span>
+                    </div>
+                    <span class="font-zendots text-xs sm:text-sm text-white font-bold">53 441 Pts</span>
+                </div>
+
+                <!-- 8th: @Walking_2 -->
+                <div class="bg-[#080e24]/90 border border-[#182348] rounded-2xl sm:rounded-3xl px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+                    <span class="font-zendots text-sm sm:text-base text-white font-bold w-12 sm:w-16">8th</span>
+                    <div class="flex items-center gap-3 sm:gap-4 flex-1 pl-2 sm:pl-4">
+                        <img src="avatars/avatar_8.png" alt="@Walking_2" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover">
+                        <span class="font-zendots text-xs sm:text-sm text-white font-bold">@Walking_2</span>
+                    </div>
+                    <span class="font-zendots text-xs sm:text-sm text-white font-bold">52 128 Pts</span>
+                </div>
+
+                <!-- 9th: @nice_lady -->
+                <div class="bg-[#080e24]/90 border border-[#182348] rounded-2xl sm:rounded-3xl px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+                    <span class="font-zendots text-sm sm:text-base text-white font-bold w-12 sm:w-16">9th</span>
+                    <div class="flex items-center gap-3 sm:gap-4 flex-1 pl-2 sm:pl-4">
+                        <img src="avatars/avatar_9.png" alt="@nice_lady" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover">
+                        <span class="font-zendots text-xs sm:text-sm text-white font-bold">@nice_lady</span>
+                    </div>
+                    <span class="font-zendots text-xs sm:text-sm text-white font-bold">51 274 Pts</span>
+                </div>
+
+                <!-- 10th: @404_alien -->
+                <div class="bg-[#080e24]/90 border border-[#182348] rounded-2xl sm:rounded-3xl px-6 sm:px-8 py-2.5 sm:py-3 flex items-center justify-between shadow-[0_4px_20px_rgba(0,0,0,0.5)]">
+                    <span class="font-zendots text-sm sm:text-base text-white font-bold w-12 sm:w-16">10th</span>
+                    <div class="flex items-center gap-3 sm:gap-4 flex-1 pl-2 sm:pl-4">
+                        <img src="avatars/avatar_10.png" alt="@404_alien" class="w-9 h-9 sm:w-10 sm:h-10 rounded-full object-cover">
+                        <span class="font-zendots text-xs sm:text-sm text-white font-bold">@404_alien</span>
+                    </div>
+                    <span class="font-zendots text-xs sm:text-sm text-white font-bold">50 178 Pts</span>
                 </div>
             </div>
 
-            <!-- 1st Place: @yucky3809 (Elevated Center) -->
-            <div class="flex flex-col items-center podium-card -translate-y-3 cursor-pointer" onclick="replayLeaderboardAnimation()" style="animation-delay: 0.05s;" title="Click to replay animation">
-                <div class="relative mb-2">
-                    <div class="w-20 h-20 sm:w-22 sm:h-22 rounded-full border-2 border-lime-400 overflow-hidden bg-slate-900 shadow-[0_0_25px_rgba(199,253,5,0.5)] flex items-center justify-center">
-                        <span class="text-4xl">🐶</span>
-                    </div>
-                    <!-- Lime Diamond Badge: 1 -->
-                    <div class="absolute -bottom-2 left-1/2 -translate-x-1/2 w-6 h-6 rotate-45 bg-lime-400 flex items-center justify-center shadow">
-                        <span class="-rotate-45 font-orbitron text-xs font-black text-black">1</span>
-                    </div>
-                </div>
-                <div class="bg-[#060e24] border-2 border-lime-400 rounded-2xl p-4 text-center w-36 sm:w-44 shadow-[0_0_30px_rgba(199,253,5,0.35)]">
-                    <div class="font-orbitron text-xs sm:text-sm text-lime-400 font-black truncate">@yucky3809</div>
-                    <div class="font-orbitron text-[9px] sm:text-[10px] text-lime-300 font-bold mt-0.5">Overall score:</div>
-                    <div id="leaderboardTopScore" class="font-orbitron text-sm sm:text-lg font-black text-white mt-0.5 text-glow-lime">71 261 Pts</div>
-                    <div id="leaderboardGainBadge" class="hidden text-[10px] font-orbitron font-black text-lime-400 mt-1 animate-pulse">+1 240 Pts New High!</div>
-                </div>
-            </div>
-
-            <!-- 3rd Place: @isThisThingOn -->
-            <div class="flex flex-col items-center podium-card" style="animation-delay: 0.25s;">
-                <div class="relative mb-2">
-                    <div class="w-16 h-16 sm:w-18 sm:h-18 rounded-full border-2 border-[#ff2a8d] overflow-hidden bg-slate-900 shadow-[0_0_15px_rgba(255,42,141,0.4)] flex items-center justify-center">
-                        <span class="text-3xl">🦙</span>
-                    </div>
-                    <!-- Pink Diamond Badge: 3 -->
-                    <div class="absolute -bottom-1.5 left-1/2 -translate-x-1/2 w-5 h-5 rotate-45 bg-[#ff2a8d] flex items-center justify-center shadow">
-                        <span class="-rotate-45 font-orbitron text-[11px] font-black text-white">3</span>
-                    </div>
-                </div>
-                <div class="bg-[#060e24] border border-[#ff2a8d]/80 rounded-2xl p-3 text-center w-28 sm:w-36 shadow-[0_0_15px_rgba(255,42,141,0.2)]">
-                    <div class="font-orbitron text-[10px] sm:text-[11px] text-slate-300 font-bold truncate">@isThisThingOn</div>
-                    <div id="podiumScore3" class="font-orbitron text-xs sm:text-sm font-extrabold text-white mt-1">63 045 Pts</div>
-                </div>
+            <!-- Exit Button with Pink Outline (matching reference image) -->
+            <div class="w-full flex justify-center pt-6 pb-2 z-20">
+                <button onclick="exitLeaderboard()" onmouseenter="playSfx('hover')" class="interactable px-16 py-3.5 rounded-2xl border-2 border-[#ff2a8d] bg-[#060b1e] text-white font-zendots text-base tracking-widest hover:bg-[#ff2a8d]/20 transition-all shadow-[0_0_20px_rgba(255,42,141,0.4)] active:scale-95 cursor-pointer">
+                    Exit
+                </button>
             </div>
 
         </div>
 
-        <!-- 4th to 10th Place List Rows (Matching third image) -->
-        <div class="w-full max-w-2xl space-y-2 my-2 z-20">
-            <!-- 4th: @Rainbow_fly -->
-            <div class="leaderboard-row bg-[#060e24]/90 border border-slate-800 rounded-2xl px-5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow" style="animation-delay: 0.1s;">
-                <div class="flex items-center space-x-4">
-                    <span class="font-orbitron text-base sm:text-lg font-extrabold text-white w-10">4th</span>
-                    <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-700 bg-slate-900 flex items-center justify-center text-lg">🪰</div>
-                    <span class="font-orbitron text-xs sm:text-sm font-bold text-white">@Rainbow_fly</span>
-                </div>
-                <span id="lbScore4" class="lb-row-score font-orbitron text-xs sm:text-sm font-extrabold text-white" data-target="56345">56 345 Pts</span>
-            </div>
-
-            <!-- 5th: @Simpliton -->
-            <div class="leaderboard-row bg-[#060e24]/90 border border-slate-800 rounded-2xl px-5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow" style="animation-delay: 0.15s;">
-                <div class="flex items-center space-x-4">
-                    <span class="font-orbitron text-base sm:text-lg font-extrabold text-white w-10">5th</span>
-                    <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-700 bg-slate-900 flex items-center justify-center text-lg">🐱</div>
-                    <span class="font-orbitron text-xs sm:text-sm font-bold text-white">@Simpliton</span>
-                </div>
-                <span id="lbScore5" class="lb-row-score font-orbitron text-xs sm:text-sm font-extrabold text-white" data-target="55785">55 785 Pts</span>
-            </div>
-
-            <!-- 6th: @Crazy_Q -->
-            <div class="leaderboard-row bg-[#060e24]/90 border border-slate-800 rounded-2xl px-5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow" style="animation-delay: 0.2s;">
-                <div class="flex items-center space-x-4">
-                    <span class="font-orbitron text-base sm:text-lg font-extrabold text-white w-10">6th</span>
-                    <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-700 bg-slate-900 flex items-center justify-center text-lg">🧟</div>
-                    <span class="font-orbitron text-xs sm:text-sm font-bold text-white">@Crazy_Q</span>
-                </div>
-                <span id="lbScore6" class="lb-row-score font-orbitron text-xs sm:text-sm font-extrabold text-white" data-target="55219">55 219 Pts</span>
-            </div>
-
-            <!-- 7th: @JustDoIt -->
-            <div class="leaderboard-row bg-[#060e24]/90 border border-slate-800 rounded-2xl px-5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow" style="animation-delay: 0.25s;">
-                <div class="flex items-center space-x-4">
-                    <span class="font-orbitron text-base sm:text-lg font-extrabold text-white w-10">7th</span>
-                    <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-700 bg-slate-900 flex items-center justify-center text-lg">🦀</div>
-                    <span class="font-orbitron text-xs sm:text-sm font-bold text-white">@JustDoIt</span>
-                </div>
-                <span id="lbScore7" class="lb-row-score font-orbitron text-xs sm:text-sm font-extrabold text-white" data-target="53441">53 441 Pts</span>
-            </div>
-
-            <!-- 8th: @Walking_2 -->
-            <div class="leaderboard-row bg-[#060e24]/90 border border-slate-800 rounded-2xl px-5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow" style="animation-delay: 0.3s;">
-                <div class="flex items-center space-x-4">
-                    <span class="font-orbitron text-base sm:text-lg font-extrabold text-white w-10">8th</span>
-                    <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-700 bg-slate-900 flex items-center justify-center text-lg">🐒</div>
-                    <span class="font-orbitron text-xs sm:text-sm font-bold text-white">@Walking_2</span>
-                </div>
-                <span id="lbScore8" class="lb-row-score font-orbitron text-xs sm:text-sm font-extrabold text-white" data-target="52128">52 128 Pts</span>
-            </div>
-
-            <!-- 9th: @nice_lady -->
-            <div class="leaderboard-row bg-[#060e24]/90 border border-slate-800 rounded-2xl px-5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow" style="animation-delay: 0.35s;">
-                <div class="flex items-center space-x-4">
-                    <span class="font-orbitron text-base sm:text-lg font-extrabold text-white w-10">9th</span>
-                    <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-700 bg-slate-900 flex items-center justify-center text-lg">🔥</div>
-                    <span class="font-orbitron text-xs sm:text-sm font-bold text-white">@nice_lady</span>
-                </div>
-                <span id="lbScore9" class="lb-row-score font-orbitron text-xs sm:text-sm font-extrabold text-white" data-target="51274">51 274 Pts</span>
-            </div>
-
-            <!-- 10th: @404_alien -->
-            <div class="leaderboard-row bg-[#060e24]/90 border border-slate-800 rounded-2xl px-5 sm:px-6 py-2.5 sm:py-3 flex items-center justify-between shadow" style="animation-delay: 0.4s;">
-                <div class="flex items-center space-x-4">
-                    <span class="font-orbitron text-base sm:text-lg font-extrabold text-white w-10">10th</span>
-                    <div class="w-9 h-9 rounded-full overflow-hidden border border-slate-700 bg-slate-900 flex items-center justify-center text-lg">💀</div>
-                    <span class="font-orbitron text-xs sm:text-sm font-bold text-white">@404_alien</span>
-                </div>
-                <span id="lbScore10" class="lb-row-score font-orbitron text-xs sm:text-sm font-extrabold text-white" data-target="50178">50 178 Pts</span>
-            </div>
-        </div>
-
-        <!-- Exit Button with Pink Outline (from Image 3) -->
-        <div class="w-full flex justify-center pb-2 pt-2 z-20">
-            <button onclick="navigateTo('screenHome')" onmouseenter="playSfx('hover')" class="figma-btn interactable px-14 py-2.5 rounded-xl border-2 border-[#ff2a8d] bg-[#070e24] text-white font-orbitron font-bold text-sm tracking-widest hover:bg-[#ff2a8d]/20 transition-all shadow-[0_0_15px_rgba(255,42,141,0.35)] active:scale-95">
-                Exit
-            </button>
-        </div>
     </div>
 
     <!-- Generic Modal for Exit/Accessibility -->
@@ -1227,9 +1089,12 @@
             playSfx('click');
             previousScreenBeforeSettings = 'screenGameplay';
             const pauseModal = document.getElementById('pauseModal');
-            if (pauseModal) pauseModal.classList.add('hidden');
-            navigateTo('screenSettings');
-            announceAudioCue('Settings opened.');
+            if (pauseModal) {
+                pauseModal.classList.add('hidden');
+                pauseModal.style.display = 'none';
+            }
+            navigateTo('screenAccessibility');
+            announceAudioCue('Accessibility settings opened.');
         }
 
         function returnFromSettings() {
@@ -1239,7 +1104,10 @@
                 isGameRunning = true;
                 isGamePaused = true;
                 const pauseModal = document.getElementById('pauseModal');
-                if (pauseModal) pauseModal.classList.remove('hidden');
+                if (pauseModal) {
+                    pauseModal.classList.remove('hidden');
+                    pauseModal.style.display = 'flex';
+                }
             } else {
                 navigateTo('screenHome');
             }
@@ -1247,12 +1115,22 @@
 
         function returnFromAccessibility() {
             playSfx('click');
-            navigateTo('screenSettings');
+            if (previousScreenBeforeSettings === 'screenGameplay') {
+                navigateTo('screenGameplay');
+                isGameRunning = true;
+                isGamePaused = true;
+                const pauseModal = document.getElementById('pauseModal');
+                if (pauseModal) {
+                    pauseModal.classList.remove('hidden');
+                    pauseModal.style.display = 'flex';
+                }
+            } else {
+                navigateTo('screenSettings');
+            }
         }
 
         // Gameplay Pause & Resume System
         function togglePauseGame() {
-            if (!isGameRunning) return;
             if (isGamePaused) {
                 resumeGame();
             } else {
@@ -1261,20 +1139,22 @@
         }
 
         function pauseGame() {
-            if (!isGameRunning || isGamePaused) return;
+            if (isGamePaused) return;
             isGamePaused = true;
             if (gameLoopRafId) {
                 cancelAnimationFrame(gameLoopRafId);
                 gameLoopRafId = null;
             }
             playSfx('click');
-            const scoreDisplayVal = currentTotalScore > 0 ? currentTotalScore : 1240;
             const pauseScoreEl = document.getElementById('pauseScoreDisplay');
-            if (pauseScoreEl) pauseScoreEl.innerText = scoreDisplayVal + ' Pts';
+            if (pauseScoreEl) pauseScoreEl.innerText = currentTotalScore + ' Pts';
             const pauseComboEl = document.getElementById('pauseComboDisplay');
             if (pauseComboEl) pauseComboEl.innerText = comboMultiplier + 'x';
             const pauseModal = document.getElementById('pauseModal');
-            if (pauseModal) pauseModal.classList.remove('hidden');
+            if (pauseModal) {
+                pauseModal.classList.remove('hidden');
+                pauseModal.style.display = 'flex';
+            }
             announceAudioCue('Game paused. Press resume to continue.');
         }
 
@@ -1282,42 +1162,89 @@
             playSfx('click');
             isGamePaused = false;
             lastGameTimestamp = null;
-            document.getElementById('pauseModal').classList.add('hidden');
+            const pauseModal = document.getElementById('pauseModal');
+            if (pauseModal) {
+                pauseModal.classList.add('hidden');
+                pauseModal.style.display = 'none';
+            }
             announceAudioCue('Game resumed.');
-            if (gameLoopRafId) cancelAnimationFrame(gameLoopRafId);
-            gameLoopRafId = requestAnimationFrame(gameLoop);
+            if (isGameRunning) {
+                if (gameLoopRafId) cancelAnimationFrame(gameLoopRafId);
+                gameLoopRafId = requestAnimationFrame(gameLoop);
+            }
         }
 
         function restartGameplay() {
             playSfx('score');
             isGamePaused = false;
-            document.getElementById('pauseModal').classList.add('hidden');
+            const pauseModal = document.getElementById('pauseModal');
+            if (pauseModal) {
+                pauseModal.classList.add('hidden');
+                pauseModal.style.display = 'none';
+            }
             startHoleInWallGame();
         }
 
-        // Keyboard hotkeys for pause / unpause
+        // Keyboard hotkeys for pause / unpause & testing pose match
         window.addEventListener('keydown', (e) => {
             if (e.key === 'p' || e.key === 'P' || e.key === 'Escape') {
                 if (isGameRunning) {
                     togglePauseGame();
                 }
+            } else if (e.key === 'm' || e.key === 'M' || e.key === ' ') {
+                if (isGameRunning && !isGamePaused) {
+                    forcePoseMatch();
+                }
             }
         });
 
-        // Floating Score / Accuracy Feedback Helper
+        // Floating Score / Accuracy Feedback Helper (Ratings: Superstar, Fantastic, Nice!, Almost, Miss)
         let scorePopupTimeout = null;
-        function showFloatingScoreFeedback(text, isMiss = false) {
+        function showFloatingRatingFeedback(accuracy) {
             const popup = document.getElementById('gameScorePopup');
             if (!popup) return;
-            popup.innerText = text;
-            popup.className = isMiss
-                ? "pointer-events-none absolute top-20 z-40 px-6 py-2 rounded-full font-orbitron font-extrabold text-sm sm:text-base transition-all duration-300 opacity-100 scale-100 border border-rose-500 bg-rose-950/80 text-rose-300 shadow-[0_0_20px_rgba(244,63,94,0.4)]"
-                : "pointer-events-none absolute top-20 z-40 px-6 py-2 rounded-full font-orbitron font-extrabold text-sm sm:text-base transition-all duration-300 opacity-100 scale-100 border border-emerald-400 bg-emerald-950/80 text-emerald-300 shadow-[0_0_20px_rgba(57,255,20,0.4)]";
+
+            const acc = Math.round(accuracy);
+            let rating = "Miss";
+            let colorClasses = "border-2 border-[#ff0055] text-[#ff0055] bg-[#22000c]/90 shadow-[0_0_35px_rgba(255,0,85,0.75)]";
+
+            if (acc >= 95) {
+                rating = "Superstar";
+                colorClasses = "border-2 border-[#ffea00] text-[#ffea00] bg-[#1a1700]/90 shadow-[0_0_35px_rgba(255,234,0,0.75)]";
+            } else if (acc >= 80) {
+                rating = "Fantastic";
+                colorClasses = "border-2 border-[#39ff14] text-[#39ff14] bg-[#021808]/90 shadow-[0_0_35px_rgba(57,255,20,0.75)]";
+            } else if (acc >= 50) {
+                rating = "Nice!";
+                colorClasses = "border-2 border-[#00f0ff] text-[#00f0ff] bg-[#001726]/90 shadow-[0_0_35px_rgba(0,240,255,0.75)]";
+            } else if (acc >= 10) {
+                rating = "Almost";
+                colorClasses = "border-2 border-[#ff9900] text-[#ff9900] bg-[#220d00]/90 shadow-[0_0_35px_rgba(255,153,0,0.75)]";
+            } else {
+                rating = "Miss";
+                colorClasses = "border-2 border-[#ff0055] text-[#ff0055] bg-[#22000c]/90 shadow-[0_0_35px_rgba(255,0,85,0.75)]";
+            }
+
+            popup.innerText = rating;
+            popup.className = `pointer-events-none absolute top-28 left-1/2 -translate-x-1/2 z-40 px-8 py-3 rounded-full font-zendots text-xl sm:text-2xl font-black tracking-wider text-center transition-all duration-300 opacity-100 scale-100 ${colorClasses} backdrop-blur-md`;
 
             if (scorePopupTimeout) clearTimeout(scorePopupTimeout);
             scorePopupTimeout = setTimeout(() => {
-                popup.className = "pointer-events-none absolute top-20 z-40 px-6 py-2 rounded-full font-orbitron font-extrabold text-sm sm:text-base transition-all duration-300 opacity-0 scale-90 border backdrop-blur-md";
+                popup.className = "pointer-events-none absolute top-28 left-1/2 -translate-x-1/2 z-40 px-8 py-3 rounded-full font-zendots text-xl sm:text-2xl font-black tracking-wider text-center transition-all duration-300 opacity-0 scale-90 border backdrop-blur-md";
             }, 1400);
+
+            return rating;
+        }
+
+        function showFloatingScoreFeedback(textOrAcc, isMiss = false) {
+            if (typeof textOrAcc === 'number') {
+                return showFloatingRatingFeedback(textOrAcc);
+            }
+            if (typeof textOrAcc === 'string') {
+                const match = textOrAcc.match(/(\d+)%/);
+                if (match) return showFloatingRatingFeedback(parseInt(match[1], 10));
+            }
+            return showFloatingRatingFeedback(isMiss ? 0 : 70);
         }
 
         // Tutorial State
@@ -1366,16 +1293,20 @@
         }
 
         const STRETCH_POSES = [
-            { name: "OVERHEAD REACH", type: "T_POSE" },
-            { name: "STAR STRETCH", type: "STAR" },
-            { name: "SIDE LUNGE", type: "LUNGE" },
-            { name: "HIGH REACH", type: "HIGH" }
+            { name: "T-POSE", type: "T_POSE", desc: "Extend both arms horizontally at shoulder level" },
+            { name: "STAR STRETCH", type: "STAR", desc: "Extend arms and legs wide in an X shape" },
+            { name: "SIDE LUNGE", type: "LUNGE", desc: "Shift weight sideways with asymmetric arm stretch" },
+            { name: "HIGH REACH", type: "HIGH", desc: "Reach both arms straight overhead" }
         ];
 
         // Web Audio Synthesizer SFX
         function initAudio() {
-            if (!activeAudioCtx) {
-                activeAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+            try {
+                if (!activeAudioCtx && (window.AudioContext || window.webkitAudioContext)) {
+                    activeAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                }
+            } catch (e) {
+                activeAudioCtx = null;
             }
         }
 
@@ -1383,7 +1314,7 @@
             initAudio();
             if (!activeAudioCtx || masterVolume === 0) return;
             if (activeAudioCtx.state === 'suspended') {
-                activeAudioCtx.resume();
+                try { activeAudioCtx.resume(); } catch(e) {}
             }
             
             try {
@@ -1433,6 +1364,10 @@
             } catch(e) {}
         }
 
+        function stopVoiceRecognition() {
+            // Voice recognition disabled/cleanup stub
+        }
+
         let currentActiveScreen = 'screenHome';
 
         // Screen Navigation Router
@@ -1443,6 +1378,11 @@
             const targetScreen = document.getElementById(screenId);
             if (targetScreen) {
                 targetScreen.classList.remove('hidden');
+                if (screenId === 'screenGameplay') {
+                    targetScreen.style.display = 'flex';
+                } else {
+                    targetScreen.style.display = '';
+                }
             }
 
             if (screenId !== 'screenGameplay') {
@@ -1450,18 +1390,17 @@
                     isGameRunning = false;
                     isGamePaused = false;
                 }
-                isAutoPausedForBody = false;
-                bodyLostFrames = 0;
-                if (autoPauseResumeCountdown) {
-                    clearInterval(autoPauseResumeCountdown);
-                    autoPauseResumeCountdown = null;
-                }
-                const autoModal = document.getElementById('autoPauseCalibrationModal');
-                if (autoModal) autoModal.classList.add('hidden');
             }
             if (!screenId.startsWith('screenTutorialStep')) {
                 inTutorialMode = false;
-                stopVoiceRecognition();
+                if (typeof stopVoiceRecognition === 'function') {
+                    stopVoiceRecognition();
+                }
+                const cursorElem = document.getElementById('gesture-cursor');
+                if (cursorElem) {
+                    cursorElem.classList.remove('hidden');
+                    cursorElem.style.display = '';
+                }
             }
             if (screenId === 'screenAccessibility') {
                 syncAccessibilityUI();
@@ -1470,7 +1409,8 @@
 
         // Song Selection
         function selectSong(id) {
-            playSfx('hover');
+            playSfx('score');
+            startHoleInWallGame();
         }
 
         // Settings Controls
@@ -1565,9 +1505,20 @@
                 gameLoopRafId = null;
             }
             const pauseModal = document.getElementById('pauseModal');
-            if (pauseModal) pauseModal.classList.add('hidden');
-            const autoModal = document.getElementById('autoPauseCalibrationModal');
-            if (autoModal) autoModal.classList.add('hidden');
+            if (pauseModal) {
+                pauseModal.classList.add('hidden');
+                pauseModal.style.display = 'none';
+            }
+            navigateTo('screenHome');
+        }
+
+        function exitLeaderboard() {
+            playSfx('click');
+            navigateTo('screenHome');
+        }
+
+        function exitToHomeFromEndGame() {
+            playSfx('click');
             navigateTo('screenHome');
         }
 
@@ -1579,7 +1530,10 @@
                 gameLoopRafId = null;
             }
             const pauseModal = document.getElementById('pauseModal');
-            if (pauseModal) pauseModal.classList.add('hidden');
+            if (pauseModal) {
+                pauseModal.classList.add('hidden');
+                pauseModal.style.display = 'none';
+            }
 
             // Final score fallback for demo so it matches the 1240 Pts in Image 2 if 0
             const finalScore = currentTotalScore > 0 ? currentTotalScore : 1240;
@@ -1731,120 +1685,42 @@
         }
 
         // =========================================================================
-        // GAMEPLAY AUTO-PAUSE WHEN FULL BODY NOT IN SCREEN
-        // =========================================================================
-        function triggerAutoPauseDueToBodyLost() {
-            // Gameplay auto-pause disabled per user request
-            return;
-        }
-
-        function autoPauseCalibrationLoop() {
-            if (!isAutoPausedForBody || currentActiveScreen !== 'screenGameplay') return;
-
-            const apCanvas = document.getElementById('autoPauseCanvas');
-            if (apCanvas) {
-                if (apCanvas.width !== apCanvas.clientWidth || apCanvas.height !== apCanvas.clientHeight) {
-                    apCanvas.width = apCanvas.clientWidth;
-                    apCanvas.height = apCanvas.clientHeight;
-                }
-                const apCtx = apCanvas.getContext('2d');
-                apCtx.clearRect(0, 0, apCanvas.width, apCanvas.height);
-                drawGridOnCanvas(apCtx, apCanvas.width, apCanvas.height);
-                
-                const bodyOk = checkFullBodyDetected();
-                drawVolumetricPlayerShapes(apCtx, apCanvas.width, apCanvas.height, bodyOk);
-                
-                const dot = document.getElementById('autoPauseDot');
-                const badge = document.getElementById('autoPauseStatusBadge');
-                const label = document.getElementById('autoPauseProgressLabel');
-                const pctEl = document.getElementById('autoPauseProgressPct');
-                const bar = document.getElementById('autoPauseProgressBar');
-                
-                if (bodyOk) {
-                    autoPauseProgress = Math.min(100, autoPauseProgress + 2.5);
-                    if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
-                    if (badge) {
-                        badge.innerText = "BODY FIT IN FRAME";
-                        badge.className = "font-orbitron text-xs font-bold text-emerald-300";
-                    }
-                    if (label) {
-                        label.innerText = "ALIGNMENT CONFIRMED — HOLD POSITION";
-                        label.className = "text-emerald-300 font-bold";
-                    }
-                    
-                    if (autoPauseProgress >= 100 && !autoPauseResumeCountdown) {
-                        startAutoPauseResumeCountdown();
-                    }
-                } else {
-                    autoPauseProgress = Math.max(0, autoPauseProgress - 1.5);
-                    if (dot) dot.className = "w-2.5 h-2.5 rounded-full bg-amber-400 animate-pulse";
-                    if (badge) {
-                        badge.innerText = "ALIGNING BODY FRAME";
-                        badge.className = "font-orbitron text-xs font-bold text-amber-300";
-                    }
-                    if (label) {
-                        label.innerText = "STEP BACK TO ALIGN ENTIRE BODY...";
-                        label.className = "text-yellow-400";
-                    }
-                    if (autoPauseResumeCountdown) {
-                        clearInterval(autoPauseResumeCountdown);
-                        autoPauseResumeCountdown = null;
-                        const countBox = document.getElementById('autoPauseCountdownBox');
-                        if (countBox) countBox.classList.add('hidden');
-                    }
-                }
-                
-                if (pctEl) pctEl.innerText = Math.floor(autoPauseProgress) + '%';
-                if (bar) bar.style.width = autoPauseProgress + '%';
-            }
-
-            if (isAutoPausedForBody) {
-                requestAnimationFrame(autoPauseCalibrationLoop);
-            }
-        }
-
-        function startAutoPauseResumeCountdown() {
-            let count = 3;
-            const countBox = document.getElementById('autoPauseCountdownBox');
-            const countNum = document.getElementById('autoPauseCountdownNumber');
-            if (countBox) countBox.classList.remove('hidden');
-            if (countNum) countNum.innerText = count;
-            playSfx('hover');
-            announceAudioCue('3');
-            
-            autoPauseResumeCountdown = setInterval(() => {
-                count--;
-                if (count > 0) {
-                    if (countNum) countNum.innerText = count;
-                    playSfx('hover');
-                    announceAudioCue(count.toString());
-                } else {
-                    clearInterval(autoPauseResumeCountdown);
-                    autoPauseResumeCountdown = null;
-                    if (countNum) countNum.innerText = 'GO!';
-                    playSfx('score');
-                    announceAudioCue('GO!');
-                    
-                    setTimeout(() => {
-                        isAutoPausedForBody = false;
-                        const autoModal = document.getElementById('autoPauseCalibrationModal');
-                        if (autoModal) autoModal.classList.add('hidden');
-                        resumeGame();
-                    }, 400);
-                }
-            }, 1000);
-        }
-
-        // =========================================================================
         // TUTORIAL ONBOARDING SYSTEM (7-STEP FLOW)
         // =========================================================================
         let step4CalibProgress = 0;
+        let step4HoldSeconds = 0;
+        let lastStep4Timestamp = null;
         let testBtnDwellTimer = null;
         let testBtnDwellStartTime = null;
+
+        const TUT_STEP5_DEFAULT_TEXT = "To use gesture control please lift your dominant hand forward towards the screen";
+        const TUT_STEP6_TEXT = "You will be able to see a ring wrapping around your cursor. This will indicate the duration to register a click";
+
+        function handleTutBtnHover() {
+            const textElem = document.getElementById('tutStep5Text');
+            if (textElem) {
+                textElem.textContent = TUT_STEP6_TEXT;
+            }
+            startTestDwell();
+        }
+
+        function handleTutBtnLeave() {
+            const textElem = document.getElementById('tutStep5Text');
+            if (textElem) {
+                textElem.textContent = TUT_STEP5_DEFAULT_TEXT;
+            }
+            cancelTestDwell();
+        }
 
         function startTutorial() {
             playSfx('click');
             inTutorialMode = true;
+            // Disable hand position cursor at the start of tutorial for steps 1, 2, 3, 4
+            const cursorElem = document.getElementById('gesture-cursor');
+            if (cursorElem) {
+                cursorElem.classList.add('hidden');
+                cursorElem.style.display = 'none';
+            }
             goToTutorialStep(1);
         }
 
@@ -1870,7 +1746,10 @@
             inTutorialMode = false;
             // Restore cursor
             const cursorElem = document.getElementById('gesture-cursor');
-            if (cursorElem) cursorElem.classList.remove('hidden');
+            if (cursorElem) {
+                cursorElem.classList.remove('hidden');
+                cursorElem.style.display = '';
+            }
             navigateTo('screenHome');
         }
 
@@ -1879,7 +1758,10 @@
             inTutorialMode = false;
             // Restore cursor
             const cursorElem = document.getElementById('gesture-cursor');
-            if (cursorElem) cursorElem.classList.remove('hidden');
+            if (cursorElem) {
+                cursorElem.classList.remove('hidden');
+                cursorElem.style.display = '';
+            }
             navigateTo('screenSongSelect');
         }
 
@@ -1888,6 +1770,15 @@
             currentTutorialStep = stepNumber;
             const targetScreenId = `screenTutorialStep${stepNumber}`;
             navigateTo(targetScreenId);
+
+            // Disable hand position cursor for steps 1, 2, 3, 4 (Enabled starting at Step 5)
+            const cursorElem = document.getElementById('gesture-cursor');
+            if (stepNumber <= 4) {
+                if (cursorElem) {
+                    cursorElem.classList.add('hidden');
+                    cursorElem.style.display = 'none';
+                }
+            }
 
             // Step-specific logic
             if (stepNumber === 1) {
@@ -1920,24 +1811,37 @@
                 isBodyCalibrated = false;
                 requestAnimationFrame(tutorialStep3Loop);
             } else if (stepNumber === 4) {
-                // Step 4: Stand in center & align body (scanning animation text "Beginning Calibration ...")
-                step4CalibProgress = 0;
+                // Step 4: Stand in center & align body (live body outline shape enabled just for this step)
+                step4HoldSeconds = 0;
+                lastStep4Timestamp = null;
+                const textElem = document.getElementById('tutStep4Text');
+                if (textElem) {
+                    textElem.textContent = "Please stand in the center and align your body to fit the frame.";
+                }
+                const scanBar = document.getElementById('tutStep4ScanBar');
+                if (scanBar) scanBar.classList.add('hidden');
+                const bar = document.getElementById('step4ProgressBar');
+                if (bar) bar.style.width = '0%';
                 requestAnimationFrame(tutorialStep4Loop);
             } else if (stepNumber === 5) {
-                // Step 5: Lift dominant hand forward towards screen
-                // "(add hand curser from here)" -> reveal #gesture-cursor!
+                // Step 5 (Merged with Step 6): Lift dominant hand to control cursor, test button in center
                 const cursorElem = document.getElementById('gesture-cursor');
-                if (cursorElem) cursorElem.classList.remove('hidden');
-                
-                setTimeout(() => {
-                    if (inTutorialMode && currentTutorialStep === 5) {
-                        goToTutorialStep(6);
-                    }
-                }, 3500);
+                if (cursorElem) {
+                    cursorElem.classList.remove('hidden');
+                    cursorElem.style.display = '';
+                }
+                const textElem = document.getElementById('tutStep5Text');
+                if (textElem) {
+                    textElem.textContent = TUT_STEP5_DEFAULT_TEXT;
+                }
+                const prog = document.getElementById('testBtnProgress');
+                if (prog) prog.style.width = '0%';
+                const testBtn = document.getElementById('tutTestBtn');
+                if (testBtn) testBtn.classList.remove('ring-4', 'ring-emerald-400');
             } else if (stepNumber === 6) {
-                // Step 6: Ring wrapping around cursor with test button
-                const cursorElem = document.getElementById('gesture-cursor');
-                if (cursorElem) cursorElem.classList.remove('hidden');
+                // Step 6 has been merged into Step 5
+                goToTutorialStep(5);
+                return;
             } else if (stepNumber === 7) {
                 // Step 7: Game controls tutorial complete (automatic transition after 2.5s)
                 playSfx('success');
@@ -2015,41 +1919,90 @@
             requestAnimationFrame(tutorialStep3Loop);
         }
 
-        // STEP 4: Stand in Center and Align Body Loop
-        function tutorialStep4Loop() {
-            if (currentTutorialStep !== 4 || !inTutorialMode) return;
+        // STEP 4: Stand in Center and Align Body Loop (Live Body Outline Shape & Up/Down Scan Beam)
+        function tutorialStep4Loop(timestamp) {
+            if (currentTutorialStep !== 4 || !inTutorialMode) {
+                // Clean up canvas and scan bar when leaving Step 4
+                const canvas = document.getElementById('tutStep4Canvas');
+                if (canvas) {
+                    const ctx = canvas.getContext('2d');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                }
+                const scanBar = document.getElementById('tutStep4ScanBar');
+                if (scanBar) scanBar.classList.add('hidden');
+                return;
+            }
+
+            if (!lastStep4Timestamp) lastStep4Timestamp = timestamp || performance.now();
+            const now = timestamp || performance.now();
+            const dt = Math.min(0.1, (now - lastStep4Timestamp) / 1000);
+            lastStep4Timestamp = now;
 
             const fullBodyDetected = checkFullBodyDetected();
             const card = document.getElementById('tutStep4Card');
             const bar = document.getElementById('step4ProgressBar');
+            const textElem = document.getElementById('tutStep4Text');
+            const scanBar = document.getElementById('tutStep4ScanBar');
+            const canvas = document.getElementById('tutStep4Canvas');
+
+            // Render live body outline shape just for this step
+            if (canvas) {
+                if (canvas.width !== window.innerWidth || canvas.height !== window.innerHeight) {
+                    canvas.width = window.innerWidth;
+                    canvas.height = window.innerHeight;
+                }
+                const ctx = canvas.getContext('2d');
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                drawVolumetricPlayerShapes(ctx, canvas.width, canvas.height, fullBodyDetected);
+            }
 
             if (fullBodyDetected) {
-                step4CalibProgress = Math.min(100, step4CalibProgress + 1.4);
-                if (card) {
-                    card.classList.add('shadow-[0_0_35px_rgba(56,189,248,0.65)]', 'border-cyan-300');
+                // When player is in correct position: show up-and-down scanning animation & change text
+                if (scanBar) scanBar.classList.remove('hidden');
+                if (textElem && textElem.textContent !== "Hold posture for 5 seconds") {
+                    textElem.textContent = "Hold posture for 5 seconds";
                 }
-                if (step4CalibProgress >= 100) {
+                if (card) {
+                    card.classList.add('shadow-[0_0_35px_rgba(57,255,20,0.6)]', 'border-emerald-400');
+                }
+
+                step4HoldSeconds += dt;
+                const progressPct = Math.min(100, (step4HoldSeconds / 5.0) * 100);
+                if (bar) bar.style.width = progressPct + '%';
+
+                if (step4HoldSeconds >= 5.0) {
                     playSfx('success');
+                    if (scanBar) scanBar.classList.add('hidden');
+                    // Clear canvas before leaving Step 4
+                    if (canvas) {
+                        const ctx = canvas.getContext('2d');
+                        ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    }
                     setTimeout(() => {
                         if (currentTutorialStep === 4 && inTutorialMode) {
                             goToTutorialStep(5);
                         }
-                    }, 500);
+                    }, 400);
                     return;
                 }
             } else {
-                step4CalibProgress = Math.max(0, step4CalibProgress - 0.6);
-                if (card) {
-                    card.classList.remove('shadow-[0_0_35px_rgba(56,189,248,0.65)]', 'border-cyan-300');
+                // Not in correct position: hide scanning animation & revert text
+                if (scanBar) scanBar.classList.add('hidden');
+                if (textElem && textElem.textContent !== "Please stand in the center and align your body to fit the frame.") {
+                    textElem.textContent = "Please stand in the center and align your body to fit the frame.";
                 }
+                if (card) {
+                    card.classList.remove('shadow-[0_0_35px_rgba(57,255,20,0.6)]', 'border-emerald-400');
+                }
+                step4HoldSeconds = Math.max(0, step4HoldSeconds - dt * 1.5);
+                const progressPct = Math.min(100, (step4HoldSeconds / 5.0) * 100);
+                if (bar) bar.style.width = progressPct + '%';
             }
-
-            if (bar) bar.style.width = step4CalibProgress + '%';
 
             requestAnimationFrame(tutorialStep4Loop);
         }
 
-        // STEP 6: Interactive Test Button
+        // STEP 5: Interactive Center Test Button Dwell / Click Handlers
         function startTestDwell() {
             testBtnDwellStartTime = Date.now();
             playSfx('hover');
@@ -2084,7 +2037,7 @@
                 btn.classList.add('ring-4', 'ring-emerald-400');
             }
             setTimeout(() => {
-                if (inTutorialMode && currentTutorialStep === 6) {
+                if (inTutorialMode && (currentTutorialStep === 5 || currentTutorialStep === 6)) {
                     goToTutorialStep(7);
                 }
             }, 300);
@@ -2100,8 +2053,21 @@
         });
 
         function updateCursorPosition() {
+            // Disable hand position cursor for tutorial steps 1, 2, 3, 4 (Enabled in Step 5+)
+            if (inTutorialMode && currentTutorialStep <= 4) {
+                const cursorElem = document.getElementById('gesture-cursor');
+                if (cursorElem) {
+                    cursorElem.classList.add('hidden');
+                    cursorElem.style.display = 'none';
+                }
+                return;
+            }
+
             const cursorElem = document.getElementById('gesture-cursor');
             if (cursorElem) {
+                if (cursorElem.style.display === 'none') {
+                    cursorElem.style.display = '';
+                }
                 cursorElem.style.left = `${cursorX}px`;
                 cursorElem.style.top = `${cursorY}px`;
             }
@@ -2130,6 +2096,11 @@
                     hoverStartTime = Date.now();
                     interactable.classList.add('hovered');
                     playSfx('hover');
+
+                    // If hovering the middle test button in Step 5, trigger text change
+                    if (interactable.id === 'tutTestBtn') {
+                        handleTutBtnHover();
+                    }
                 } else {
                     const elapsed = Date.now() - hoverStartTime;
                     const progress = Math.min(elapsed / DWELL_TIME, 1);
@@ -2161,6 +2132,9 @@
                 }
 
                 if (hoverTarget) {
+                    if (hoverTarget.id === 'tutTestBtn') {
+                        handleTutBtnLeave();
+                    }
                     hoverTarget.classList.remove('hovered');
                     hoverTarget = null;
                 }
@@ -2278,8 +2252,6 @@
 
             ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-            // Gameplay auto-pause removed per user request
-
             // 1. Draw Simulated 360 Dark Room Grid Background
             drawGridOnCanvas(ctx, canvas.width, canvas.height);
 
@@ -2296,19 +2268,50 @@
                 return;
             }
 
-            // 3. 3-Second Countdown for Current Pose & Progress Bar
+            // 3. 3-Second Countdown for Current Pose
             currentPoseTimeLeft -= dt;
             const displaySec = Math.max(1, Math.ceil(currentPoseTimeLeft));
             const countdownEl = document.getElementById('poseCountdownText');
             if (countdownEl) countdownEl.innerText = displaySec;
 
-            // Pose Progress Bar: indicates progress across the 3 seconds
+            // 3D Approaching Wall synchronized with the 3 seconds (0.0 far to 1.0 close)
             const poseFraction = Math.min(1, Math.max(0, (POSE_DURATION_SECONDS - currentPoseTimeLeft) / POSE_DURATION_SECONDS));
-            const poseBarEl = document.getElementById('poseProgressBar');
-            if (poseBarEl) poseBarEl.style.width = (poseFraction * 100) + '%';
-
-            // 3D Approaching Wall synchronized with the 3 seconds
             wallZ = poseFraction;
+
+            // 4. Calculate Pose Accuracy (MediaPipe live landmarks or simulated fallback)
+            const activePose = STRETCH_POSES[currentPoseIndex];
+            const liveAccuracy = (typeof userLandmarks !== 'undefined' && userLandmarks && userLandmarks.length >= 29)
+                ? checkLivePoseAccuracy(activePose.type, userLandmarks)
+                : null;
+
+            if (liveAccuracy !== null) {
+                const passMin = accessibilitySettings.limitedMobility ? 35 : 60;
+                if (liveAccuracy >= passMin) {
+                    poseHoldProgress = Math.min(100, poseHoldProgress + 1.2);
+                } else {
+                    poseHoldProgress = Math.max(0, poseHoldProgress - 0.4);
+                }
+            } else if (wallZ > 0.15 && wallZ < 0.95) {
+                // Fallback simulated accuracy progress when camera stream is inactive
+                const matchStep = accessibilitySettings.limitedMobility ? 0.95 : 0.65;
+                poseHoldProgress = Math.min(100, poseHoldProgress + matchStep);
+            }
+
+            // 5. Pose Accuracy Bar below 321 countdown
+            const isMatchThreshold = accessibilitySettings.limitedMobility ? 35 : 60;
+            const isPoseMatched = poseHoldProgress >= isMatchThreshold;
+            const poseBarEl = document.getElementById('poseProgressBar');
+            if (poseBarEl) {
+                const accuracyPct = Math.min(100, Math.max(0, Math.round(poseHoldProgress)));
+                poseBarEl.style.width = accuracyPct + '%';
+                if (isPoseMatched) {
+                    poseBarEl.style.backgroundColor = '#39ff14';
+                    poseBarEl.style.boxShadow = '0 0 12px rgba(57, 255, 20, 0.7)';
+                } else {
+                    poseBarEl.style.backgroundColor = '#00f0ff';
+                    poseBarEl.style.boxShadow = 'none';
+                }
+            }
 
             if (currentPoseTimeLeft <= 0) {
                 // Pose Time Expired (Wall reached player) - Evaluate accuracy!
@@ -2321,13 +2324,12 @@
 
                     // Points calculated proportionally to pose accuracy
                     let accuracyMultiplier = 5;
-                    let accuracyRating = 'GOOD';
-                    if (accuracy >= 90) {
-                        accuracyMultiplier = 10;
-                        accuracyRating = 'PERFECT!';
-                    } else if (accuracy >= 70) {
-                        accuracyMultiplier = 7;
-                        accuracyRating = 'GREAT!';
+                    if (accuracy >= 95) {
+                        accuracyMultiplier = 12;
+                    } else if (accuracy >= 80) {
+                        accuracyMultiplier = 9;
+                    } else if (accuracy >= 50) {
+                        accuracyMultiplier = 6;
                     }
 
                     const earnedPoints = Math.round(accuracy * accuracyMultiplier * Math.min(comboMultiplier, 4));
@@ -2336,16 +2338,16 @@
                     const scoreTextEl = document.getElementById('gameScoreText');
                     if (scoreTextEl) scoreTextEl.innerText = currentTotalScore + ' Pts';
 
-                    showFloatingScoreFeedback(`+${earnedPoints} Pts (${accuracy}% Accuracy - ${accuracyRating})`, false);
+                    const rating = showFloatingRatingFeedback(accuracy);
 
                     if (accessibilitySettings.screenReader) {
-                        announceAudioCue(`${accuracyRating}! Earned ${earnedPoints} points for ${accuracy} percent accuracy.`);
+                        announceAudioCue(`${rating}!`);
                     }
                 } else {
                     comboMultiplier = 1;
-                    showFloatingScoreFeedback(`MISS (Accuracy ${accuracy}%)`, true);
+                    const rating = showFloatingRatingFeedback(accuracy);
                     if (accessibilitySettings.screenReader) {
-                        announceAudioCue(`Missed pose. Accuracy was ${accuracy} percent.`);
+                        announceAudioCue(`${rating}.`);
                     }
                 }
                 
@@ -2356,43 +2358,138 @@
                     return;
                 }
 
-                // Advance to Next Target Posture & Reset 3-Second Pose Timer
+                // Advance to Next Target Posture & Reset 3-Second Pose Timer & Accuracy Bar
                 currentPoseTimeLeft = POSE_DURATION_SECONDS;
                 wallZ = 0;
                 poseHoldProgress = 0;
+                if (poseBarEl) {
+                    poseBarEl.style.width = '0%';
+                    poseBarEl.style.backgroundColor = '#00f0ff';
+                    poseBarEl.style.boxShadow = 'none';
+                }
                 currentPoseIndex = (currentPoseIndex + 1) % STRETCH_POSES.length;
             }
 
-            // Real-time Pose Matching Evaluation
-            const currentPose = STRETCH_POSES[currentPoseIndex];
-            const liveMatchScore = (userLandmarks && userLandmarks.length >= 29)
-                ? checkLivePoseAccuracy(currentPose.type, userLandmarks)
-                : null;
+            draw3DWall(wallZ, STRETCH_POSES[currentPoseIndex].type);
 
-            if (liveMatchScore !== null) {
-                if (liveMatchScore >= (accessibilitySettings.limitedMobility ? 35 : 60)) {
-                    poseHoldProgress = Math.min(100, poseHoldProgress + 1.25);
-                } else {
-                    poseHoldProgress = Math.max(0, poseHoldProgress - 0.45);
-                }
-            } else if (wallZ > 0.15 && wallZ < 0.95) {
-                const matchStep = accessibilitySettings.limitedMobility ? 0.95 : 0.65;
-                poseHoldProgress = Math.min(100, poseHoldProgress + matchStep);
-            }
-
-            const isMatchThreshold = accessibilitySettings.limitedMobility ? 35 : 60;
-            const isCurrentlyMatched = poseHoldProgress > isMatchThreshold;
-
-            // 4. Draw Incoming Stickman Posture Guide in 3D Perspective
-            drawIncomingStickmanGuide(wallZ, currentPose, isCurrentlyMatched);
-
-            // 5. Draw Player Outline Shapes in Foreground
-            drawVolumetricPlayerShapes(ctx, canvas.width, canvas.height, isCurrentlyMatched);
+            // 6. Draw Player Outline (Shapes)
+            drawVolumetricPlayerShapes(ctx, canvas.width, canvas.height, isPoseMatched);
 
             gameLoopRafId = requestAnimationFrame(gameLoop);
         }
 
-        // Live Pose Accuracy Evaluator
+        function drawGridOnCanvas(targetCtx, w, h) {
+            const vpX = w / 2;
+            const vpY = h / 2;
+
+            targetCtx.save();
+            targetCtx.strokeStyle = accessibilitySettings.colorblindMode ? "rgba(255, 255, 255, 0.15)" : "rgba(0, 240, 255, 0.12)";
+            targetCtx.lineWidth = 1;
+
+            // Perspective Vanishing Lines
+            targetCtx.beginPath();
+            targetCtx.moveTo(0, 0); targetCtx.lineTo(vpX, vpY);
+            targetCtx.moveTo(w, 0); targetCtx.lineTo(vpX, vpY);
+            targetCtx.moveTo(0, h); targetCtx.lineTo(vpX, vpY);
+            targetCtx.moveTo(w, h); targetCtx.lineTo(vpX, vpY);
+            targetCtx.stroke();
+
+            // Depth Rings
+            for (let d = 0.2; d <= 0.9; d += 0.2) {
+                const rw = w * d;
+                const rh = h * d;
+                targetCtx.strokeStyle = `rgba(0, 240, 255, ${0.03 + d * 0.05})`;
+                targetCtx.strokeRect(vpX - rw / 2, vpY - rh / 2, rw, rh);
+            }
+            targetCtx.restore();
+        }
+
+        function draw3DWall(z, poseType) {
+            const w = canvas.width;
+            const h = canvas.height;
+            const vpX = w / 2;
+            const vpY = h / 2;
+
+            // Scale based on z depth (0 = far, 1 = screen)
+            const scale = 0.18 + (z * 0.82);
+            const wallW = w * scale * 0.85;
+            const wallH = h * scale * 0.85;
+
+            const x = vpX - wallW / 2;
+            const y = vpY - wallH / 2;
+
+            ctx.save();
+            // Approaching Wall Frame
+            ctx.strokeStyle = accessibilitySettings.colorblindMode 
+                ? `rgba(255, 255, 255, ${0.35 + z * 0.65})` 
+                : `rgba(0, 240, 255, ${0.25 + z * 0.75})`;
+            ctx.lineWidth = 3 + z * 3;
+            ctx.strokeRect(x, y, wallW, wallH);
+
+            // Wall Surface Mask
+            ctx.fillStyle = `rgba(9, 19, 48, ${0.45 * (1 - z)})`;
+            ctx.fillRect(x, y, wallW, wallH);
+
+            // Cutout Silhouette Stance Drawing
+            ctx.translate(vpX, vpY);
+            ctx.scale(scale, scale);
+
+            const isMatched = poseHoldProgress > (accessibilitySettings.limitedMobility ? 35 : 60);
+            let strokeColor = isMatched ? '#39ff14' : '#ff2a8d';
+            let fillColor = isMatched ? 'rgba(57, 255, 20, 0.12)' : 'rgba(255, 42, 141, 0.1)';
+
+            if (accessibilitySettings.colorblindMode) {
+                strokeColor = isMatched ? '#ffb703' : '#38bdf8';
+                fillColor = isMatched ? 'rgba(255, 183, 3, 0.25)' : 'rgba(56, 189, 248, 0.2)';
+            }
+
+            ctx.strokeStyle = strokeColor;
+            ctx.fillStyle = fillColor;
+            ctx.lineWidth = accessibilitySettings.colorblindMode ? 8 : 6;
+            ctx.shadowBlur = 18;
+            ctx.shadowColor = ctx.strokeStyle;
+
+            ctx.beginPath();
+            if (poseType === 'T_POSE') {
+                // Head
+                ctx.arc(0, -90, 20, 0, Math.PI * 2);
+                // Arms
+                ctx.moveTo(-95, -40); ctx.lineTo(95, -40);
+                // Spine
+                ctx.moveTo(0, -40); ctx.lineTo(0, 30);
+                // Legs
+                ctx.moveTo(0, 30); ctx.lineTo(-45, 115);
+                ctx.moveTo(0, 30); ctx.lineTo(45, 115);
+            } else if (poseType === 'STAR') {
+                // Star Pose
+                ctx.arc(0, -90, 20, 0, Math.PI * 2);
+                ctx.moveTo(-90, -95); ctx.lineTo(0, -40); ctx.lineTo(90, -95);
+                ctx.moveTo(0, -40); ctx.lineTo(0, 30);
+                ctx.moveTo(0, 30); ctx.lineTo(-65, 115);
+                ctx.moveTo(0, 30); ctx.lineTo(65, 115);
+            } else if (poseType === 'LUNGE') {
+                // Side Lunge Pose
+                ctx.arc(0, -90, 20, 0, Math.PI * 2);
+                ctx.moveTo(-80, -20); ctx.lineTo(0, -40); ctx.lineTo(70, -60);
+                ctx.moveTo(0, -40); ctx.lineTo(0, 30);
+                ctx.moveTo(0, 30); ctx.lineTo(-75, 115);
+                ctx.moveTo(0, 30); ctx.lineTo(35, 115);
+            } else {
+                // High Reach Pose
+                ctx.arc(0, -90, 20, 0, Math.PI * 2);
+                ctx.moveTo(-35, -115); ctx.lineTo(0, -40); ctx.lineTo(35, -115);
+                ctx.moveTo(0, -40); ctx.lineTo(0, 30);
+                ctx.moveTo(0, 30); ctx.lineTo(-40, 115);
+                ctx.moveTo(0, 30); ctx.lineTo(40, 115);
+            }
+            ctx.stroke();
+            ctx.restore();
+        }
+
+        // =========================================================================
+        // REAL-TIME GEOMETRIC POSE ACCURACY EVALUATOR
+        // Evaluates MediaPipe landmarks coordinates against target posture shapes
+        // =========================================================================
         function checkLivePoseAccuracy(targetPoseType, lm) {
             if (!lm || lm.length < 29) return null;
             const nose = lm[0];
@@ -2424,180 +2521,6 @@
             }
         }
 
-        function drawGridOnCanvas(targetCtx, w, h) {
-            const vpX = w / 2;
-            const vpY = h / 2 - 20;
-
-            targetCtx.save();
-            targetCtx.strokeStyle = accessibilitySettings.colorblindMode ? "rgba(255, 255, 255, 0.12)" : "rgba(0, 240, 255, 0.09)";
-            targetCtx.lineWidth = 1;
-
-            // Perspective Vanishing Lines to Horizon
-            targetCtx.beginPath();
-            targetCtx.moveTo(0, 0); targetCtx.lineTo(vpX, vpY);
-            targetCtx.moveTo(w, 0); targetCtx.lineTo(vpX, vpY);
-            targetCtx.moveTo(0, h); targetCtx.lineTo(vpX, vpY);
-            targetCtx.moveTo(w, h); targetCtx.lineTo(vpX, vpY);
-            targetCtx.stroke();
-
-            // Perspective Floor & Wall Rings
-            for (let d = 0.2; d <= 0.95; d += 0.2) {
-                const rw = w * d;
-                const rh = h * d;
-                targetCtx.strokeStyle = `rgba(0, 240, 255, ${0.02 + d * 0.04})`;
-                targetCtx.strokeRect(vpX - rw / 2, vpY - rh / 2, rw, rh);
-            }
-            targetCtx.restore();
-        }
-
-        // =========================================================================
-        // INCOMING STICKMAN POSTURE GUIDE (3D PERSPECTIVE)
-        // Approaches the player showing target posture with floor target & glowing portal
-        // =========================================================================
-        function drawIncomingStickmanGuide(z, targetPose, isMatched) {
-            const w = canvas.width;
-            const h = canvas.height;
-            const vpX = w / 2;
-            const vpY = h / 2 - 20;
-
-            // Scale expands smoothly from distance depth (0.22) to foreground (1.0)
-            const scale = 0.22 + (z * 0.78);
-            const groundY = vpY + (h * 0.36 * scale);
-            const guideX = vpX;
-            const guideY = groundY - (130 * scale);
-
-            ctx.save();
-
-            // 1. Floor Depth Target Ellipse
-            ctx.save();
-            ctx.beginPath();
-            ctx.ellipse(guideX, groundY, 78 * scale, 22 * scale, 0, 0, Math.PI * 2);
-            ctx.fillStyle = isMatched ? "rgba(57, 255, 20, 0.16)" : "rgba(0, 240, 255, 0.08)";
-            ctx.fill();
-            ctx.strokeStyle = isMatched 
-                ? "#39ff14" 
-                : (accessibilitySettings.colorblindMode ? "#ffb703" : "#00f0ff");
-            ctx.lineWidth = 2 + (z * 2.5);
-            ctx.shadowBlur = 14 * scale;
-            ctx.shadowColor = ctx.strokeStyle;
-            ctx.stroke();
-            ctx.restore();
-
-            // 2. Holographic Target Posture Portal Arch
-            const archW = 190 * scale;
-            const archH = 260 * scale;
-            const archX = guideX - archW / 2;
-            const archY = guideY - (120 * scale);
-
-            ctx.save();
-            const archColor = isMatched 
-                ? "rgba(57, 255, 20, 0.9)" 
-                : (accessibilitySettings.colorblindMode ? "rgba(255, 183, 3, 0.8)" : `rgba(255, 42, 141, ${0.45 + z * 0.5})`);
-            ctx.strokeStyle = archColor;
-            ctx.lineWidth = 2.5 + (z * 2);
-            ctx.shadowBlur = 14 * scale;
-            ctx.shadowColor = archColor;
-
-            // Curved holographic posture arch
-            ctx.beginPath();
-            ctx.moveTo(archX, groundY - 4);
-            ctx.lineTo(archX, archY + 35 * scale);
-            ctx.arcTo(archX, archY, archX + 35 * scale, archY, 35 * scale);
-            ctx.lineTo(archX + archW - 35 * scale, archY);
-            ctx.arcTo(archX + archW, archY, archX + archW, archY + 35 * scale, 35 * scale);
-            ctx.lineTo(archX + archW, groundY - 4);
-            ctx.stroke();
-
-            // Floating Target Posture Badge
-            ctx.font = `900 ${Math.max(10, Math.round(14 * scale))}px 'Orbitron', sans-serif`;
-            ctx.textAlign = 'center';
-            ctx.fillStyle = isMatched ? "#39ff14" : "#ffffff";
-            ctx.shadowBlur = 8;
-            ctx.shadowColor = isMatched ? "#39ff14" : "#ff2a8d";
-            ctx.fillText(`✦ ${targetPose.name} ✦`, guideX, archY - 10);
-            ctx.restore();
-
-            // 3. Stickman Posture Figure in 3D Space
-            ctx.save();
-            ctx.translate(guideX, guideY);
-            ctx.scale(scale, scale);
-
-            const stickColor = isMatched 
-                ? "#39ff14" 
-                : (accessibilitySettings.colorblindMode ? "#ffb703" : "#ff2a8d");
-
-            ctx.strokeStyle = stickColor;
-            ctx.fillStyle = stickColor;
-            ctx.lineWidth = 7;
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
-            ctx.shadowBlur = 18;
-            ctx.shadowColor = stickColor;
-
-            // Head & Inner Reticle
-            ctx.beginPath();
-            ctx.arc(0, -90, 20, 0, Math.PI * 2);
-            ctx.stroke();
-            ctx.beginPath();
-            ctx.arc(0, -90, 5, 0, Math.PI * 2);
-            ctx.fill();
-
-            // Torso Spine
-            ctx.beginPath();
-            ctx.moveTo(0, -70);
-            ctx.lineTo(0, 25);
-            ctx.stroke();
-
-            // Limbs by Pose Type
-            const poseType = targetPose.type;
-            let lElb, lWr, rElb, rWr, lKnee, lAnk, rKnee, rAnk;
-
-            if (poseType === 'T_POSE') {
-                lElb = [-55, -45]; lWr = [-105, -45];
-                rElb = [55, -45];  rWr = [105, -45];
-                lKnee = [-30, 75]; lAnk = [-45, 125];
-                rKnee = [30, 75];  rAnk = [45, 125];
-            } else if (poseType === 'STAR') {
-                lElb = [-55, -75]; lWr = [-95, -105];
-                rElb = [55, -75];  rWr = [95, -105];
-                lKnee = [-45, 75]; lAnk = [-75, 125];
-                rKnee = [45, 75];  rAnk = [75, 125];
-            } else if (poseType === 'LUNGE') {
-                lElb = [-50, -35]; lWr = [-88, -20];
-                rElb = [45, -55];  rWr = [80, -75];
-                lKnee = [-55, 80]; lAnk = [-82, 125];
-                rKnee = [30, 75];  rAnk = [40, 125];
-            } else { // HIGH REACH
-                lElb = [-25, -80]; lWr = [-32, -125];
-                rElb = [25, -80];  rWr = [32, -125];
-                lKnee = [-22, 75]; lAnk = [-30, 125];
-                rKnee = [22, 75];  rAnk = [30, 125];
-            }
-
-            // Draw Arms
-            ctx.beginPath();
-            ctx.moveTo(0, -50); ctx.lineTo(lElb[0], lElb[1]); ctx.lineTo(lWr[0], lWr[1]);
-            ctx.moveTo(0, -50); ctx.lineTo(rElb[0], rElb[1]); ctx.lineTo(rWr[0], rWr[1]);
-            ctx.stroke();
-
-            // Draw Legs
-            ctx.beginPath();
-            ctx.moveTo(0, 25); ctx.lineTo(lKnee[0], lKnee[1]); ctx.lineTo(lAnk[0], lAnk[1]);
-            ctx.moveTo(0, 25); ctx.lineTo(rKnee[0], rKnee[1]); ctx.lineTo(rAnk[0], rAnk[1]);
-            ctx.stroke();
-
-            // Glowing White Joint Nodes
-            ctx.fillStyle = "#ffffff";
-            [[-105, -45], [105, -45], lElb, rElb, lWr, rWr, [0, -50], [0, 25], lKnee, rKnee, lAnk, rAnk].forEach(pt => {
-                ctx.beginPath();
-                ctx.arc(pt[0], pt[1], 4.5, 0, Math.PI * 2);
-                ctx.fill();
-            });
-
-            ctx.restore();
-            ctx.restore();
-        }
-
         // =========================================================================
         // VOLUMETRIC PLAYER OUTLINE (SHAPES) ENGINE
         // Renders capsules, head ellipse, contoured torso, and energy nodes
@@ -2620,8 +2543,8 @@
             targetCtx.lineJoin = "round";
             targetCtx.strokeStyle = strokeColor;
             targetCtx.fillStyle = fillColor;
-            targetCtx.lineWidth = 3.5;
-            targetCtx.shadowBlur = showOutlineGlow ? 18 : 6;
+            targetCtx.lineWidth = 4.5;
+            targetCtx.shadowBlur = showOutlineGlow ? (isMatched ? 22 : 14) : 8;
             targetCtx.shadowColor = strokeColor;
 
             // Helper: Draw smooth rounded capsule connecting articulating joints
@@ -2758,13 +2681,22 @@
                 targetCtx.arc(cx, cy - 10 + breathY, 9, 0, Math.PI * 2);
                 targetCtx.stroke();
 
-                // Pose Matching Target Shapes (In Tutorial Step 1, standing neutral posture)
-                const currentType = (inTutorialMode && currentTutorialStep === 1) 
-                    ? 'NEUTRAL' 
-                    : STRETCH_POSES[currentPoseIndex].type;
+                // Pose Matching Target Shapes (In Tutorial Step 4: calibration goalpost; Step 1: neutral)
+                const currentType = (inTutorialMode && currentTutorialStep === 4)
+                    ? 'CALIBRATION'
+                    : ((inTutorialMode && currentTutorialStep === 1) 
+                        ? 'NEUTRAL' 
+                        : (STRETCH_POSES[currentPoseIndex] ? STRETCH_POSES[currentPoseIndex].type : 'T_POSE'));
                 let lWr, rWr, lKnee, rKnee, lAnk, rAnk;
 
-                if (currentType === 'NEUTRAL') {
+                if (currentType === 'CALIBRATION') {
+                    lWr = { x: cx - 68, y: cy - 70 + breathY };
+                    rWr = { x: cx + 68, y: cy - 70 + breathY };
+                    lKnee = { x: cx - 26, y: cy + 75 };
+                    rKnee = { x: cx + 26, y: cy + 75 };
+                    lAnk = { x: cx - 28, y: cy + 122 };
+                    rAnk = { x: cx + 28, y: cy + 122 };
+                } else if (currentType === 'NEUTRAL') {
                     lWr = { x: cx - 65, y: cy + 10 + breathY };
                     rWr = { x: cx + 65, y: cy + 10 + breathY };
                     lKnee = { x: cx - 26, y: cy + 75 };
@@ -2801,8 +2733,14 @@
                     rAnk = { x: cx + 35, y: cy + 120 };
                 }
 
-                const lElb = { x: (tShL.x + lWr.x) / 2, y: (tShL.y + lWr.y) / 2 + 5 };
-                const rElb = { x: (tShR.x + rWr.x) / 2, y: (tShR.y + rWr.y) / 2 + 5 };
+                let lElb, rElb;
+                if (currentType === 'CALIBRATION') {
+                    lElb = { x: cx - 68, y: cy - 35 + breathY };
+                    rElb = { x: cx + 68, y: cy - 35 + breathY };
+                } else {
+                    lElb = { x: (tShL.x + lWr.x) / 2, y: (tShL.y + lWr.y) / 2 + 5 };
+                    rElb = { x: (tShR.x + rWr.x) / 2, y: (tShR.y + rWr.y) / 2 + 5 };
+                }
 
                 // Arm Capsules
                 drawCapsule(tShL, lElb, 12);

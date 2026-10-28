@@ -19,6 +19,7 @@ body {
 .font-orbitron { font-family: 'Orbitron', sans-serif; }
 .font-exo { font-family: 'Exo 2', sans-serif; }
 .font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+.font-zendots { font-family: 'Zen Dots', cursive, sans-serif; }
 
 /* Figma UI Slanted Logo Text */
 .flexscape-logo-text {
@@ -365,6 +366,16 @@ input[type=range]::-webkit-slider-runnable-track {
     15% { opacity: 1; }
     85% { opacity: 1; }
     100% { top: 96%; opacity: 0; }
+}
+
+@keyframes scanBeamSweepUpDown {
+    0% { top: 12%; opacity: 0.7; }
+    50% { top: 88%; opacity: 1; }
+    100% { top: 12%; opacity: 0.7; }
+}
+
+.scan-beam-up-down {
+    animation: scanBeamSweepUpDown 2.2s ease-in-out infinite;
 }
 
 .ring-wrap-circle {

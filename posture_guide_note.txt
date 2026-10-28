@@ -1,0 +1,370 @@
+# ==============================================================================
+# PROMPT & IMPLEMENTATION GUIDE: POSTURE GUIDE FEATURE RE-INTEGRATION
+# ==============================================================================
+# Use this file to restore the "Posture Guide / 360° Wall Stretch Pose Matcher" 
+# feature into your refined FlexScape prototype.
+# ==============================================================================
+
+--------------------------------------------------------------------------------
+SECTION 1: READY-TO-USE AI PROMPT
+(Copy and paste the prompt below into your AI coding assistant or chat)
+--------------------------------------------------------------------------------
+
+"""
+Please restore and integrate the Posture Guide feature into my refined FlexScape prototype HTML file.
+
+Requirements:
+1. Target Postures: Support 4 distinct stretching poses:
+   - "T-Pose" (Horizontal arms extended)
+   - "Star Stretch" (Arms angled up ~45°, legs wide)
+   - "Side Lunge" (Asymmetric arm stretch, wide side stance)
+   - "High Reach" (Both arms vertical above head)
+
+2. 3D Approaching Cutout Guide (Canvas):
+   - A 3D perspective wall that moves from background (z=0) to foreground (z=1) over 3 seconds.
+   - A glowing silhouette cutout of the target pose on the moving wall with joint highlight dots.
+   - A floating header badge above the approaching wall: "✦ TARGET: [POSE NAME] ✦".
+   - Dynamic color feedback: Cyan/Magenta when unaligned; turns Neon Green (#39ff14) with a glow pulse when the player matches the posture.
+   - Floor depth shadow/landing ellipse under the target.
+
+3. Live Pose Accuracy Evaluation:
+   - Read MediaPipe Pose landmarks (or fallback to simulated input if webcam is unavailable).
+   - Accurately validate arm, head, and leg geometry against the active pose.
+   - Fill a Pose Hold / Accuracy meter (0% to 100%). When the wall reaches z=1, award points and combo if matched (>= 50% accuracy).
+
+4. Preserve all existing UI, navigation, modals, and styles in my current file.
+
+Here is the reference code for the posture guide:
+[PASTE SECTIONS 2, 3 & 4 BELOW]
+"""
+
+--------------------------------------------------------------------------------
+SECTION 2: POSE DEFINITIONS & GEOMETRIC ACCURACY CHECKER
+(Place in your <script> section)
+--------------------------------------------------------------------------------
+
+// 1. Defined Target Stretch Poses
+const STRETCH_POSES = [
+    { name: "T-POSE", type: "T_POSE", desc: "Extend both arms horizontally at shoulder level" },
+    { name: "STAR STRETCH", type: "STAR", desc: "Extend arms and legs wide in an X shape" },
+    { name: "SIDE LUNGE", type: "LUNGE", desc: "Shift weight sideways with asymmetric arm stretch" },
+    { name: "HIGH REACH", type: "HIGH", desc: "Reach both arms straight overhead" }
+];
+
+let currentPoseIndex = 0;
+let wallZ = 0; // 0.0 (far background) to 1.0 (reaches player)
+let poseHoldProgress = 0; // 0 to 100% accuracy hold
+const POSE_DURATION_SECONDS = 3.0;
+let currentPoseTimeLeft = POSE_DURATION_SECONDS;
+
+// 2. Real-Time Geometric Pose Accuracy Checker
+// Evaluates MediaPipe landmark coordinates (0.0 to 1.0 normalized)
+function checkLivePoseAccuracy(targetPoseType, lm) {
+    if (!lm || lm.length < 29) return null;
+
+    const nose = lm[0];
+    const lSh = lm[11], rSh = lm[12]; // Left & Right Shoulders
+    const lWr = lm[15], rWr = lm[16]; // Left & Right Wrists
+    const lAnk = lm[27], rAnk = lm[28]; // Left & Right Ankles
+
+    if (!lSh || !rSh || !lWr || !rWr) return null;
+
+    const shoulderDist = Math.hypot(lSh.x - rSh.x, lSh.y - rSh.y) || 0.15;
+    const midShY = (lSh.y + rSh.y) / 2;
+
+    if (targetPoseType === 'T_POSE') {
+        // Both wrists aligned horizontally with shoulder line
+        const lOk = Math.abs(lWr.y - midShY) < shoulderDist * 0.75;
+        const rOk = Math.abs(rWr.y - midShY) < shoulderDist * 0.75;
+        return (lOk && rOk) ? 95 : (lOk || rOk) ? 65 : 25;
+
+    } else if (targetPoseType === 'STAR') {
+        // Both wrists elevated above shoulders + feet apart
+        const lUp = lWr.y < midShY - shoulderDist * 0.2;
+        const rUp = rWr.y < midShY - shoulderDist * 0.2;
+        const feetApart = (lAnk && rAnk) ? Math.abs(lAnk.x - rAnk.x) > shoulderDist * 1.0 : true;
+        return (lUp && rUp && feetApart) ? 95 : (lUp && rUp) ? 75 : 30;
+
+    } else if (targetPoseType === 'LUNGE') {
+        // Wide foot stance + asymmetric reach
+        const feetApart = (lAnk && rAnk) ? Math.abs(lAnk.x - rAnk.x) > shoulderDist * 1.1 : true;
+        return feetApart ? 90 : 40;
+
+    } else { // HIGH REACH
+        // Both wrists well above the head/nose
+        const headY = nose ? nose.y : (midShY - shoulderDist * 0.5);
+        const lHigh = lWr.y < headY;
+        const rHigh = rWr.y < headY;
+        return (lHigh && rHigh) ? 96 : (lHigh || rHigh) ? 65 : 25;
+    }
+}
+
+
+--------------------------------------------------------------------------------
+SECTION 3: 3D APPROACHING POSTURE GUIDE (CANVAS RENDERER)
+(Draws the 3D approaching cutout wall, floating posture badge & joint reticles)
+--------------------------------------------------------------------------------
+
+function drawIncomingStickmanGuide(canvasCtx, canvasW, canvasH, z, targetPose, isMatched) {
+    const vpX = canvasW / 2;
+    const vpY = canvasH / 2 - 20;
+
+    // Scale expands smoothly from distance depth (0.18) to arrival (1.0)
+    const scale = 0.18 + (z * 0.82);
+    const groundY = vpY + (canvasH * 0.36 * scale);
+
+    canvasCtx.save();
+
+    // 1. Floor Target Ellipse Shadow
+    canvasCtx.beginPath();
+    canvasCtx.ellipse(vpX, groundY, 85 * scale, 24 * scale, 0, 0, Math.PI * 2);
+    canvasCtx.fillStyle = isMatched ? "rgba(57, 255, 20, 0.18)" : "rgba(0, 240, 255, 0.08)";
+    canvasCtx.fill();
+    canvasCtx.strokeStyle = isMatched ? "#39ff14" : "#00f0ff";
+    canvasCtx.lineWidth = 2 + (z * 2.5);
+    canvasCtx.shadowBlur = 14 * scale;
+    canvasCtx.shadowColor = canvasCtx.strokeStyle;
+    canvasCtx.stroke();
+
+    // 2. Approaching 3D Wall Frame
+    const wallW = Math.min(canvasW * 0.82, 820) * scale;
+    const wallH = Math.min(canvasH * 0.84, 620) * scale;
+    const wallX = vpX - wallW / 2;
+    const wallY = vpY - wallH / 2;
+
+    // Semi-transparent Wall Surface
+    const wallAlpha = 0.45 * (1 - z * 0.25);
+    canvasCtx.fillStyle = isMatched ? `rgba(9, 28, 48, ${wallAlpha})` : `rgba(9, 19, 48, ${wallAlpha})`;
+    canvasCtx.fillRect(wallX, wallY, wallW, wallH);
+
+    // Outer Neon Glowing Perimeter
+    const frameColor = isMatched ? "#39ff14" : `rgba(0, 240, 255, ${0.35 + z * 0.65})`;
+    canvasCtx.strokeStyle = frameColor;
+    canvasCtx.lineWidth = 2.5 + (z * 3);
+    canvasCtx.shadowBlur = 14 * scale;
+    canvasCtx.shadowColor = frameColor;
+    canvasCtx.strokeRect(wallX, wallY, wallW, wallH);
+
+    // Cyber Corner Brackets
+    const cornerSize = Math.max(12, 28 * scale);
+    canvasCtx.lineWidth = 4 + (z * 2);
+    // Top-Left
+    canvasCtx.beginPath();
+    canvasCtx.moveTo(wallX, wallY + cornerSize); canvasCtx.lineTo(wallX, wallY); canvasCtx.lineTo(wallX + cornerSize, wallY);
+    // Top-Right
+    canvasCtx.moveTo(wallX + wallW - cornerSize, wallY); canvasCtx.lineTo(wallX + wallW, wallY); canvasCtx.lineTo(wallX + wallW, wallY + cornerSize);
+    // Bottom-Left
+    canvasCtx.moveTo(wallX, wallY + wallH - cornerSize); canvasCtx.lineTo(wallX, wallY + wallH); canvasCtx.lineTo(wallX + cornerSize, wallY + wallH);
+    // Bottom-Right
+    canvasCtx.moveTo(wallX + wallW - cornerSize, wallY + wallH); canvasCtx.lineTo(wallX + wallW, wallY + wallH); canvasCtx.lineTo(wallX + wallW, wallY + wallH - cornerSize);
+    canvasCtx.stroke();
+
+    // Floating Target Posture Title Badge
+    canvasCtx.font = `900 ${Math.max(12, Math.round(16 * scale))}px 'Orbitron', sans-serif`;
+    canvasCtx.textAlign = 'center';
+    canvasCtx.fillStyle = isMatched ? "#39ff14" : "#ffffff";
+    canvasCtx.shadowBlur = 10;
+    canvasCtx.shadowColor = isMatched ? "#39ff14" : "#ff2a8d";
+    canvasCtx.fillText(`✦ TARGET: ${targetPose.name} ✦`, vpX, wallY - 12);
+
+    // 3. Cutout Silhouette Stance Guide
+    canvasCtx.save();
+    canvasCtx.translate(vpX, vpY);
+    canvasCtx.scale(scale, scale);
+
+    const cutoutColor = isMatched ? "#39ff14" : "#ff2a8d";
+    canvasCtx.strokeStyle = cutoutColor;
+    canvasCtx.fillStyle = cutoutColor;
+    canvasCtx.lineWidth = 8;
+    canvasCtx.lineCap = "round";
+    canvasCtx.lineJoin = "round";
+    canvasCtx.shadowBlur = 16;
+    canvasCtx.shadowColor = cutoutColor;
+
+    canvasCtx.beginPath();
+    const poseType = targetPose.type;
+
+    if (poseType === 'T_POSE') {
+        // Head
+        canvasCtx.arc(0, -90, 18, 0, Math.PI * 2);
+        // Arms
+        canvasCtx.moveTo(-90, -40); canvasCtx.lineTo(90, -40);
+        // Spine
+        canvasCtx.moveTo(0, -40); canvasCtx.lineTo(0, 30);
+        // Legs
+        canvasCtx.moveTo(0, 30); canvasCtx.lineTo(-40, 110);
+        canvasCtx.moveTo(0, 30); canvasCtx.lineTo(40, 110);
+    } else if (poseType === 'STAR') {
+        // Head
+        canvasCtx.arc(0, -90, 18, 0, Math.PI * 2);
+        // Arms (45 deg up)
+        canvasCtx.moveTo(-80, -90); canvasCtx.lineTo(0, -40); canvasCtx.lineTo(80, -90);
+        // Spine
+        canvasCtx.moveTo(0, -40); canvasCtx.lineTo(0, 30);
+        // Legs (Wide stance)
+        canvasCtx.moveTo(0, 30); canvasCtx.lineTo(-60, 110);
+        canvasCtx.moveTo(0, 30); canvasCtx.lineTo(60, 110);
+    } else if (poseType === 'LUNGE') {
+        // Head
+        canvasCtx.arc(0, -90, 18, 0, Math.PI * 2);
+        // Arms (Asymmetric reach)
+        canvasCtx.moveTo(-80, -25); canvasCtx.lineTo(0, -40); canvasCtx.lineTo(75, -60);
+        // Spine
+        canvasCtx.moveTo(0, -40); canvasCtx.lineTo(0, 30);
+        // Legs (Lunge stance)
+        canvasCtx.moveTo(0, 30); canvasCtx.lineTo(-70, 110);
+        canvasCtx.moveTo(0, 30); canvasCtx.lineTo(35, 110);
+    } else { // HIGH REACH
+        // Head
+        canvasCtx.arc(0, -90, 18, 0, Math.PI * 2);
+        // Arms (Straight overhead)
+        canvasCtx.moveTo(-25, -110); canvasCtx.lineTo(0, -40); canvasCtx.lineTo(25, -110);
+        // Spine
+        canvasCtx.moveTo(0, -40); canvasCtx.lineTo(0, 30);
+        // Legs
+        canvasCtx.moveTo(0, 30); canvasCtx.lineTo(-30, 110);
+        canvasCtx.moveTo(0, 30); canvasCtx.lineTo(30, 110);
+    }
+    canvasCtx.stroke();
+
+    // Center reticle dot in head
+    canvasCtx.beginPath();
+    canvasCtx.arc(0, -90, 5, 0, Math.PI * 2);
+    canvasCtx.fill();
+
+    // Glowing White Joint Nodes on Key Endpoints
+    canvasCtx.fillStyle = "#ffffff";
+    let joints = [];
+    if (poseType === 'T_POSE') {
+        joints = [[-90, -40], [90, -40], [0, -40], [0, 30], [-40, 110], [40, 110]];
+    } else if (poseType === 'STAR') {
+        joints = [[-80, -90], [80, -90], [0, -40], [0, 30], [-60, 110], [60, 110]];
+    } else if (poseType === 'LUNGE') {
+        joints = [[-80, -25], [75, -60], [0, -40], [0, 30], [-70, 110], [35, 110]];
+    } else {
+        joints = [[-25, -110], [25, -110], [0, -40], [0, 30], [-30, 110], [30, 110]];
+    }
+    joints.forEach(pt => {
+        canvasCtx.beginPath();
+        canvasCtx.arc(pt[0], pt[1], 4.5, 0, Math.PI * 2);
+        canvasCtx.fill();
+    });
+
+    canvasCtx.restore();
+    canvasCtx.restore();
+}
+
+
+--------------------------------------------------------------------------------
+SECTION 4: GAME ENGINE LOOP INTEGRATION
+(Call this inside your requestAnimationFrame loop)
+--------------------------------------------------------------------------------
+
+let lastTimestamp = performance.now();
+
+function gameLoop(now) {
+    if (!isGameRunning) return;
+
+    const dt = Math.min((now - lastTimestamp) / 1000, 0.1);
+    lastTimestamp = now;
+
+    // Clear canvas
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // 1. Advance Pose Timer (3.0 seconds per wall)
+    currentPoseTimeLeft -= dt;
+    wallZ = Math.min(1.0, Math.max(0.0, (POSE_DURATION_SECONDS - currentPoseTimeLeft) / POSE_DURATION_SECONDS));
+
+    // 2. Evaluate Live Accuracy
+    const activePose = STRETCH_POSES[currentPoseIndex];
+    let liveAccuracy = (typeof userLandmarks !== 'undefined' && userLandmarks)
+        ? checkLivePoseAccuracy(activePose.type, userLandmarks)
+        : null;
+
+    if (liveAccuracy !== null) {
+        if (liveAccuracy >= 60) {
+            poseHoldProgress = Math.min(100, poseHoldProgress + 1.2);
+        } else {
+            poseHoldProgress = Math.max(0, poseHoldProgress - 0.4);
+        }
+    } else if (wallZ > 0.15 && wallZ < 0.95) {
+        // Fallback simulated progress if camera stream is inactive
+        poseHoldProgress = Math.min(100, poseHoldProgress + 0.65);
+    }
+
+    const isCurrentlyMatched = poseHoldProgress >= 55;
+
+    // 3. Draw 3D Approaching Posture Guide Wall
+    drawIncomingStickmanGuide(ctx, canvas.width, canvas.height, wallZ, activePose, isCurrentlyMatched);
+
+    // 4. Update HUD Progress & Countdown
+    const countdownEl = document.getElementById('poseCountdownText');
+    if (countdownEl) countdownEl.innerText = Math.max(1, Math.ceil(currentPoseTimeLeft)) + "s";
+
+    const holdBarEl = document.getElementById('holdBarFill');
+    if (holdBarEl) holdBarEl.style.width = poseHoldProgress + "%";
+
+    const holdPctEl = document.getElementById('holdTimePct');
+    if (holdPctEl) holdPctEl.innerText = Math.round(poseHoldProgress) + "%";
+
+    // 5. Wall Arrival / Next Pose Evaluation
+    if (currentPoseTimeLeft <= 0) {
+        if (poseHoldProgress >= 50) {
+            // SUCCESS!
+            currentTotalScore += 350;
+            comboMultiplier += 1;
+            console.log("Pose Cleared! Score:", currentTotalScore);
+        } else {
+            // MISS!
+            comboMultiplier = 1;
+            console.log("Pose Missed!");
+        }
+
+        // Advance to next posture
+        currentPoseIndex = (currentPoseIndex + 1) % STRETCH_POSES.length;
+        currentPoseTimeLeft = POSE_DURATION_SECONDS;
+        poseHoldProgress = 0;
+        wallZ = 0;
+
+        const poseNameEl = document.getElementById('gamePoseName');
+        if (poseNameEl) poseNameEl.innerText = "TARGET: " + STRETCH_POSES[currentPoseIndex].name;
+    }
+
+    requestAnimationFrame(gameLoop);
+}
+
+
+--------------------------------------------------------------------------------
+SECTION 5: MINIMAL HTML HUD OVERLAY FOR THE POSTURE GUIDE
+(Drop this inside your gameplay container)
+--------------------------------------------------------------------------------
+
+<!-- Posture Guide HUD Overlay -->
+<div class="hud-posture-container" style="position: absolute; top: 16px; left: 0; right: 0; display: flex; justify-content: space-between; align-items: center; padding: 0 24px; pointer-events: none; z-index: 30;">
+    <!-- Active Target Badge -->
+    <div style="background: rgba(9, 19, 48, 0.85); border: 1px solid #00f0ff; border-radius: 12px; padding: 8px 18px; backdrop-filter: blur(8px);">
+        <div style="font-size: 10px; color: #ff2a8d; font-weight: bold; letter-spacing: 1px;">CURRENT POSE</div>
+        <div id="gamePoseName" style="font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 900; color: #00f0ff;">
+            TARGET: T-POSE
+        </div>
+    </div>
+
+    <!-- 3-Second Wall Arrival Countdown -->
+    <div style="background: rgba(9, 19, 48, 0.85); border: 1px solid #ff2a8d; border-radius: 12px; padding: 8px 18px; text-align: center; backdrop-filter: blur(8px);">
+        <div style="font-size: 10px; color: #94a3b8; font-weight: bold;">TIME TO WALL</div>
+        <div id="poseCountdownText" style="font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 900; color: #ff2a8d;">
+            3s
+        </div>
+    </div>
+</div>
+
+<!-- Accuracy Hold Progress Bar (Bottom of Screen) -->
+<div style="position: absolute; bottom: 20px; left: 10%; right: 10%; z-index: 30; pointer-events: none;">
+    <div style="display: flex; justify-content: space-between; font-family: 'Orbitron', sans-serif; font-size: 11px; margin-bottom: 6px; font-weight: bold;">
+        <span style="color: #00f0ff;">POSTURE ACCURACY</span>
+        <span id="holdTimePct" style="color: #39ff14;">0%</span>
+    </div>
+    <div style="width: 100%; height: 10px; background: rgba(15, 23, 42, 0.9); border: 1px solid rgba(0, 240, 255, 0.4); border-radius: 5px; overflow: hidden; padding: 1px;">
+        <div id="holdBarFill" style="width: 0%; height: 100%; background: linear-gradient(90deg, #00f0ff, #39ff14); border-radius: 4px; transition: width 0.08s linear;"></div>
+    </div>
+</div>
