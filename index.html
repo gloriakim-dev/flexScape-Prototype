@@ -241,11 +241,13 @@
       background: var(--bg-card);
       border: 1px solid var(--border-glass);
       border-radius: var(--radius-lg);
-      padding: 36px 32px;
+      padding: 44px 32px;
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-      text-align: left;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      text-align: center;
       backdrop-filter: blur(20px);
       text-decoration: none;
       color: inherit;
@@ -253,6 +255,7 @@
       overflow: hidden;
       transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
       box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      min-height: 220px;
     }
 
     .experience-card::before {
@@ -421,91 +424,30 @@
     <!-- Hero Brand Header -->
     <header class="brand-hero-section">
       <div class="brand-logo-container">
-        <svg viewBox="0 0 120 140" fill="none" style="width: 100%; height: 100%;">
-          <path d="M 18 38 C 18 16, 44 6, 70 14 C 82 18, 90 26, 92 36" stroke="#30DFF2" stroke-width="14"
-            stroke-linecap="round" fill="none" />
-          <circle cx="34" cy="30" r="12" fill="#FFF4ED" />
-          <path d="M 24 38 C 22 52, 22 70, 36 78 C 48 84, 62 80, 68 68 C 70 60, 60 52, 48 50 C 38 48, 32 40, 30 36 Z"
-            fill="#FFF4ED" />
-          <path d="M 42 46 C 48 30, 74 26, 94 38" stroke="#C7FD05" stroke-width="14" stroke-linecap="round"
-            fill="none" />
-          <path d="M 18 94 C 18 122, 54 128, 76 108 C 84 100, 84 84, 76 74" stroke="#FF3FAB" stroke-width="14"
-            stroke-linecap="round" fill="none" />
-          <path d="M 76 64 C 92 66, 108 78, 108 94 C 108 110, 96 124, 84 126" stroke="#2C735F" stroke-width="14"
-            stroke-linecap="round" fill="none" />
-        </svg>
+        <img src="logo.svg" alt="FlexScape Logo" style="width: 100%; height: 100%; object-fit: contain; filter: drop-shadow(0 0 25px rgba(48, 223, 242, 0.45));">
       </div>
-
-      <div class="brand-subtitle-tag">
-        <span>✨ Next-Gen Interaction Design</span>
-      </div>
-
       <h1 class="brand-title">FlexScape</h1>
-      <p class="brand-description">
-        Choose your experience: Launch the camera-based Vision AI posture tracking game room, or open the mobile study
-        stopwatch and break companion.
-      </p>
     </header>
 
     <!-- 2 Main Interactive Experience Cards -->
     <section class="experience-cards-grid">
 
-      <!-- Card 1: FlexScape Room (Game) -->
+      <!-- Card 1: FlexScape Room -->
       <a href="room.html" class="experience-card card-room" id="card-room"
-        title="Launch FlexScape Room (Vision AI Game)">
-        <div class="card-top-badge">
-          <span>🌌 Motion Tracking • Vision AI</span>
-        </div>
-
-        <div class="card-icon-emblem">
-          <span>🧘</span>
-        </div>
-
-        <h2 class="card-title">FlexScape Room (Game)</h2>
-        <p class="card-desc">
-          Enter the full-body posture tracking space. Match stretch poses in real-time, view glowing cyber body
-          outlines, and control settings with in-air arm controls.
-        </p>
-
-        <div class="card-tags-row">
-          <span class="card-pill-tag">✨ Body Outline Mode</span>
-          <span class="card-pill-tag">⏱️ 4s Hold + 1s Rating</span>
-          <span class="card-pill-tag">👋 3-Wave Arm Settings</span>
-          <span class="card-pill-tag">⚡ 1, 5, 10 Min Workouts</span>
-        </div>
-
+        title="Launch FlexScape Room">
+        <h2 class="card-title">FlexScape Room</h2>
         <div class="card-action-btn">
           <span>Enter Game Room</span>
           <span>➔</span>
         </div>
       </a>
 
-      <!-- Card 2: FlexScape Mobile Web Companion -->
+      <!-- Card 2: FlexScape Reminder Device Companion -->
       <a href="mobile.html" class="experience-card card-mobile" id="card-mobile"
-        title="Launch FlexScape Mobile Web Companion">
-        <div class="card-top-badge">
-          <span>📱 Study Companion • 3 Pages</span>
-        </div>
-
-        <div class="card-icon-emblem">
-          <span>⏱️</span>
-        </div>
-
-        <h2 class="card-title">FlexScape Mobile</h2>
-        <p class="card-desc">
-          Stay focused during study sessions with smart break intervals. Features a digital stopwatch, 0–59 custom
-          sliding interval wheel, break launcher, and session statistics.
-        </p>
-
-        <div class="card-tags-row">
-          <span class="card-pill-tag">🔢 Custom 00:00 Slider</span>
-          <span class="card-pill-tag">⏱️ Study Stopwatch</span>
-          <span class="card-pill-tag">☕ Break Modal</span>
-          <span class="card-pill-tag">📊 Session Stats</span>
-        </div>
-
+        title="Launch FlexScape Reminder Device">
+        <h2 class="card-title">FlexScape Reminder Device</h2>
         <div class="card-action-btn">
-          <span>Open Mobile App</span>
+          <span>Open Reminder Device</span>
           <span>➔</span>
         </div>
       </a>
@@ -516,7 +458,7 @@
     <footer class="portal-footer">
       <span>Press <span class="key-badge">1</span> for Game Room</span>
       <span>•</span>
-      <span>Press <span class="key-badge">2</span> for Mobile App</span>
+      <span>Press <span class="key-badge">2</span> for Reminder Device</span>
     </footer>
 
   </main>

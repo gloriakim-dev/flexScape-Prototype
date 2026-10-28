@@ -7,50 +7,39 @@
   <meta name="description" content="FlexScape Mobile - Study Stopwatch, Custom Break Intervals, and Session Statistics.">
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
 
-  <!-- Google Fonts: Outfit, Zen Dots, Inter -->
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <link rel="stylesheet" href="style.css" />
+
+  <!-- Google Fonts matching room.html typography -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Zen+Dots&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;600;700;800;900&family=Rajdhani:wght@500;600;700&family=Exo+2:ital,wght@0,700;0,800;0,900;1,800;1,900&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
   <style>
     /* ==========================================================================
-       CSS Design System & Variables
+       Dark Cyber Design System (Matching room.html)
        ========================================================================== */
     :root {
-      --primary-cyan: #30DFF2;
-      --primary-lime: #C7FD05;
-      --primary-pink: #FF3FAB;
-      --primary-teal: #2C735F;
-      --cream-light: #FFF4ED;
+      --bg-dark: #030611;
+      --card-bg: rgba(9, 19, 48, 0.85);
+      --card-border: rgba(0, 240, 255, 0.22);
+      --btn-blue: #091330;
+      --btn-blue-hover: #0d1b45;
+      --neon-pink: #ff2a8d;
+      --neon-cyan: #00f0ff;
+      --neon-green: #39ff14;
       
-      --bg-main: #FFFFFF;
-      --bg-card: #FFFFFF;
-      --bg-modal: #FFFFFF;
-      
-      --btn-dark: #2C2C2E;
-      --btn-dark-hover: #1C1C1E;
-      --btn-dark-active: #0A0A0C;
-      --btn-break-green: #059669;
-      --btn-break-green-hover: #047857;
-      
-      --text-main: #111827;
-      --text-muted: #6B7280;
-      --text-dim: #9CA3AF;
-      --border-light: rgba(0, 0, 0, 0.08);
-      --border-focus: #30DFF2;
+      --text-main: #ffffff;
+      --text-muted: #94a3b8;
       
       --radius-pill: 9999px;
-      --radius-btn: 18px;
-      --radius-modal: 28px;
-      
-      --shadow-sm: 0 4px 12px rgba(0, 0, 0, 0.05);
-      --shadow-md: 0 10px 30px rgba(0, 0, 0, 0.08);
-      --shadow-btn: 0 6px 18px rgba(0, 0, 0, 0.16);
-      --shadow-glow: 0 0 20px rgba(48, 223, 242, 0.35);
-      
-      --font-display: 'Outfit', sans-serif;
-      --font-digital: 'Zen Dots', sans-serif;
-      --font-body: 'Inter', sans-serif;
+      --radius-btn: 14px;
+      --radius-modal: 24px;
     }
 
     * {
@@ -65,9 +54,9 @@
       width: 100%;
       height: 100%;
       overflow: hidden;
-      background-color: var(--bg-main);
+      background-color: var(--bg-dark);
       color: var(--text-main);
-      font-family: var(--font-body);
+      font-family: 'Rajdhani', sans-serif;
     }
 
     body {
@@ -78,31 +67,17 @@
       position: relative;
     }
 
-    /* Ambient Soft Lighting */
-    .ambient-glow {
-      position: fixed;
-      width: 600px;
-      height: 600px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(48, 223, 242, 0.06), transparent 70%);
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      pointer-events: none;
-      z-index: 0;
-    }
-
     /* Fullscreen Viewport & Centered Container */
     .app-viewport-container {
       position: relative;
       z-index: 10;
       width: 100%;
       height: 100%;
-      max-width: 900px;
+      max-width: 600px;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 24px;
+      padding: 20px;
     }
 
     /* Common Page Base */
@@ -131,86 +106,59 @@
       z-index: 20;
     }
 
-    /* ==========================================================================
-       PAGE 1: HOME (Start Screen)
-       ========================================================================== */
+    /* Page 1: Start Screen */
     .page1-content-box {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       width: 100%;
-      max-width: 480px;
+      max-width: 440px;
     }
 
-    .sr-only {
-      position: absolute;
-      width: 1px;
-      height: 1px;
-      padding: 0;
-      margin: -1px;
-      overflow: hidden;
-      clip: rect(0, 0, 0, 0);
-      white-space: nowrap;
-      border: 0;
-    }
-
-    .brand-hero-logo-img {
-      max-width: 290px;
-      width: 82%;
-      height: auto;
-      margin-bottom: 34px;
-      filter: drop-shadow(0 6px 16px rgba(0, 0, 0, 0.08));
-      animation: gentleFloat 4s ease-in-out infinite;
-      user-select: none;
-      -webkit-user-drag: none;
-    }
-
-    @keyframes gentleFloat {
-      0%, 100% { transform: translateY(0); }
-      50% { transform: translateY(-5px); }
-    }
-
-    /* Universal Button Styling (Same font size 16px) */
+    /* Main Action Button */
     .btn-main-dark {
-      width: 220px;
+      width: 100%;
+      max-width: 320px;
       height: 56px;
-      background: var(--btn-dark);
-      color: #FFFFFF;
-      border: none;
-      border-radius: var(--radius-pill);
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 600;
+      background-color: var(--btn-blue);
+      color: #ffffff;
+      border: 1.5px solid var(--neon-pink);
+      box-shadow: 0 0 16px rgba(255, 42, 141, 0.35);
+      border-radius: var(--radius-btn);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      letter-spacing: 1px;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
-      box-shadow: var(--shadow-btn);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       margin-bottom: 24px;
     }
 
     .btn-main-dark:not(:disabled):hover {
-      background: var(--btn-dark-hover);
-      transform: translateY(-2px) scale(1.02);
-      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+      background-color: #160e2e;
+      box-shadow: 0 0 24px rgba(255, 42, 141, 0.55);
+      transform: translateY(-2px);
     }
 
     .btn-main-dark:not(:disabled):active {
-      transform: translateY(1px) scale(0.98);
+      transform: translateY(1px);
     }
 
     .btn-main-dark:disabled {
       opacity: 0.35;
       cursor: not-allowed;
+      border-color: rgba(255, 255, 255, 0.15);
       box-shadow: none;
     }
 
     /* 3 Mini Options Row */
     .mini-options-row {
       display: flex;
-      gap: 14px;
+      gap: 12px;
       justify-content: center;
       align-items: center;
       width: 100%;
@@ -219,36 +167,37 @@
 
     .mini-option-btn {
       flex: 1;
-      height: 54px;
-      background: var(--btn-dark);
-      color: #FFFFFF;
-      border: 2px solid transparent;
+      height: 52px;
+      background: var(--btn-blue);
+      color: #ffffff;
+      border: 1px solid rgba(0, 240, 255, 0.2);
       border-radius: var(--radius-btn);
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 600;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       text-align: center;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.5);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
       touch-action: manipulation;
     }
 
     .mini-option-btn:hover {
-      background: var(--btn-dark-hover);
+      background: var(--btn-blue-hover);
+      border-color: rgba(0, 240, 255, 0.4);
       transform: translateY(-2px);
     }
 
     .mini-option-btn.selected {
-      background: #111827;
-      border-color: var(--primary-cyan);
-      box-shadow: 0 0 18px rgba(48, 223, 242, 0.45);
-      color: #FFFFFF;
-      transform: translateY(-3px) scale(1.04);
+      background: linear-gradient(180deg, #160924 0%, #0a0e28 100%);
+      border: 1.5px solid var(--neon-pink);
+      box-shadow: 0 0 18px rgba(255, 42, 141, 0.45);
+      color: #ffffff;
+      transform: translateY(-2px);
     }
 
     .mini-option-btn.selected::after {
@@ -257,13 +206,12 @@
       bottom: 5px;
       width: 6px;
       height: 6px;
-      background: var(--primary-cyan);
+      background: var(--neon-pink);
       border-radius: 50%;
+      box-shadow: 0 0 6px var(--neon-pink);
     }
 
-    /* ==========================================================================
-       PAGE 2: ACTIVE STUDY & STOPWATCH SCREEN
-       ========================================================================== */
+    /* Page 2: Active Stopwatch Screen */
     .page2-content-box {
       display: flex;
       flex-direction: column;
@@ -274,21 +222,22 @@
     }
 
     .stopwatch-digital-display {
-      font-family: var(--font-digital);
-      font-size: 52px;
-      font-weight: 700;
-      letter-spacing: -1px;
-      color: #111827;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 54px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #ffffff;
       margin-bottom: 8px;
       font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 25px rgba(0, 240, 255, 0.45);
     }
 
     .stopwatch-countdown-subtitle {
-      font-family: var(--font-display);
-      font-size: 17px;
-      font-weight: 500;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 18px;
+      font-weight: 600;
       color: var(--text-muted);
-      margin-bottom: 40px;
+      margin-bottom: 36px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -297,14 +246,15 @@
     .pulse-dot {
       width: 8px;
       height: 8px;
-      background: #10B981;
+      background: var(--neon-green);
       border-radius: 50%;
+      box-shadow: 0 0 8px var(--neon-green);
       animation: pulseGlow 1.5s infinite;
     }
 
     @keyframes pulseGlow {
       0% { transform: scale(0.9); opacity: 0.7; }
-      50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 10px #10B981; }
+      50% { transform: scale(1.3); opacity: 1; box-shadow: 0 0 12px var(--neon-green); }
       100% { transform: scale(0.9); opacity: 0.7; }
     }
 
@@ -313,77 +263,72 @@
       flex-direction: column;
       gap: 16px;
       width: 100%;
-      max-width: 260px;
+      max-width: 280px;
     }
 
     .page2-btn {
       width: 100%;
       height: 54px;
-      background: var(--btn-dark);
-      color: #FFFFFF;
-      border: none;
-      border-radius: var(--radius-pill);
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 600;
+      background: var(--btn-blue);
+      color: #ffffff;
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: var(--radius-btn);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       cursor: pointer;
       display: flex;
       justify-content: center;
       align-items: center;
       gap: 8px;
-      box-shadow: var(--shadow-btn);
+      box-shadow: 0 4px 18px rgba(0, 0, 0, 0.6);
       transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     .page2-btn:hover {
-      background: var(--btn-dark-hover);
+      background: var(--btn-blue-hover);
+      border-color: rgba(0, 240, 255, 0.5);
       transform: translateY(-2px);
-      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.3);
     }
 
-    .page2-btn:active {
-      transform: translateY(1px);
-    }
-
-    /* Back from Break Active State */
     .page2-btn.in-break-state {
-      background: var(--btn-break-green);
-      box-shadow: 0 6px 18px rgba(5, 150, 105, 0.3);
+      background: linear-gradient(180deg, #091e20 0%, #061517 100%);
+      border-color: var(--neon-green);
+      box-shadow: 0 0 20px rgba(57, 255, 20, 0.35);
+      color: #ffffff;
     }
 
     .page2-btn.in-break-state:hover {
-      background: var(--btn-break-green-hover);
+      box-shadow: 0 0 26px rgba(57, 255, 20, 0.5);
     }
 
-    /* FlexScape Room Activity Button */
-    .page2-btn.btn-room-link {
-      background: linear-gradient(135deg, rgba(48, 223, 242, 0.12), rgba(199, 253, 5, 0.08));
-      border: 1.5px solid rgba(48, 223, 242, 0.45);
-      color: #111827;
-      box-shadow: 0 4px 14px rgba(48, 223, 242, 0.15);
-      gap: 10px;
+    .page2-btn.btn-finish-study {
+      border-color: var(--neon-pink);
+      box-shadow: 0 0 16px rgba(255, 42, 141, 0.3);
     }
 
-    .page2-btn.btn-room-link:hover {
-      background: linear-gradient(135deg, rgba(48, 223, 242, 0.22), rgba(199, 253, 5, 0.16));
-      border-color: var(--primary-cyan);
-      box-shadow: 0 6px 20px rgba(48, 223, 242, 0.3);
-      transform: translateY(-2px);
+    .page2-btn.btn-finish-study:hover {
+      background-color: #160e2e;
+      box-shadow: 0 0 24px rgba(255, 42, 141, 0.5);
     }
 
-    /* Active Break Pill */
+    /* Active Break Pill HUD */
     .break-active-hud {
       display: none;
       align-items: center;
       gap: 8px;
-      padding: 8px 18px;
-      background: rgba(5, 150, 105, 0.12);
-      border: 1px solid var(--btn-break-green);
+      padding: 8px 20px;
+      background: rgba(4, 9, 25, 0.9);
+      border: 1.5px solid var(--neon-cyan);
       border-radius: var(--radius-pill);
+      font-family: 'Orbitron', sans-serif;
       font-size: 13px;
-      font-weight: 600;
-      color: #047857;
-      margin-bottom: 20px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.3);
+      margin-bottom: 24px;
       animation: fadeIn 0.3s ease;
     }
 
@@ -391,9 +336,7 @@
       display: flex;
     }
 
-    /* ==========================================================================
-       PAGE 3: STATISTIC PAGE (Image 2)
-       ========================================================================== */
+    /* Page 3: Statistics Screen */
     .page3-content-box {
       display: flex;
       flex-direction: column;
@@ -404,38 +347,45 @@
     }
 
     .stat-header-label {
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 500;
-      color: var(--text-muted);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
       margin-bottom: 6px;
     }
 
     .stat-big-time-display {
-      font-family: var(--font-digital);
-      font-size: 48px;
-      font-weight: 700;
-      letter-spacing: -1px;
-      color: #111827;
-      margin-bottom: 10px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 46px;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: #ffffff;
+      margin-bottom: 8px;
       font-variant-numeric: tabular-nums;
+      text-shadow: 0 0 22px rgba(0, 240, 255, 0.4);
     }
 
     .stat-breaks-summary {
-      font-family: var(--font-display);
-      font-size: 18px;
-      font-weight: 600;
-      color: #111827;
-      margin-bottom: 36px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--neon-pink);
+      margin-bottom: 32px;
     }
 
     .stat-time-columns-card {
       display: flex;
-      justify-content: space-between;
+      justify-content: space-around;
       width: 100%;
-      max-width: 280px;
-      margin-bottom: 40px;
-      padding: 0 10px;
+      max-width: 320px;
+      margin-bottom: 36px;
+      padding: 18px 20px;
+      background: var(--card-bg);
+      border: 1.5px solid var(--card-border);
+      border-radius: var(--radius-btn);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5);
     }
 
     .stat-col {
@@ -445,31 +395,30 @@
     }
 
     .stat-col-title {
-      font-family: var(--font-display);
+      font-family: 'Rajdhani', sans-serif;
       font-size: 14px;
       font-weight: 700;
-      color: #111827;
-      margin-bottom: 6px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      margin-bottom: 4px;
     }
 
     .stat-col-time {
-      font-family: var(--font-display);
-      font-size: 18px;
-      font-weight: 500;
-      color: #374151;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 17px;
+      font-weight: 700;
+      color: #ffffff;
     }
 
-    /* ==========================================================================
-       CENTER POPUP MODAL: CUSTOM DIGITAL TIME SLIDER (0 to 59)
-       ========================================================================== */
+    /* Modal Center Popups */
     .modal-backdrop-center {
       position: fixed;
       top: 0;
       left: 0;
       width: 100vw;
       height: 100vh;
-      background: rgba(0, 0, 0, 0.45);
-      backdrop-filter: blur(8px);
+      background: rgba(0, 0, 0, 0.85);
+      backdrop-filter: blur(12px);
       z-index: 200;
       display: flex;
       justify-content: center;
@@ -486,7 +435,8 @@
     }
 
     .modal-card-center {
-      background: var(--bg-modal);
+      background: #091330;
+      border: 1.5px solid rgba(0, 240, 255, 0.35);
       border-radius: var(--radius-modal);
       width: 100%;
       max-width: 380px;
@@ -495,11 +445,12 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.2);
+      box-shadow: 0 0 35px rgba(0, 240, 255, 0.25);
       transform: scale(0.9);
       transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
       max-height: 90vh;
       overflow-y: auto;
+      color: #ffffff;
     }
 
     .modal-backdrop-center.open .modal-card-center {
@@ -507,23 +458,23 @@
     }
 
     .modal-title-center {
-      font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: 700;
-      color: #111827;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: var(--neon-cyan);
       margin-bottom: 18px;
     }
 
     /* Digital "00:00" Hero Display */
     .digital-picker-hero {
-      font-family: var(--font-digital);
-      font-size: 46px;
-      font-weight: 700;
-      color: #111827;
-      background: #F3F4F6;
-      border: 2px solid var(--primary-cyan);
-      box-shadow: 0 0 16px rgba(48, 223, 242, 0.35);
-      border-radius: 20px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 42px;
+      font-weight: 800;
+      color: #ffffff;
+      background: #030611;
+      border: 1.5px solid var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
+      border-radius: 18px;
       padding: 10px 24px;
       margin-bottom: 20px;
       display: inline-flex;
@@ -543,25 +494,26 @@
 
     .slide-unit-box {
       flex: 1;
-      background: #F9FAFB;
-      border: 1.5px solid #E5E7EB;
-      border-radius: 20px;
+      background: rgba(3, 6, 17, 0.7);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 16px;
       padding: 12px 8px;
       display: flex;
       flex-direction: column;
       align-items: center;
       touch-action: none;
       cursor: ns-resize;
-      transition: border-color 0.2s ease, background 0.2s ease;
+      transition: all 0.2s ease;
     }
 
     .slide-unit-box.dragging {
-      border-color: var(--primary-cyan);
-      background: #F0FDFA;
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.3);
+      background: rgba(9, 19, 48, 0.9);
     }
 
     .slide-unit-label {
-      font-family: var(--font-display);
+      font-family: 'Orbitron', sans-serif;
       font-size: 11px;
       font-weight: 700;
       text-transform: uppercase;
@@ -574,35 +526,35 @@
       width: 34px;
       height: 34px;
       border-radius: 50%;
-      background: #FFFFFF;
-      border: 1px solid #E5E7EB;
+      background: #091330;
+      border: 1px solid rgba(0, 240, 255, 0.3);
       display: flex;
       justify-content: center;
       align-items: center;
-      font-size: 14px;
+      font-size: 13px;
       font-weight: 700;
-      color: #111;
+      color: var(--neon-cyan);
       cursor: pointer;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
       transition: all 0.15s ease;
     }
 
     .slide-stepper-btn:hover {
-      background: var(--primary-cyan);
-      border-color: var(--primary-cyan);
-      color: #000;
+      background: var(--btn-blue-hover);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan);
       transform: scale(1.1);
     }
 
     .slide-number-window {
-      height: 70px;
+      height: 64px;
       display: flex;
       justify-content: center;
       align-items: center;
-      font-family: var(--font-digital);
-      font-size: 34px;
-      font-weight: 700;
-      color: #111827;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
       margin: 4px 0;
       user-select: none;
     }
@@ -610,20 +562,22 @@
     .modal-btn-confirm {
       width: 100%;
       height: 52px;
-      background: var(--btn-dark);
-      color: #FFFFFF;
-      border: none;
-      border-radius: var(--radius-pill);
-      font-family: var(--font-display);
-      font-size: 16px;
-      font-weight: 600;
+      background: var(--btn-blue);
+      color: #ffffff;
+      border: 1.5px solid var(--neon-pink);
+      box-shadow: 0 0 16px rgba(255, 42, 141, 0.35);
+      border-radius: var(--radius-btn);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
       cursor: pointer;
-      box-shadow: var(--shadow-btn);
       transition: all 0.2s ease;
     }
 
     .modal-btn-confirm:hover {
-      background: var(--btn-dark-hover);
+      background-color: #160e2e;
+      box-shadow: 0 0 24px rgba(255, 42, 141, 0.55);
       transform: translateY(-2px);
     }
 
@@ -637,55 +591,56 @@
     }
 
     .break-choice-card {
-      background: #FFFFFF;
-      border: 1.5px solid var(--border-light);
-      border-radius: var(--radius-md);
-      padding: 16px 12px;
+      background: rgba(4, 9, 25, 0.9);
+      border: 1.5px solid rgba(0, 240, 255, 0.2);
+      border-radius: 16px;
+      padding: 18px 12px;
       display: flex;
       flex-direction: column;
       align-items: center;
       text-align: center;
       cursor: pointer;
-      box-shadow: var(--shadow-sm);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.5);
       transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
       position: relative;
     }
 
     .break-choice-card.choice-room {
-      border-color: rgba(48, 223, 242, 0.55);
-      background: linear-gradient(180deg, rgba(48, 223, 242, 0.08) 0%, #FFFFFF 100%);
+      border-color: rgba(0, 240, 255, 0.4);
     }
 
     .break-choice-card.choice-room:hover {
-      border-color: var(--primary-cyan);
-      box-shadow: 0 6px 20px rgba(48, 223, 242, 0.25);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.35);
       transform: translateY(-3px);
     }
 
     .break-choice-card.choice-short {
-      border-color: rgba(0, 0, 0, 0.1);
-      background: linear-gradient(180deg, rgba(0, 0, 0, 0.02) 0%, #FFFFFF 100%);
+      border-color: rgba(255, 42, 141, 0.4);
     }
 
     .break-choice-card.choice-short:hover {
-      border-color: var(--btn-dark);
-      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.1);
+      border-color: var(--neon-pink);
+      box-shadow: 0 0 20px rgba(255, 42, 141, 0.35);
       transform: translateY(-3px);
     }
 
     .choice-card-badge {
+      font-family: 'Orbitron', sans-serif;
       font-size: 10px;
       font-weight: 700;
       padding: 3px 8px;
       border-radius: var(--radius-pill);
       margin-bottom: 8px;
-      background: rgba(48, 223, 242, 0.18);
-      color: #0891B2;
+      background: rgba(0, 240, 255, 0.15);
+      color: var(--neon-cyan);
+      border: 1px solid rgba(0, 240, 255, 0.3);
     }
 
     .choice-short .choice-card-badge {
-      background: rgba(0, 0, 0, 0.06);
-      color: var(--text-muted);
+      background: rgba(255, 42, 141, 0.15);
+      color: var(--neon-pink);
+      border-color: rgba(255, 42, 141, 0.3);
     }
 
     .choice-card-icon {
@@ -694,152 +649,1477 @@
     }
 
     .choice-card-title {
-      font-family: var(--font-display);
-      font-size: 15px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
       font-weight: 700;
-      color: var(--text-main);
+      color: #ffffff;
       margin-bottom: 4px;
     }
 
     .choice-card-desc {
-      font-size: 11.5px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 12px;
       color: var(--text-muted);
       line-height: 1.35;
     }
 
     .modal-btn-cancel {
       width: 100%;
-      height: 46px;
-      background: transparent;
-      color: var(--text-muted);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-pill);
-      font-family: var(--font-display);
-      font-size: 15px;
-      font-weight: 600;
+      height: 48px;
+      background: var(--btn-blue);
+      color: #ffffff;
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: var(--radius-btn);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
       cursor: pointer;
       transition: all 0.2s ease;
     }
 
     .modal-btn-cancel:hover {
-      background: rgba(0, 0, 0, 0.04);
-      color: var(--text-main);
+      background: var(--btn-blue-hover);
+      border-color: rgba(0, 240, 255, 0.4);
     }
 
-
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
 
     /* ==========================================================================
-       RESPONSIVE LANDSCAPE STYLING (HORIZONTAL PHONE SCREENS)
+       Page 4: Indoor Navigation Map (Study Table to FlexScape Room)
        ========================================================================== */
-    @media (max-height: 520px) and (orientation: landscape) {
-      .app-viewport-container {
-        padding: 12px 20px;
-      }
+    #page-navigation {
+      overflow-y: auto;
+      overflow-x: hidden;
+      justify-content: flex-start;
+      padding: 24px 16px 40px 16px;
+      -webkit-overflow-scrolling: touch;
+    }
 
-      .page1-content-box,
-      .page2-content-box,
-      .page3-content-box {
-        max-width: 640px;
-      }
+    .nav-content-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
 
-      .brand-hero-logo-img {
-        max-width: 190px;
-        margin-bottom: 14px;
-      }
+    .nav-top-hud {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 14px;
+    }
 
-      .btn-main-dark {
-        height: 48px;
-        width: 190px;
-        margin-bottom: 12px;
-      }
+    .nav-back-btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 14px;
+      background: rgba(9, 19, 48, 0.85);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: var(--radius-pill);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #ffffff;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
 
-      .mini-options-row {
-        max-width: 420px;
-        gap: 10px;
-      }
+    .nav-back-btn:hover {
+      background: var(--btn-blue-hover);
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+    }
 
-      .mini-option-btn {
-        height: 44px;
-      }
+    .nav-live-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      border-radius: var(--radius-pill);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+    }
 
-      .stopwatch-digital-display {
-        font-size: 38px;
-        margin-bottom: 4px;
-      }
+    .nav-live-chip .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon-green);
+      box-shadow: 0 0 8px var(--neon-green);
+      animation: pulseGreen 1.5s infinite;
+    }
 
-      .stopwatch-countdown-subtitle {
-        font-size: 14px;
-        margin-bottom: 16px;
-      }
+    @keyframes pulseGreen {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.4; transform: scale(0.85); }
+    }
 
-      .page2-btn-group {
-        flex-direction: row;
-        max-width: 420px;
-        gap: 12px;
-      }
+    .nav-title-main {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+      text-align: center;
+    }
 
-      .page2-btn {
-        height: 46px;
-      }
+    .nav-route-summary-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      padding: 10px 16px;
+      background: rgba(9, 19, 48, 0.85);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 14px;
+      margin-bottom: 14px;
+      font-size: 12px;
+    }
 
-      .stat-big-time-display {
-        font-size: 36px;
-        margin-bottom: 4px;
-      }
+    .nav-summary-point {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
 
-      .stat-breaks-summary {
-        font-size: 15px;
-        margin-bottom: 14px;
-      }
+    .nav-summary-point.point-destination {
+      align-items: flex-end;
+      text-align: right;
+    }
 
-      .stat-time-columns-card {
-        margin-bottom: 16px;
-      }
+    .nav-point-label {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+    }
 
-      .modal-card-center {
-        padding: 18px 20px;
-        max-width: 420px;
-      }
+    .nav-point-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+    }
 
-      .digital-picker-hero {
-        font-size: 34px;
-        padding: 6px 16px;
-        margin-bottom: 12px;
-      }
+    .nav-distance-badge {
+      padding: 4px 10px;
+      background: rgba(255, 42, 141, 0.15);
+      border: 1px solid rgba(255, 42, 141, 0.4);
+      border-radius: var(--radius-pill);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--neon-pink);
+    }
 
-      .touch-slide-columns-wrap {
-        margin-bottom: 14px;
-      }
+    /* Map Card Container */
+    .nav-map-container {
+      width: 100%;
+      background: #04091a;
+      border: 1.5px solid rgba(0, 240, 255, 0.35);
+      border-radius: 20px;
+      padding: 10px;
+      box-shadow: 0 10px 32px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 240, 255, 0.15);
+      margin-bottom: 14px;
+      position: relative;
+    }
 
-      .slide-number-window {
-        height: 44px;
-        font-size: 26px;
+    .nav-map-legend {
+      position: absolute;
+      top: 18px;
+      right: 18px;
+      display: flex;
+      gap: 10px;
+      background: rgba(4, 9, 26, 0.85);
+      backdrop-filter: blur(8px);
+      padding: 4px 10px;
+      border-radius: 8px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      font-size: 10px;
+      font-family: 'Orbitron', sans-serif;
+      color: var(--text-muted);
+      z-index: 5;
+    }
+
+    .nav-legend-item {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .legend-dot-user {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon-cyan);
+      box-shadow: 0 0 6px var(--neon-cyan);
+    }
+
+    .legend-dot-dest {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--neon-pink);
+      box-shadow: 0 0 6px var(--neon-pink);
+    }
+
+    /* Map SVG Animations */
+    @keyframes navDashFlow {
+      0% {
+        stroke-dashoffset: 28;
       }
+      100% {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    .nav-route-flow {
+      animation: navDashFlow 1.2s linear infinite;
+    }
+
+    @keyframes sonarPulse {
+      0% {
+        r: 5px;
+        opacity: 0.9;
+      }
+      100% {
+        r: 22px;
+        opacity: 0;
+      }
+    }
+
+    .user-sonar-ring {
+      animation: sonarPulse 1.8s cubic-bezier(0.2, 0.8, 0.4, 1) infinite;
+    }
+
+    @keyframes beaconPulse {
+      0%, 100% {
+        transform: scale(1);
+        opacity: 0.8;
+      }
+      50% {
+        transform: scale(1.35);
+        opacity: 0.3;
+      }
+    }
+
+    .destination-pulse {
+      transform-origin: 395px 200px;
+      animation: beaconPulse 2s ease-in-out infinite;
+    }
+
+    /* Navigation Steps Card */
+    .nav-steps-card {
+      width: 100%;
+      background: rgba(9, 19, 48, 0.8);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 16px;
+      padding: 14px 16px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    .nav-steps-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .nav-step-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 8px;
+      font-size: 13px;
+      color: #e2e8f0;
+      line-height: 1.4;
+    }
+
+    .nav-step-item:last-child {
+      margin-bottom: 0;
+    }
+
+    .nav-step-num {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background: rgba(0, 240, 255, 0.15);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      color: var(--neon-cyan);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+
+    /* Arrived State Box */
+    .nav-arrived-box {
+      display: none;
+      width: 100%;
+      background: rgba(9, 30, 32, 0.95);
+      border: 1.5px solid var(--neon-green);
+      box-shadow: 0 0 25px rgba(57, 255, 20, 0.25);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      text-align: center;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .nav-arrived-box.active {
+      display: block;
+    }
+
+    .nav-arrived-timer {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 32px;
+      font-weight: 800;
+      color: #ffffff;
+      text-shadow: 0 0 16px rgba(57, 255, 20, 0.5);
+      margin: 8px 0;
+    }
+
+    .nav-action-group {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      width: 100%;
+    }
+
+    /* ==========================================================================
+       Onboarding Flow Styles (Reminder Device)
+       ========================================================================== */
+    .onboarding-page {
+      overflow-y: auto;
+      overflow-x: hidden;
+      justify-content: flex-start;
+      padding: 24px 16px 40px 16px;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .onboarding-card {
+      width: 100%;
+      max-width: 440px;
+      background: rgba(9, 19, 48, 0.88);
+      border: 1.5px solid rgba(0, 240, 255, 0.28);
+      border-radius: 24px;
+      padding: 28px 22px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 25px rgba(0, 240, 255, 0.12);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin: 0 auto;
+    }
+
+    .onboarding-step-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 4px 12px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      border-radius: var(--radius-pill);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      letter-spacing: 1px;
+      margin-bottom: 12px;
+    }
+
+    .onboarding-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 22px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.5px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .onboarding-desc {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.5;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .auth-button-stack {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .btn-login-accent {
+      width: 100%;
+      height: 52px;
+      background: linear-gradient(135deg, #091330 0%, #132252 100%);
+      color: #ffffff;
+      border: 1.5px solid var(--neon-cyan);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.3);
+      border-radius: var(--radius-btn);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .btn-login-accent:hover {
+      box-shadow: 0 0 24px rgba(0, 240, 255, 0.5);
+      border-color: #ffffff;
+      transform: translateY(-2px);
+    }
+
+    .btn-signup-accent {
+      width: 100%;
+      height: 52px;
+      background: var(--btn-blue);
+      color: #ffffff;
+      border: 1.5px solid var(--neon-pink);
+      box-shadow: 0 0 16px rgba(255, 42, 141, 0.35);
+      border-radius: var(--radius-btn);
+      font-family: 'Orbitron', sans-serif;
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.25s ease;
+    }
+
+    .btn-signup-accent:hover {
+      background-color: #160e2e;
+      box-shadow: 0 0 24px rgba(255, 42, 141, 0.55);
+      transform: translateY(-2px);
+    }
+
+    /* Terms Scroll Box */
+    .terms-content-box {
+      width: 100%;
+      max-height: 220px;
+      overflow-y: auto;
+      background: rgba(4, 9, 25, 0.85);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      border-radius: 14px;
+      padding: 16px;
+      text-align: left;
+      font-size: 12px;
+      color: #cbd5e1;
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+
+    .terms-section-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      margin-top: 10px;
+      margin-bottom: 4px;
+    }
+
+    .terms-checkbox-label {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      width: 100%;
+      text-align: left;
+      font-size: 13px;
+      color: #e2e8f0;
+      cursor: pointer;
+      user-select: none;
+      margin-bottom: 18px;
+    }
+
+    .terms-checkbox-input {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 20px;
+      height: 20px;
+      border: 1.5px solid var(--neon-cyan);
+      border-radius: 6px;
+      background: rgba(9, 19, 48, 0.8);
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 1px;
+      transition: all 0.2s ease;
+    }
+
+    .terms-checkbox-input:checked {
+      background: var(--neon-cyan);
+      box-shadow: 0 0 10px var(--neon-cyan);
+    }
+
+    .terms-checkbox-input:checked::after {
+      content: '✓';
+      font-size: 13px;
+      font-weight: 900;
+      color: #030611;
+    }
+
+    /* Form Fields */
+    .input-group {
+      width: 100%;
+      text-align: left;
+      margin-bottom: 14px;
+    }
+
+    .input-label {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--neon-cyan);
+      letter-spacing: 0.5px;
+      margin-bottom: 6px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .input-text-field {
+      width: 100%;
+      height: 48px;
+      background: rgba(4, 9, 25, 0.9);
+      border: 1.5px solid rgba(0, 240, 255, 0.3);
+      border-radius: 12px;
+      padding: 0 16px;
+      color: #ffffff;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 16px;
+      font-weight: 600;
+      outline: none;
+      transition: all 0.2s ease;
+    }
+
+    .input-text-field:focus {
+      border-color: #00f0ff;
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
+      background: rgba(9, 19, 48, 0.95);
+    }
+
+    .input-feedback {
+      font-size: 11px;
+      margin-top: 4px;
+      color: var(--text-muted);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .input-feedback.valid {
+      color: var(--neon-green);
+    }
+
+    .input-feedback.invalid {
+      color: var(--neon-pink);
+    }
+
+    /* Profile Avatar Picker */
+    .avatar-selector-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 16px;
+    }
+
+    .avatar-hero-preview {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      border: 2.5px solid var(--neon-cyan);
+      box-shadow: 0 0 20px rgba(0, 240, 255, 0.45);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      background: linear-gradient(135deg, #091330 0%, #162456 100%);
+      margin-bottom: 10px;
+      overflow: hidden;
+      position: relative;
+    }
+
+    .avatar-hero-preview img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .avatar-presets-grid {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      margin-bottom: 8px;
+    }
+
+    .avatar-preset-btn {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      border: 1.5px solid rgba(255, 255, 255, 0.2);
+      background: #091330;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+
+    .avatar-preset-btn.selected {
+      border-color: var(--neon-cyan);
+      box-shadow: 0 0 14px var(--neon-cyan);
+      transform: scale(1.1);
+      background: rgba(0, 240, 255, 0.15);
+    }
+
+    /* Top User Status Header on Page 1 (Break Interval Setup) */
+    .user-profile-header-pill {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 100%;
+      padding: 8px 14px;
+      background: rgba(9, 19, 48, 0.85);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: var(--radius-pill);
+      margin-bottom: 20px;
+      font-size: 12px;
+    }
+
+    .user-pill-left {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .user-pill-avatar {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      border: 1px solid var(--neon-cyan);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      background: #071026;
+      overflow: hidden;
+    }
+
+    .user-pill-avatar img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .user-pill-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      line-height: 1.2;
+    }
+
+    .user-pill-name {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #ffffff;
+    }
+
+    .user-pill-unikey {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 11px;
+      font-weight: 600;
+      color: var(--neon-cyan);
+    }
+
+    .btn-switch-account {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      background: transparent;
+      border: none;
+      transition: color 0.2s ease;
+      text-decoration: underline;
+    }
+
+    .btn-switch-account:hover {
+      color: var(--neon-pink);
+    }
+
+    /* Current Location Indicator Only */
+    .current-location-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 22px;
+      background: rgba(15, 23, 42, 0.75);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      box-shadow: 0 4px 18px rgba(0, 240, 255, 0.15);
+      border-radius: var(--radius-pill);
+      margin-bottom: 22px;
+      max-width: 90%;
+    }
+
+    .current-location-text {
+      font-family: 'Orbitron', -apple-system, sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #00f0ff;
+      letter-spacing: 0.5px;
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+
+    /* Post-Login Top Floating Account Visual (Profile Picture Only) */
+    .post-login-top-bar {
+      position: absolute;
+      top: 18px;
+      right: 20px;
+      z-index: 45;
+    }
+
+    .account-menu-container {
+      position: relative;
+    }
+
+    .account-avatar-btn {
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(15, 23, 42, 0.85);
+      border: 2px solid rgba(0, 240, 255, 0.45);
+      box-shadow: 0 0 16px rgba(0, 240, 255, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      padding: 0;
+      overflow: hidden;
+      user-select: none;
+    }
+
+    .account-avatar-btn:hover {
+      border-color: #00f0ff;
+      box-shadow: 0 0 22px rgba(0, 240, 255, 0.6);
+      transform: scale(1.06);
+    }
+
+    .account-avatar-btn:active {
+      transform: scale(0.96);
+    }
+
+    .account-avatar-content {
+      font-size: 24px;
+      line-height: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    .account-avatar-content img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 50%;
+    }
+
+    /* Expand Tab Menu (Settings, Logout) */
+    .account-expand-menu {
+      position: absolute;
+      top: calc(100% + 10px);
+      right: 0;
+      width: 220px;
+      background: rgba(11, 19, 43, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      border-radius: 16px;
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.7), 0 0 18px rgba(0, 240, 255, 0.2);
+      padding: 10px;
+      display: none;
+      flex-direction: column;
+      gap: 6px;
+      transform-origin: top right;
+      animation: menuFadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      z-index: 50;
+    }
+
+    .account-expand-menu.open {
+      display: flex;
+    }
+
+    @keyframes menuFadeIn {
+      from {
+        opacity: 0;
+        transform: scale(0.92) translateY(-6px);
+      }
+      to {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    .account-menu-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 6px 8px 8px 8px;
+    }
+
+    .account-menu-avatar-small {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 18px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+
+    .account-menu-avatar-small img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .account-menu-meta {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .account-menu-username {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      color: #ffffff;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .account-menu-unikey {
+      font-family: 'Orbitron', monospace;
+      font-size: 10.5px;
+      color: #00f0ff;
+    }
+
+    .account-menu-divider {
+      height: 1px;
+      background: rgba(255, 255, 255, 0.1);
+      margin: 2px 0 4px 0;
+    }
+
+    .account-menu-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      background: transparent;
+      border: none;
+      color: #e2e8f0;
+      font-family: 'Inter', -apple-system, sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      text-align: left;
+    }
+
+    .account-menu-item:hover {
+      background: rgba(0, 240, 255, 0.12);
+      color: #00f0ff;
+    }
+
+    .account-menu-item.item-logout:hover {
+      background: rgba(255, 42, 141, 0.15);
+      color: #ff2a8d;
+    }
+
+    .account-menu-item i {
+      font-size: 14px;
+      width: 18px;
+      text-align: center;
+    }
+
+    /* Settings Modal Styles */
+    .settings-modal-card {
+      max-width: 420px;
+      text-align: left;
+    }
+
+    .modal-header-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 18px;
+      width: 100%;
+    }
+
+    .modal-close-btn {
+      background: rgba(255, 255, 255, 0.1);
+      border: none;
+      color: #94a3b8;
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+
+    .modal-close-btn:hover {
+      background: rgba(255, 42, 141, 0.3);
+      color: #ffffff;
+    }
+
+    .settings-group {
+      width: 100%;
+    }
+
+    .settings-group-label {
+      display: block;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 12px;
+      font-weight: 700;
+      color: #00f0ff;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .settings-avatar-preview-box {
+      display: flex;
+      justify-content: center;
+      margin-bottom: 12px;
+    }
+
+    .settings-upload-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      width: 100%;
+      padding: 9px 14px;
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px dashed rgba(0, 240, 255, 0.4);
+      border-radius: 10px;
+      font-size: 12px;
+      color: #cbd5e1;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-weight: 600;
+    }
+
+    .settings-upload-btn:hover {
+      background: rgba(0, 240, 255, 0.15);
+      border-color: #00f0ff;
+      color: #ffffff;
+    }
+
+    /* Read-Only Account Details Card in Settings */
+    .settings-readonly-card {
+      width: 100%;
+      background: rgba(4, 9, 25, 0.75);
+      border: 1px solid rgba(0, 240, 255, 0.25);
+      border-radius: 14px;
+      padding: 12px 14px;
+      margin-bottom: 20px;
+      box-shadow: inset 0 0 16px rgba(0, 240, 255, 0.04);
+      user-select: none;
+    }
+
+    .readonly-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
+    .readonly-card-title {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 11px;
+      font-weight: 700;
+      color: #94a3b8;
+      display: flex;
+      align-items: center;
+      letter-spacing: 0.5px;
+    }
+
+    .readonly-badge {
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      color: var(--neon-cyan);
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      padding: 2px 7px;
+      border-radius: var(--radius-pill);
+      letter-spacing: 0.5px;
+    }
+
+    .readonly-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 14px;
+    }
+
+    .readonly-item {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 2px;
+    }
+
+    .readonly-label {
+      font-family: 'Inter', sans-serif;
+      font-size: 10px;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.3px;
+    }
+
+    .readonly-value {
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13.5px;
+      font-weight: 700;
+      color: #e2e8f0;
+      letter-spacing: 0.3px;
+    }
+
+    /* Cyber Input Design (Matching Website Styling) */
+    .cyber-input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      width: 100%;
+      background: rgba(4, 9, 25, 0.85);
+      border: 1.5px solid rgba(0, 240, 255, 0.35);
+      box-shadow: inset 0 0 14px rgba(0, 240, 255, 0.08);
+      border-radius: 12px;
+      transition: all 0.25s ease;
+    }
+
+    .cyber-input-wrap:focus-within {
+      border-color: #00f0ff;
+      box-shadow: 0 0 18px rgba(0, 240, 255, 0.4), inset 0 0 12px rgba(0, 240, 255, 0.15);
+      background: rgba(8, 17, 44, 0.95);
+    }
+
+    .cyber-input-icon {
+      padding-left: 14px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+    }
+
+    .cyber-input-field {
+      width: 100%;
+      height: 48px;
+      background: transparent;
+      border: none;
+      padding: 0 12px;
+      color: #ffffff;
+      font-family: 'Rajdhani', -apple-system, sans-serif;
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      outline: none;
+    }
+
+    .cyber-input-badge {
+      padding: 3px 8px;
+      margin-right: 10px;
+      background: rgba(0, 240, 255, 0.12);
+      border: 1px solid rgba(0, 240, 255, 0.35);
+      border-radius: 6px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9px;
+      font-weight: 800;
+      color: #00f0ff;
+      letter-spacing: 0.5px;
+      white-space: nowrap;
+    }
+
+    /* Student Card & Digital Wallet Login Card */
+    .student-wallet-card-btn {
+      width: 100%;
+      height: 64px;
+      background: linear-gradient(135deg, rgba(20, 32, 60, 0.95) 0%, rgba(8, 14, 32, 0.98) 100%);
+      border: 1.5px solid rgba(0, 240, 255, 0.4);
+      border-radius: 14px;
+      padding: 10px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.5), inset 0 0 16px rgba(0, 240, 255, 0.08);
+      cursor: pointer;
+      transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .student-wallet-card-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, #00f0ff, transparent);
+      opacity: 0.6;
+    }
+
+    .student-wallet-card-btn:hover {
+      border-color: #00f0ff;
+      box-shadow: 0 12px 30px rgba(0, 240, 255, 0.35), inset 0 0 20px rgba(0, 240, 255, 0.15);
+      transform: translateY(-2px);
+    }
+
+    .student-wallet-card-btn:active {
+      transform: translateY(0) scale(0.98);
+    }
+
+    .wallet-card-left {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .wallet-card-chip {
+      width: 40px;
+      height: 32px;
+      background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+      border: 1px solid rgba(0, 240, 255, 0.5);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+    }
+
+    .wallet-card-info {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+    }
+
+    .wallet-card-title {
+      font-family: 'Exo 2', sans-serif;
+      font-size: 15px;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: 0.3px;
+    }
+
+    .wallet-card-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 9.5px;
+      font-weight: 700;
+      color: #00f0ff;
+      letter-spacing: 0.5px;
+    }
+
+    .wallet-card-wave {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      color: #00f0ff;
+      font-size: 16px;
+      opacity: 0.85;
     }
   </style>
 </head>
-<body>
+<body class="w-screen h-screen relative bg-[#030611] text-white flex items-center justify-center overflow-hidden">
 
-  <div class="ambient-glow"></div>
+  <!-- Ambient CRT Grid & Glows (Exact same style as room.html) -->
+  <div class="absolute inset-0 bg-grid opacity-50 pointer-events-none"></div>
+  <div class="absolute -top-32 -left-32 w-96 h-96 bg-cyan-500/10 rounded-full blur-3xl pointer-events-none"></div>
+  <div class="absolute -bottom-32 -right-32 w-96 h-96 bg-pink-500/10 rounded-full blur-3xl pointer-events-none"></div>
 
   <!-- App Main Centered Container -->
   <main class="app-viewport-container">
 
+    <!-- Global Floating Post-Login Account Menu (Profile Picture Only) -->
+    <div class="post-login-top-bar" id="post-login-account" style="display: none;">
+      <div class="account-menu-container">
+        <button class="account-avatar-btn" id="btn-account-avatar" type="button" aria-label="Account profile menu" title="Account profile & settings">
+          <span class="account-avatar-content" id="global-account-avatar">🧘</span>
+        </button>
+
+        <!-- Expand Tab Dropdown Menu (Settings, Logout) -->
+        <div class="account-expand-menu" id="account-expand-menu">
+          <div class="account-menu-header">
+            <div class="account-menu-avatar-small" id="menu-user-avatar">🧘</div>
+            <div class="account-menu-meta">
+              <span class="account-menu-username" id="menu-user-name">Alex99</span>
+              <span class="account-menu-unikey" id="menu-user-unikey">UniKey: abcd1234</span>
+            </div>
+          </div>
+          <div class="account-menu-divider"></div>
+          <button class="account-menu-item" id="menu-btn-settings" type="button">
+            <i class="fa-solid fa-gear"></i>
+            <span>Settings</span>
+          </button>
+          <button class="account-menu-item item-logout" id="menu-btn-logout" type="button">
+            <i class="fa-solid fa-right-from-bracket"></i>
+            <span>Logout</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
     <!-- ==========================================================================
-         PAGE 1: HOME (Start Screen)
+         ONBOARDING STEP 1: LOGIN OR SIGN UP
          ========================================================================== -->
-    <article class="app-page active" id="page-home">
+    <article class="app-page active onboarding-page" id="page-onboarding-auth">
+      <div class="onboarding-card">
+        <!-- FlexScape Brand Emblem -->
+        <div class="inline-flex flex-col items-center gap-2 mb-6">
+          <img src="logo.svg" alt="FlexScape Emblem" class="h-20 w-auto object-contain drop-shadow-[0_0_20px_rgba(0,240,255,0.45)]">
+          <span class="flexscape-logo-text font-exo italic font-black text-3xl text-white tracking-tight">Flex<span class="text-[#00f0ff]">Scape</span></span>
+          <span class="text-xs font-orbitron font-bold text-[#00f0ff] tracking-widest uppercase">Reminder Device</span>
+        </div>
+
+
+
+        <!-- Auth Button Stack -->
+        <div class="auth-button-stack">
+          <button class="btn-login-accent" id="btn-auth-goto-login">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            <span>Login with UniKey</span>
+          </button>
+
+          <button class="btn-signup-accent" id="btn-auth-goto-signup">
+            <i class="fa-solid fa-user-plus"></i>
+            <span>Sign Up (New Student)</span>
+          </button>
+        </div>
+
+        <!-- Student Card Login (Including Digital Wallet) -->
+        <div class="mt-5 pt-3 border-t border-white/10 w-full">
+          <button class="student-wallet-card-btn" id="btn-quick-demo-login" type="button" title="Sign In with Student Card / Digital Wallet">
+            <div class="wallet-card-left">
+              <div class="wallet-card-chip">
+                <i class="fa-solid fa-microchip text-[#00f0ff] text-base"></i>
+              </div>
+              <div class="wallet-card-info">
+                <span class="wallet-card-title">Student Card</span>
+                <span class="wallet-card-badge">
+                  <i class="fa-solid fa-wallet text-[#39ff14]"></i> Digital Wallet
+                </span>
+              </div>
+            </div>
+            <div class="wallet-card-wave">
+              <i class="fa-solid fa-wifi rotate-90 text-[#00f0ff]"></i>
+            </div>
+          </button>
+        </div>
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         ONBOARDING STEP 2: TERMS AND CONDITIONS (If Signup)
+         ========================================================================== -->
+    <article class="app-page onboarding-page" id="page-onboarding-terms">
+      <div class="onboarding-card">
+        
+        <div class="w-full flex justify-between items-center mb-4">
+          <button class="nav-back-btn" id="btn-terms-back">
+            <i class="fa-solid fa-arrow-left"></i> Back
+          </button>
+        </div>
+
+        <h2 class="onboarding-title">Terms & Conditions</h2>
+        <p class="onboarding-desc" style="margin-bottom: 14px;">
+          Please review the reminder device policy for library wellness and privacy.
+        </p>
+
+        <!-- Scrollable Terms Agreement Box -->
+        <div class="terms-content-box">
+          <div class="terms-section-title">1. Reminder Device Purpose</div>
+          <p>The FlexScape Reminder Device assists university students during study sessions by providing subtle interval alerts, encouraging regular ergonomic posture shifts and active screen breaks.</p>
+
+          <div class="terms-section-title">2. Library Quiet Environment</div>
+          <p>All reminders are delivered via soft ambient light pulses and localized micro-haptics. Auditory chimes are automatically silenced in library quiet zones.</p>
+
+          <div class="terms-section-title">3. Privacy, Vision Tracking & Sound Recording</div>
+          <p>Motion tracking and sound recording for hands-free voice control in the FlexScape Room operate on local edge computing models. Microphone audio is used strictly for real-time local voice command recognition. No sound recordings or webcam video feeds are ever recorded, broadcast, or stored on external servers.</p>
+
+          <div class="terms-section-title">4. UniKey Account Linking</div>
+          <p>Your university key is used solely for desk booking identification, break scheduling, and personal wellness streak stats.</p>
+        </div>
+
+        <!-- Agreement Checkbox -->
+        <label class="terms-checkbox-label">
+          <input type="checkbox" id="terms-agree-checkbox" class="terms-checkbox-input">
+          <span>I agree to the FlexScape Terms of Service, Privacy Policy, and desk reminder guidelines.</span>
+        </label>
+
+        <!-- Continue Button -->
+        <button class="btn-main-dark w-full" id="btn-terms-continue" disabled style="max-width: 100%; opacity: 0.4; cursor: not-allowed;">
+          Accept & Continue ➔
+        </button>
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         ONBOARDING STEP 3: DATA INPUT (If Signup)
+         ========================================================================== -->
+    <article class="app-page onboarding-page" id="page-onboarding-data">
+      <div class="onboarding-card">
+        
+        <div class="w-full flex justify-between items-center mb-4">
+          <button class="nav-back-btn" id="btn-data-back">
+            <i class="fa-solid fa-arrow-left"></i> Terms
+          </button>
+        </div>
+
+        <h2 class="onboarding-title">Student Profile</h2>
+        <p class="onboarding-desc" style="margin-bottom: 16px;">
+          Enter your profile picture, username, and university key.
+        </p>
+
+        <!-- 1. Profile Picture Selector -->
+        <div class="avatar-selector-box">
+          <div class="avatar-hero-preview" id="avatar-preview-display">
+            <span id="avatar-preview-icon">🧘</span>
+          </div>
+
+          <div class="avatar-presets-grid">
+            <button class="avatar-preset-btn selected" data-avatar="🧘" title="Zen Scholar">🧘</button>
+            <button class="avatar-preset-btn" data-avatar="⚡" title="Cyber Pulse">⚡</button>
+            <button class="avatar-preset-btn" data-avatar="🏃" title="Motion Flow">🏃</button>
+            <button class="avatar-preset-btn" data-avatar="🎯" title="Focus Master">🎯</button>
+          </div>
+
+          <label class="text-xs font-orbitron font-bold text-[#00f0ff] hover:underline cursor-pointer mt-1 flex items-center gap-1.5">
+            <i class="fa-solid fa-camera"></i>
+            <span>Upload Photo</span>
+            <input type="file" id="input-avatar-file" accept="image/*" class="hidden">
+          </label>
+        </div>
+
+        <!-- 2. Username (English + Numbers Only) -->
+        <div class="input-group">
+          <label class="input-label" for="input-username">
+            <span>Username</span>
+            <span class="text-[10px] text-slate-400 font-normal">English + Numbers only</span>
+          </label>
+          <input type="text" id="input-username" class="input-text-field" placeholder="e.g. Alex99" maxlength="20" autocomplete="off" spellcheck="false">
+          <div class="input-feedback" id="username-feedback">
+            <span>• Letters and numbers only (e.g. Alex99)</span>
+          </div>
+        </div>
+
+        <!-- 3. UniKey (4 English Letters + 4 Digit Numbers) -->
+        <div class="input-group">
+          <label class="input-label" for="input-unikey">
+            <span>UniKey</span>
+            <span class="text-[10px] text-slate-400 font-normal">4 letters + 4 digits</span>
+          </label>
+          <input type="text" id="input-unikey" class="input-text-field uppercase" placeholder="e.g. abcd1234" maxlength="8" autocomplete="off" spellcheck="false">
+          <div class="input-feedback" id="unikey-feedback">
+            <span>• 4 English letters followed by 4 digits (e.g. abcd1234)</span>
+          </div>
+        </div>
+
+        <!-- Submit Button -->
+        <button class="btn-main-dark w-full mt-2" id="btn-data-submit" disabled style="max-width: 100%; opacity: 0.4; cursor: not-allowed;">
+          Complete Registration ➔
+        </button>
+
+      </div>
+    </article>
+
+    <!-- ==========================================================================
+         PAGE 1 / STEP 4: SETTING BREAK INTERVAL BOOKING
+         ========================================================================== -->
+    <article class="app-page" id="page-home">
       <div class="page1-content-box">
-        <!-- FlexScape Official Brand Logo -->
-        <h1 class="sr-only">FlexScape</h1>
-        <img class="brand-hero-logo-img" src="logo.png" alt="FlexScape" width="280" height="81">
+        
+        <!-- Current Location Indicator Only -->
+        <div class="current-location-pill">
+          <span class="current-location-text">📍 Study Desk 14 • Level 2</span>
+        </div>
+
+        <!-- FlexScape Official Brand Emblem -->
+        <div class="inline-flex flex-col items-center gap-2 mb-8">
+          <img src="logo.svg" alt="FlexScape Emblem" class="h-20 w-auto object-contain drop-shadow-[0_0_22px_rgba(0,240,255,0.45)]">
+          <span class="flexscape-logo-text font-exo italic font-black text-3xl text-white tracking-tight">Flex<span class="text-[#00f0ff]">Scape</span></span>
+          <span class="text-xs font-orbitron font-bold text-slate-400">Step 4: Set Break Interval</span>
+        </div>
 
         <!-- Start Button (Disabled until interval selected) -->
         <button class="btn-main-dark" id="home-start-btn" disabled>
-          Start
+          Start Study Session
         </button>
 
-        <!-- 3 Mini Option Buttons (Same text size) -->
+        <!-- 3 Mini Option Buttons -->
         <div class="mini-options-row">
           <button class="mini-option-btn" id="btn-opt-5s" data-seconds="5">
             5 sec
@@ -865,18 +2145,18 @@
         <!-- Active Break HUD Indicator -->
         <div class="break-active-hud" id="break-hud">
           <span id="break-hud-label">☕ Short break active</span>
-          <span id="break-hud-timer" style="font-family: var(--font-digital); font-weight: 700;">00:00</span>
+          <span id="break-hud-timer" style="font-family: 'Orbitron', sans-serif; font-weight: 700;">00:00</span>
         </div>
 
-        <!-- Center Digital Stopwatch -->
-        <div class="stopwatch-digital-display" id="study-stopwatch">
-          00:00:00
+        <!-- Center Digital Break Countdown (00:00 format) -->
+        <div class="stopwatch-digital-display" id="study-countdown-display" style="font-variant-numeric: tabular-nums; text-shadow: 0 0 24px rgba(0, 240, 255, 0.45);">
+          00:00
         </div>
 
         <!-- Countdown Subtitle -->
         <div class="stopwatch-countdown-subtitle" id="countdown-subtitle">
           <span class="pulse-dot"></span>
-          <span id="countdown-text">Break in 30 seconds</span>
+          <span id="countdown-text">Break countdown</span>
         </div>
 
         <!-- Action Buttons -->
@@ -886,7 +2166,7 @@
             <span id="break-btn-text">Break now</span>
           </button>
 
-          <button class="page2-btn" id="finish-study-btn">
+          <button class="page2-btn btn-finish-study" id="finish-study-btn">
             Finish study session
           </button>
         </div>
@@ -894,7 +2174,7 @@
     </article>
 
     <!-- ==========================================================================
-         PAGE 3: STATISTIC PAGE (Image 2)
+         PAGE 3: STATISTIC PAGE
          ========================================================================== -->
     <article class="app-page" id="page-stats">
       <div class="page3-content-box">
@@ -929,6 +2209,256 @@
       </div>
     </article>
 
+    <!-- ==========================================================================
+         PAGE 4: INDOOR NAVIGATION (Study Table to FlexScape Room)
+         ========================================================================== -->
+    <article class="app-page" id="page-navigation">
+      <div class="nav-content-box">
+        
+        <!-- Top Navigation HUD -->
+        <div class="nav-top-hud">
+          <button class="nav-back-btn" id="btn-nav-return-study">
+            <i class="fa-solid fa-arrow-left"></i> Study Desk
+          </button>
+        </div>
+
+        <h2 class="nav-title-main" style="margin-bottom: 16px;">Route to FlexScape Room</h2>
+
+        <!-- Library Map Card (Website Cyberpunk Blueprint Style) -->
+        <div class="nav-map-container" style="background: rgba(10, 17, 40, 0.85); backdrop-filter: blur(18px); padding: 14px; border-radius: 20px; border: 1px solid rgba(0, 240, 255, 0.35); box-shadow: 0 16px 40px rgba(0, 0, 0, 0.85), 0 0 24px rgba(0, 240, 255, 0.15); max-width: 460px; width: 100%; margin-bottom: 18px;">
+          <svg viewBox="0 0 540 500" class="w-full h-auto block select-none" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+              <!-- Cyber Grid Pattern -->
+              <pattern id="cyberGrid" width="20" height="20" patternUnits="userSpaceOnUse">
+                <path d="M 20 0 L 0 0 0 20" fill="none" stroke="rgba(0, 240, 255, 0.07)" stroke-width="0.8"/>
+              </pattern>
+
+              <!-- Neon Glow Filters -->
+              <filter id="neonPinkGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="0" stdDeviation="6" flood-color="#ff2a8d" flood-opacity="0.8"/>
+              </filter>
+              <filter id="neonCyanGlow" x="-20%" y="-20%" width="140%" height="140%">
+                <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#00f0ff" flood-opacity="0.6"/>
+              </filter>
+              <filter id="mapShadow" x="-10%" y="-10%" width="120%" height="120%">
+                <feDropShadow dx="0" dy="4" stdDeviation="6" flood-color="#000000" flood-opacity="0.7"/>
+              </filter>
+            </defs>
+
+            <!-- Base Canvas & Blueprint Grid -->
+            <rect x="0" y="0" width="540" height="500" rx="16" fill="#040816"/>
+            <rect x="16" y="16" width="508" height="468" rx="12" fill="#091124" stroke="rgba(0, 240, 255, 0.25)" stroke-width="1.2"/>
+            <rect x="16" y="16" width="508" height="468" rx="12" fill="url(#cyberGrid)"/>
+
+            <!-- HUD Corner Crosshairs & Accents -->
+            <path d="M 24 38 L 24 24 L 38 24" fill="none" stroke="#00f0ff" stroke-width="2"/>
+            <path d="M 516 38 L 516 24 L 502 24" fill="none" stroke="#00f0ff" stroke-width="2"/>
+            <path d="M 24 462 L 24 476 L 38 476" fill="none" stroke="#00f0ff" stroke-width="2"/>
+            <path d="M 516 462 L 516 476 L 502 476" fill="none" stroke="#00f0ff" stroke-width="2"/>
+
+            <!-- Connecting Corridors / Architectural Floor Guide Paths -->
+            <rect x="160" y="32" width="30" height="380" fill="rgba(0, 240, 255, 0.03)"/>
+            <rect x="36" y="160" width="468" height="30" fill="rgba(0, 240, 255, 0.03)"/>
+            <rect x="36" y="390" width="468" height="24" fill="rgba(0, 240, 255, 0.03)"/>
+
+            <!-- ==========================================================================
+                 1. FLEXSCAPE ROOM (North-West) — KEY COLOR (NEON PINK #ff2a8d)
+                 ========================================================================== -->
+            <rect x="36" y="36" width="140" height="104" rx="8" fill="rgba(255, 42, 141, 0.25)" stroke="#ff2a8d" stroke-width="2.5" filter="url(#neonPinkGlow)"/>
+            
+            <!-- Room Inner Decorative Motion Chamber Ring -->
+            <circle cx="106" cy="80" r="24" fill="none" stroke="rgba(255, 42, 141, 0.4)" stroke-dasharray="4 3" stroke-width="1.5"/>
+            <!-- Pulsing Center Figure Icon -->
+            <text x="106" y="87" font-size="22" text-anchor="middle">🧘</text>
+            
+            <!-- FlexScape Room Header Badge -->
+            <rect x="44" y="108" width="124" height="22" rx="4" fill="#ff2a8d" filter="url(#mapShadow)"/>
+            <text x="106" y="123" font-family="'Orbitron', sans-serif" font-size="8.5" font-weight="900" fill="#ffffff" letter-spacing="0.8" text-anchor="middle">★ FLEXSCAPE ROOM</text>
+            
+            <!-- Destination Door Opening / Beacon -->
+            <circle cx="106" cy="140" r="10" fill="none" stroke="#ff2a8d" stroke-width="2" class="destination-pulse"/>
+
+            <!-- ==========================================================================
+                 2. MEETING ROOMS (North-East) — DIFFERENT COLOR OUTLINE (PURPLE #a855f7)
+                 ========================================================================== -->
+            <!-- Meeting Room 1 -->
+            <rect x="355" y="36" width="70" height="52" rx="6" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" stroke-width="1.8"/>
+            <ellipse cx="390" cy="58" rx="15" ry="9" fill="none" stroke="#a855f7" stroke-width="1.2"/>
+            <text x="390" y="80" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#d8b4fe" text-anchor="middle">MEETING 1</text>
+
+            <!-- Meeting Room 2 -->
+            <rect x="435" y="36" width="70" height="52" rx="6" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" stroke-width="1.8"/>
+            <ellipse cx="470" cy="58" rx="15" ry="9" fill="none" stroke="#a855f7" stroke-width="1.2"/>
+            <text x="470" y="80" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#d8b4fe" text-anchor="middle">MEETING 2</text>
+
+            <!-- Meeting Room 3 -->
+            <rect x="355" y="96" width="70" height="52" rx="6" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" stroke-width="1.8"/>
+            <ellipse cx="390" cy="118" rx="15" ry="9" fill="none" stroke="#a855f7" stroke-width="1.2"/>
+            <text x="390" y="140" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#d8b4fe" text-anchor="middle">MEETING 3</text>
+
+            <!-- Meeting Room 4 -->
+            <rect x="435" y="96" width="70" height="52" rx="6" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" stroke-width="1.8"/>
+            <ellipse cx="470" cy="118" rx="15" ry="9" fill="none" stroke="#a855f7" stroke-width="1.2"/>
+            <text x="470" y="140" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#d8b4fe" text-anchor="middle">MEETING 4</text>
+
+            <!-- ==========================================================================
+                 3. BOOK SECTIONS — DIFFERENT COLOR OUTLINE (SKY BLUE #38bdf8)
+                 ========================================================================== -->
+            <!-- Book Stacks Row 1 -->
+            <rect x="200" y="36" width="130" height="28" rx="4" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.6"/>
+            <line x1="210" y1="50" x2="320" y2="50" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="265" y="46" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#bae6fd" text-anchor="middle">BOOKSTACKS • A</text>
+
+            <!-- Book Stacks Row 2 -->
+            <rect x="200" y="74" width="130" height="28" rx="4" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.6"/>
+            <line x1="210" y1="88" x2="320" y2="88" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="265" y="84" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#bae6fd" text-anchor="middle">BOOKSTACKS • B</text>
+
+            <!-- Book Stacks Row 3 -->
+            <rect x="200" y="112" width="130" height="28" rx="4" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.6"/>
+            <line x1="210" y1="126" x2="320" y2="126" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3"/>
+            <text x="265" y="122" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#bae6fd" text-anchor="middle">BOOKSTACKS • C</text>
+
+            <!-- East Book Wing (Fiction & Reference) -->
+            <rect x="355" y="196" width="150" height="88" rx="6" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.6"/>
+            <line x1="370" y1="216" x2="490" y2="216" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
+            <line x1="370" y1="234" x2="490" y2="234" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
+            <line x1="370" y1="252" x2="490" y2="252" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
+            <text x="430" y="272" font-family="'Orbitron', sans-serif" font-size="8" font-weight="700" fill="#bae6fd" text-anchor="middle">BOOKS • FICTION &amp; REF</text>
+
+            <!-- South Book Wing (Periodicals) -->
+            <rect x="355" y="300" width="150" height="80" rx="6" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.6"/>
+            <line x1="370" y1="320" x2="490" y2="320" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
+            <line x1="370" y1="338" x2="490" y2="338" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
+            <text x="430" y="365" font-family="'Orbitron', sans-serif" font-size="8" font-weight="700" fill="#bae6fd" text-anchor="middle">PERIODICALS &amp; JOURNALS</text>
+
+            <!-- Center Book Cluster -->
+            <rect x="200" y="200" width="130" height="96" rx="6" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.6"/>
+            <line x1="215" y1="225" x2="315" y2="225" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
+            <line x1="215" y1="245" x2="315" y2="245" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
+            <line x1="215" y1="265" x2="315" y2="265" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
+            <text x="265" y="284" font-family="'Orbitron', sans-serif" font-size="8" font-weight="700" fill="#bae6fd" text-anchor="middle">NONFICTION ARCHIVE</text>
+
+            <!-- ==========================================================================
+                 4. STUDY TABLES (West & South-West) — DIFFERENT COLOR OUTLINE (GREEN #10b981)
+                 ========================================================================== -->
+            <!-- Desk Cluster 1 (Desks 11, 12, 13, 14 - USER DESK) -->
+            <rect x="36" y="200" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
+            <text x="61" y="222" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 11</text>
+
+            <rect x="96" y="200" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
+            <text x="121" y="222" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 12</text>
+
+            <rect x="36" y="248" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
+            <text x="61" y="270" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 13</text>
+
+            <!-- Desk 14 (USER CURRENT DESK: Highlighted Green) -->
+            <rect x="96" y="248" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.28)" stroke="#10b981" stroke-width="2"/>
+            <text x="121" y="270" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="800" fill="#10b981" text-anchor="middle">Desk 14</text>
+
+            <!-- Desk Cluster 2 (Desks 15, 16, 17, 18) -->
+            <rect x="36" y="300" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
+            <text x="61" y="322" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 15</text>
+
+            <rect x="96" y="300" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
+            <text x="121" y="322" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 16</text>
+
+            <rect x="36" y="348" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
+            <text x="61" y="370" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 17</text>
+
+            <rect x="96" y="348" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
+            <text x="121" y="370" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 18</text>
+
+            <!-- Silent Study Pods Box -->
+            <rect x="36" y="420" width="110" height="52" rx="6" fill="rgba(16, 185, 129, 0.08)" stroke="#10b981" stroke-width="1.4"/>
+            <text x="91" y="445" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">QUIET STUDY PODS</text>
+            <text x="91" y="457" font-family="'Orbitron', sans-serif" font-size="6.5" font-weight="500" fill="#94a3b8" text-anchor="middle">10 Carrels</text>
+
+            <!-- ==========================================================================
+                 5. ELEVATOR (South-Center) — DIFFERENT COLOR OUTLINE (AMBER #f59e0b)
+                 ========================================================================== -->
+            <rect x="180" y="420" width="140" height="52" rx="6" fill="rgba(245, 158, 11, 0.12)" stroke="#f59e0b" stroke-width="1.8"/>
+            <!-- Dual Elevator Cabs -->
+            <rect x="194" y="429" width="34" height="34" rx="3" fill="rgba(245, 158, 11, 0.22)" stroke="#f59e0b" stroke-width="1.2"/>
+            <line x1="211" y1="429" x2="211" y2="463" stroke="#f59e0b" stroke-width="1"/>
+            
+            <rect x="238" y="429" width="34" height="34" rx="3" fill="rgba(245, 158, 11, 0.22)" stroke="#f59e0b" stroke-width="1.2"/>
+            <line x1="255" y1="429" x2="255" y2="463" stroke="#f59e0b" stroke-width="1"/>
+
+            <text x="296" y="444" font-family="'Orbitron', sans-serif" font-size="8" font-weight="800" fill="#fbbf24">ELEVATOR</text>
+            <text x="296" y="455" font-family="'Orbitron', sans-serif" font-size="6.5" font-weight="600" fill="#fde68a">Cores 1 &amp; 2</text>
+
+            <!-- ==========================================================================
+                 6. ENTRANCE (South-East) — DIFFERENT COLOR OUTLINE (CYAN #00f0ff)
+                 ========================================================================== -->
+            <rect x="355" y="420" width="150" height="52" rx="6" fill="rgba(0, 240, 255, 0.12)" stroke="#00f0ff" stroke-width="1.8"/>
+            <!-- Turnstiles / Gates lines -->
+            <line x1="375" y1="432" x2="375" y2="460" stroke="#00f0ff" stroke-width="2"/>
+            <line x1="392" y1="432" x2="392" y2="460" stroke="#00f0ff" stroke-width="2"/>
+            <line x1="409" y1="432" x2="409" y2="460" stroke="#00f0ff" stroke-width="2"/>
+
+            <text x="455" y="444" font-family="'Orbitron', sans-serif" font-size="8" font-weight="800" fill="#00f0ff">ENTRANCE</text>
+            <text x="455" y="455" font-family="'Orbitron', sans-serif" font-size="6.5" font-weight="600" fill="#94a3b8">Smart Gates ▲</text>
+
+            <!-- ==========================================================================
+                 7. STRAIGHT NAVIGATION LINE (Straight Segments from Desk 14 to Room 1)
+                 ========================================================================== -->
+            <!-- Underlay Neon Pink Glow -->
+            <path d="M 146 266 L 175 266 L 175 140 L 106 140" fill="none" stroke="rgba(255, 42, 141, 0.4)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+            
+            <!-- Animated Route Flow (Pure Straight Lines) -->
+            <path d="M 146 266 L 175 266 L 175 140 L 106 140" fill="none" stroke="#ff2a8d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 6" class="nav-route-flow"/>
+
+            <!-- Moving Active Position Particle -->
+            <circle r="4.5" fill="#39ff14" filter="drop-shadow(0 0 6px #39ff14)">
+              <animateMotion path="M 146 266 L 175 266 L 175 140 L 106 140" dur="2.4s" repeatCount="indefinite" />
+            </circle>
+
+            <!-- ==========================================================================
+                 8. CURRENT LOCATION: "YOU ARE HERE" PIN AT DESK 14
+                 ========================================================================== -->
+            <!-- Sonar Pulse Ring -->
+            <circle cx="121" cy="266" r="10" fill="none" stroke="#00f0ff" stroke-width="2.5" class="user-sonar-ring"/>
+            
+            <!-- Black & Cyan Circle Pin -->
+            <circle cx="121" cy="266" r="17" fill="#030611" stroke="#00f0ff" stroke-width="2.5" filter="url(#mapShadow)"/>
+            <text x="121" y="261" font-family="'Orbitron', -apple-system, sans-serif" font-size="6.5" font-weight="900" fill="#ffffff" text-anchor="middle">YOU</text>
+            <text x="121" y="268" font-family="'Orbitron', -apple-system, sans-serif" font-size="5.5" font-weight="900" fill="#00f0ff" text-anchor="middle">ARE</text>
+            <text x="121" y="275" font-family="'Orbitron', -apple-system, sans-serif" font-size="5.5" font-weight="900" fill="#ffffff" text-anchor="middle">HERE</text>
+
+          </svg>
+        </div>
+
+        <!-- Arrived Status Box (Shown when user confirms arrival) -->
+        <div class="nav-arrived-box" id="nav-arrived-section">
+          <div style="font-size: 34px; margin-bottom: 6px;">🧘</div>
+          <div style="font-family: 'Orbitron', sans-serif; font-size: 16px; font-weight: 800; color: #39ff14; letter-spacing: 0.5px;">
+            Arrived at FlexScape Room
+          </div>
+          <div style="font-size: 13px; color: #94a3b8; margin-top: 4px;">
+            Follow the interactive wall screen in the room to begin your posture exercises.
+          </div>
+          <div class="nav-arrived-timer" id="nav-arrived-stopwatch">
+            00:00
+          </div>
+          <button class="btn-main-dark w-full mt-3" id="btn-nav-finish-break" style="max-width: 100%; height: 50px; font-size: 15px; border-color: #39ff14; box-shadow: 0 0 16px rgba(57,255,20,0.35);">
+            Finish Break • Return to Study Desk
+          </button>
+        </div>
+
+        <!-- Action Buttons Group -->
+        <div class="nav-action-group">
+          <button class="btn-main-dark w-full" id="btn-nav-arrived" style="max-width: 100%; margin-bottom: 0;">
+            Arrived?
+          </button>
+          <button class="page2-btn" id="btn-nav-cancel-break" style="max-width: 100%; height: 48px; font-size: 14px;">
+            Return to study desk
+          </button>
+        </div>
+
+      </div>
+    </article>
+
   </main>
 
   <!-- ==========================================================================
@@ -955,7 +2485,7 @@
         </div>
 
         <!-- Colon -->
-        <div style="font-family: var(--font-digital); font-size: 28px; font-weight: 700; color: #9CA3AF;">:</div>
+        <div style="font-family: 'Orbitron', sans-serif; font-size: 28px; font-weight: 800; color: #00f0ff;">:</div>
 
         <!-- Seconds Slide Box -->
         <div class="slide-unit-box" id="slide-box-secs" title="Drag up or down to adjust seconds">
@@ -977,9 +2507,9 @@
        POPUP MODAL: BREAK OPTIONS (ROOM vs SHORT BREAK)
        ========================================================================== -->
   <div class="modal-backdrop-center" id="break-choice-backdrop">
-    <div class="modal-card-center" style="max-width: 400px; padding: 26px 20px;">
+    <div class="modal-card-center" style="max-width: 420px; padding: 28px 22px;">
       <h2 class="modal-title-center" style="margin-bottom: 6px;">Choose Break Type</h2>
-      <p style="font-size: 13.5px; color: var(--text-muted); text-align: center; margin-bottom: 18px;">
+      <p style="font-size: 14px; color: var(--text-muted); text-align: center; margin-bottom: 18px;">
         Select how you would like to take your break
       </p>
 
@@ -989,7 +2519,7 @@
           <span class="choice-card-badge">ROOM</span>
           <div class="choice-card-icon">🧘</div>
           <div class="choice-card-title">FlexScape Room</div>
-          <div class="choice-card-desc">Interactive room activities & arm gesture games</div>
+          <div class="choice-card-desc">Interactive posture tracking & 360° stretch chamber</div>
         </div>
 
         <!-- Short Break Option -->
@@ -1008,26 +2538,139 @@
   </div>
 
   <!-- ==========================================================================
-       POPUP MODAL: FLEXSCAPE ROOM ACTIVITY
+       CENTER POPUP MODAL: STUDENT LOGIN (UniKey Format Check)
        ========================================================================== -->
-  <div class="modal-backdrop-center" id="room-modal-backdrop">
-    <div class="modal-card-center" style="max-width: 380px; text-align: center; padding: 32px 24px;">
-      <div style="font-size: 42px; margin-bottom: 12px; filter: drop-shadow(0 4px 14px rgba(48,223,242,0.4));">🧘</div>
-      <h2 class="modal-title-center" style="margin-bottom: 12px; font-size: 22px;">FlexScape Room</h2>
-
-      <p style="font-size: 16px; line-height: 1.6; color: var(--text-main); font-weight: 500; margin-bottom: 24px; padding: 0 8px;">
-        Go to FlexScape room activity Thanks
+  <div class="modal-backdrop-center" id="login-modal-backdrop">
+    <div class="modal-card-center" style="max-width: 400px; padding: 28px 22px;">
+      <div class="onboarding-step-pill" style="margin-bottom: 8px;">
+        <span>STUDENT LOGIN</span>
+      </div>
+      <h2 class="modal-title-center" style="margin-bottom: 6px;">Sign In to Device</h2>
+      <p style="font-size: 13px; color: var(--text-muted); text-align: center; margin-bottom: 18px;">
+        Enter your university key to retrieve your desk booking.
       </p>
 
-      <button class="modal-btn-confirm" id="btn-close-room-modal">
-        Got it
+      <div class="input-group">
+        <label class="input-label" for="login-unikey">
+          <span>UniKey</span>
+          <span class="text-[10px] text-slate-400 font-normal">4 letters + 4 digits</span>
+        </label>
+        <input type="text" id="login-unikey" class="input-text-field uppercase" placeholder="e.g. abcd1234" maxlength="8">
+        <div class="input-feedback" id="login-unikey-feedback">
+          <span>• Format: 4 letters + 4 digits</span>
+        </div>
+      </div>
+
+      <div class="input-group" style="margin-bottom: 20px;">
+        <label class="input-label" for="login-password">Password / PIN</label>
+        <input type="password" id="login-password" class="input-text-field" placeholder="••••••••" value="student123">
+      </div>
+
+      <div class="flex flex-col gap-3 w-full">
+        <button class="btn-main-dark w-full" id="btn-login-submit" style="max-width: 100%; height: 50px; margin-bottom: 0;">
+          Login & Continue ➔
+        </button>
+        <button class="page2-btn w-full" id="btn-login-cancel" style="max-width: 100%; height: 44px; font-size: 13px;">
+          Cancel
+        </button>
+      </div>
+
+      <div class="mt-4 pt-3 border-t border-white/10 w-full text-center">
+        <button class="text-xs font-orbitron font-bold text-[#00f0ff] hover:underline flex items-center justify-center gap-1 mx-auto" id="btn-login-fill-demo">
+          <i class="fa-solid fa-wand-magic-sparkles"></i>
+          <span>Fill Demo UniKey (glor1234)</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==========================================================================
+       POPUP MODAL: ACCOUNT SETTINGS
+       ========================================================================== -->
+  <div class="modal-backdrop-center" id="settings-modal-backdrop">
+    <div class="modal-card-center settings-modal-card">
+      <div class="modal-header-row">
+        <h2 class="modal-title-center font-exo font-black text-xl text-white tracking-tight" style="margin-bottom: 0;">
+          <span class="text-[#00f0ff]">Account</span> Settings
+        </h2>
+        <button class="modal-close-btn" id="btn-close-settings" type="button" aria-label="Close Settings">✕</button>
+      </div>
+
+      <!-- Current Account Details (Read-Only • Not Editable) -->
+      <div class="settings-readonly-card">
+        <div class="readonly-card-header">
+          <span class="readonly-card-title">
+            <i class="fa-solid fa-lock text-[#00f0ff] mr-1.5"></i> Current Account Details
+          </span>
+          <span class="readonly-badge">VERIFIED</span>
+        </div>
+        <div class="readonly-grid">
+          <div class="readonly-item">
+            <span class="readonly-label">UniKey ID</span>
+            <span class="readonly-value font-mono text-[#00f0ff]" id="settings-readonly-unikey">GLOR1234</span>
+          </div>
+          <div class="readonly-item">
+            <span class="readonly-label">Current Location</span>
+            <span class="readonly-value" id="settings-readonly-location">Study Desk 14 • Level 2</span>
+          </div>
+          <div class="readonly-item">
+            <span class="readonly-label">Access Status</span>
+            <span class="readonly-value text-[#39ff14]">● Active Scholar</span>
+          </div>
+          <div class="readonly-item">
+            <span class="readonly-label">Reminder Device</span>
+            <span class="readonly-value">Desk Sensor Synced</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1. Change Profile Pictures -->
+      <div class="settings-group">
+        <label class="settings-group-label">1. Change Profile Picture</label>
+        <div class="settings-avatar-preview-box">
+          <div class="avatar-hero-preview" id="settings-avatar-preview" style="width: 72px; height: 72px; font-size: 38px;">
+            <span id="settings-avatar-preview-icon">🧘</span>
+          </div>
+        </div>
+        <div class="avatar-presets-grid" style="grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 12px;">
+          <button type="button" class="avatar-preset-btn settings-avatar-opt selected" data-avatar="🧘">🧘</button>
+          <button type="button" class="avatar-preset-btn settings-avatar-opt" data-avatar="⚡">⚡</button>
+          <button type="button" class="avatar-preset-btn settings-avatar-opt" data-avatar="🏃">🏃</button>
+          <button type="button" class="avatar-preset-btn settings-avatar-opt" data-avatar="🎯">🎯</button>
+          <button type="button" class="avatar-preset-btn settings-avatar-opt" data-avatar="🚀">🚀</button>
+          <button type="button" class="avatar-preset-btn settings-avatar-opt" data-avatar="💡">💡</button>
+          <button type="button" class="avatar-preset-btn settings-avatar-opt" data-avatar="🧠">🧠</button>
+          <button type="button" class="avatar-preset-btn settings-avatar-opt" data-avatar="🌟">🌟</button>
+        </div>
+        <label class="settings-upload-btn">
+          <i class="fa-solid fa-camera"></i> Upload Custom Photo
+          <input type="file" id="settings-avatar-file-input" accept="image/*" style="display: none;">
+        </label>
+      </div>
+
+      <!-- 2. Change Username (Website Cyberpunk Input Style) -->
+      <div class="settings-group" style="margin-top: 18px;">
+        <label class="settings-group-label" for="settings-username-input">
+          <span>2. Change Username</span>
+        </label>
+        <div class="cyber-input-wrap">
+          <span class="cyber-input-icon">
+            <i class="fa-solid fa-user-pen text-[#00f0ff]"></i>
+          </span>
+          <input type="text" id="settings-username-input" class="cyber-input-field" placeholder="Enter new username" maxlength="20" autocomplete="off">
+          <span class="cyber-input-badge">EDIT</span>
+        </div>
+        <span class="text-[11px] text-slate-400 mt-1.5 block">English letters and numbers only.</span>
+      </div>
+
+      <!-- Save Button -->
+      <button class="btn-main-dark w-full mt-5" id="btn-save-settings" type="button" style="max-width: 100%; height: 50px; font-size: 15px;">
+        Save Changes
       </button>
     </div>
   </div>
 
-
-
-  <!-- Sound Generator & Haptic FX Engine (iOS & Android Universal) -->
+  <!-- Sound Generator & Haptic FX Engine (Universal Web Audio) -->
   <script>
     class WebAudioHelper {
       constructor() {
@@ -1121,8 +2764,6 @@
         this.init();
         if (!this.ctx) return;
         const now = this.ctx.currentTime;
-        // Acoustic sub-bass physical haptic pulse pattern
-        // Resonates mobile speaker chambers (Taptic / speaker enclosure on iPhone)
         const pulses = [
           { start: 0.0, dur: 0.18, freq: 62 },
           { start: 0.28, dur: 0.22, freq: 56 },
@@ -1154,7 +2795,6 @@
         this.hasVibrate = typeof navigator !== "undefined" && Boolean(navigator.vibrate);
       }
 
-      // Light tap / tick (mini options, cancel, fullscreen)
       light() {
         if (this.hasVibrate) {
           try { navigator.vibrate(15); } catch(e) {}
@@ -1164,7 +2804,6 @@
         }
       }
 
-      // Selection tick (stepper, touch slider drag step)
       selection() {
         if (this.hasVibrate) {
           try { navigator.vibrate(10); } catch(e) {}
@@ -1174,7 +2813,6 @@
         }
       }
 
-      // Medium impact (modals, break choices, toggles)
       medium() {
         if (this.hasVibrate) {
           try { navigator.vibrate(35); } catch(e) {}
@@ -1184,7 +2822,6 @@
         }
       }
 
-      // Success / Confirmation (confirm interval, start study, finish study)
       success() {
         if (this.hasVibrate) {
           try { navigator.vibrate([20, 35, 30]); } catch(e) {}
@@ -1194,7 +2831,6 @@
         }
       }
 
-      // Heavy Break Alarm Vibration (Break alert on countdown completion)
       alarm() {
         if (this.hasVibrate) {
           try { navigator.vibrate([200, 100, 250, 100, 400]); } catch(e) {}
@@ -1208,7 +2844,6 @@
     const sound = new WebAudioHelper();
     const haptic = new HapticFeedback(sound);
 
-    // Auto unlock audio & haptics on first touch / tap for iOS Safari
     const unlockAudio = () => {
       sound.init();
       document.removeEventListener("touchstart", unlockAudio);
@@ -1225,7 +2860,7 @@
     /* ==========================================================================
        State Management
        ========================================================================== */
-    let selectedIntervalSeconds = null; // null until chosen
+    let selectedIntervalSeconds = null;
     let isStudyActive = false;
     let isBreakActive = false;
     
@@ -1248,16 +2883,58 @@
     /* ==========================================================================
        DOM Elements
        ========================================================================== */
+    // Onboarding Pages
+    const pageOnboardingAuth = document.getElementById("page-onboarding-auth");
+    const pageOnboardingTerms = document.getElementById("page-onboarding-terms");
+    const pageOnboardingData = document.getElementById("page-onboarding-data");
     const pageHome = document.getElementById("page-home");
     const pageStudy = document.getElementById("page-study");
     const pageStats = document.getElementById("page-stats");
+    const pageNavigation = document.getElementById("page-navigation");
 
+    // Step 1: Auth Choice
+    const btnAuthGotoLogin = document.getElementById("btn-auth-goto-login");
+    const btnAuthGotoSignup = document.getElementById("btn-auth-goto-signup");
+    const btnQuickDemoLogin = document.getElementById("btn-quick-demo-login");
+
+    // Step 2: Terms
+    const btnTermsBack = document.getElementById("btn-terms-back");
+    const termsAgreeCheckbox = document.getElementById("terms-agree-checkbox");
+    const btnTermsContinue = document.getElementById("btn-terms-continue");
+
+    // Step 3: Data Input
+    const btnDataBack = document.getElementById("btn-data-back");
+    const avatarPreviewDisplay = document.getElementById("avatar-preview-display");
+    const avatarPreviewIcon = document.getElementById("avatar-preview-icon");
+    const inputAvatarFile = document.getElementById("input-avatar-file");
+    const avatarPresetBtns = document.querySelectorAll(".avatar-preset-btn");
+    const inputUsername = document.getElementById("input-username");
+    const usernameFeedback = document.getElementById("username-feedback");
+    const inputUnikey = document.getElementById("input-unikey");
+    const unikeyFeedback = document.getElementById("unikey-feedback");
+    const btnDataSubmit = document.getElementById("btn-data-submit");
+
+    // Login Modal
+    const loginModalBackdrop = document.getElementById("login-modal-backdrop");
+    const loginUnikey = document.getElementById("login-unikey");
+    const loginUnikeyFeedback = document.getElementById("login-unikey-feedback");
+    const loginPassword = document.getElementById("login-password");
+    const btnLoginSubmit = document.getElementById("btn-login-submit");
+    const btnLoginCancel = document.getElementById("btn-login-cancel");
+    const btnLoginFillDemo = document.getElementById("btn-login-fill-demo");
+
+    // Step 4: Home / Booking
+    const homeUserAvatar = document.getElementById("home-user-avatar");
+    const homeUserName = document.getElementById("home-user-name");
+    const homeUserUnikey = document.getElementById("home-user-unikey");
+    const btnSwitchAccount = document.getElementById("btn-switch-account");
     const homeStartBtn = document.getElementById("home-start-btn");
     const btnOpt5s = document.getElementById("btn-opt-5s");
     const btnOpt30s = document.getElementById("btn-opt-30s");
     const btnOptCustom = document.getElementById("btn-opt-custom");
 
-    const studyStopwatch = document.getElementById("study-stopwatch");
+    // Page 2: Study Break Countdown
+    const studyCountdownDisplay = document.getElementById("study-countdown-display");
     const countdownText = document.getElementById("countdown-text");
     const breakActionBtn = document.getElementById("break-action-btn");
     const breakBtnIcon = document.getElementById("break-btn-icon");
@@ -1267,6 +2944,7 @@
     const breakHudLabel = document.getElementById("break-hud-label");
     const breakHudTimer = document.getElementById("break-hud-timer");
 
+    // Page 3: Stats
     const statFinalTime = document.getElementById("stat-final-time");
     const statBreaksText = document.getElementById("stat-breaks-text");
     const statStartTime = document.getElementById("stat-start-time");
@@ -1287,206 +2965,299 @@
     const btnSecDown = document.getElementById("btn-sec-down");
     const btnConfirmCustom = document.getElementById("btn-confirm-custom");
 
-    // Break Choice Modal & Room Activity Modal
+    // Break Choice Modal
     const breakChoiceBackdrop = document.getElementById("break-choice-backdrop");
     const btnChooseRoomBreak = document.getElementById("btn-choose-room-break");
     const btnChooseShortBreak = document.getElementById("btn-choose-short-break");
     const btnCancelBreakChoice = document.getElementById("btn-cancel-break-choice");
-    const roomModalBackdrop = document.getElementById("room-modal-backdrop");
-    const btnCloseRoomModal = document.getElementById("btn-close-room-modal");
+
+    // Page 4: Indoor Navigation References
+    const btnNavArrived = document.getElementById("btn-nav-arrived");
+    const btnNavFinishBreak = document.getElementById("btn-nav-finish-break");
+    const btnNavCancelBreak = document.getElementById("btn-nav-cancel-break");
+    const btnNavReturnStudy = document.getElementById("btn-nav-return-study");
+    const navStepsSection = document.getElementById("nav-steps-section");
+    const navArrivedSection = document.getElementById("nav-arrived-section");
+    const navArrivedStopwatch = document.getElementById("nav-arrived-stopwatch");
+
+    // Post-Login Account Menu & Settings Modal
+    const postLoginAccount = document.getElementById("post-login-account");
+    const btnAccountAvatar = document.getElementById("btn-account-avatar");
+    const globalAccountAvatar = document.getElementById("global-account-avatar");
+    const accountExpandMenu = document.getElementById("account-expand-menu");
+    const menuUserAvatar = document.getElementById("menu-user-avatar");
+    const menuUserName = document.getElementById("menu-user-name");
+    const menuUserUnikey = document.getElementById("menu-user-unikey");
+    const menuBtnSettings = document.getElementById("menu-btn-settings");
+    const menuBtnLogout = document.getElementById("menu-btn-logout");
+
+    const settingsModalBackdrop = document.getElementById("settings-modal-backdrop");
+    const btnCloseSettings = document.getElementById("btn-close-settings");
+    const settingsAvatarPreview = document.getElementById("settings-avatar-preview");
+    const settingsAvatarOpts = document.querySelectorAll(".settings-avatar-opt");
+    const settingsAvatarFileInput = document.getElementById("settings-avatar-file-input");
+    const settingsUsernameInput = document.getElementById("settings-username-input");
+    const btnSaveSettings = document.getElementById("btn-save-settings");
+    const settingsReadonlyUnikey = document.getElementById("settings-readonly-unikey");
+    const settingsReadonlyLocation = document.getElementById("settings-readonly-location");
+
+    let tempSettingsAvatar = "🧘";
+    let tempSettingsAvatarType = "emoji";
 
     /* ==========================================================================
-       Formatters (Time & Timestamps)
+       Current User State
        ========================================================================== */
-    function formatStopwatch(ms) {
-      const totalSec = Math.floor(ms / 1000);
-      const hours = Math.floor(totalSec / 3600);
-      const mins = Math.floor((totalSec % 3600) / 60);
-      const secs = totalSec % 60;
-      return `${String(hours).padStart(2, '0')}:${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
+    let currentUser = {
+      username: "Alex99",
+      unikey: "glor1234",
+      avatarType: "emoji", // "emoji" or "image"
+      avatarValue: "🧘",
+      isLoggedIn: false
+    };
+
+    function updateProfileUI() {
+      // Global post-login profile picture button
+      if (globalAccountAvatar) {
+        if (currentUser.avatarType === "image") {
+          globalAccountAvatar.innerHTML = `<img src="${currentUser.avatarValue}" alt="Avatar">`;
+        } else {
+          globalAccountAvatar.innerText = currentUser.avatarValue || "🧘";
+        }
+      }
+
+      // Expand menu user card
+      if (menuUserAvatar) {
+        if (currentUser.avatarType === "image") {
+          menuUserAvatar.innerHTML = `<img src="${currentUser.avatarValue}" alt="Avatar">`;
+        } else {
+          menuUserAvatar.innerText = currentUser.avatarValue || "🧘";
+        }
+      }
+      if (menuUserName) menuUserName.innerText = currentUser.username || "Student";
+      if (menuUserUnikey) menuUserUnikey.innerText = `UniKey: ${(currentUser.unikey || "glor1234").toLowerCase()}`;
+
+      // Settings Read-Only Account Details
+      if (settingsReadonlyUnikey) {
+        settingsReadonlyUnikey.innerText = (currentUser.unikey || "glor1234").toUpperCase();
+      }
+      if (settingsReadonlyLocation) {
+        settingsReadonlyLocation.innerText = "Study Desk 14 • Level 2";
+      }
+
+      // Step 4 Home Pill (if present)
+      if (homeUserName) homeUserName.innerText = currentUser.username || "Student";
+      if (homeUserUnikey) homeUserUnikey.innerText = `UniKey: ${(currentUser.unikey || "glor1234").toLowerCase()}`;
+      if (homeUserAvatar) {
+        if (currentUser.avatarType === "image") {
+          homeUserAvatar.innerHTML = `<img src="${currentUser.avatarValue}" alt="Avatar">`;
+        } else {
+          homeUserAvatar.innerText = currentUser.avatarValue || "🧘";
+        }
+      }
     }
 
-    function formatTimeAMPM(date) {
-      if (!date) return "--:-- --";
+    /* ==========================================================================
+       Formatters
+       ========================================================================== */
+    function formatCountdownDisplay(totalSeconds) {
+      if (totalSeconds < 0) totalSeconds = 0;
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+
+      if (hours > 0) {
+        return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}`;
+      } else if (minutes > 0) {
+        return `00:${String(minutes).padStart(2, "0")}`;
+      } else {
+        return `00:${String(seconds).padStart(2, "0")}`;
+      }
+    }
+
+    function formatStopwatchTime(totalMs) {
+      const totalSeconds = Math.floor(totalMs / 1000);
+      const hours = Math.floor(totalSeconds / 3600);
+      const minutes = Math.floor((totalSeconds % 3600) / 60);
+      const seconds = totalSeconds % 60;
+      return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    }
+
+    function formatClockTime(date) {
+      if (!date) return "--:--";
       let hours = date.getHours();
-      const mins = String(date.getMinutes()).padStart(2, '0');
-      const ampm = hours >= 12 ? 'pm' : 'am';
+      const minutes = date.getMinutes();
+      const ampm = hours >= 12 ? "pm" : "am";
       hours = hours % 12;
-      hours = hours ? hours : 12; // 0 becomes 12
-      return `${String(hours).padStart(2, '0')}:${mins} ${ampm}`;
+      hours = hours ? hours : 12;
+      return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")} ${ampm}`;
     }
 
     /* ==========================================================================
-       Page Navigation Controller (Page 1 ➔ Page 2 ➔ Page 3)
+       Screen Navigation
        ========================================================================== */
-    function showPage(pageId) {
-      [pageHome, pageStudy, pageStats].forEach(p => p.classList.remove("active"));
+    function showPage(pageElement) {
+      [pageOnboardingAuth, pageOnboardingTerms, pageOnboardingData, pageHome, pageStudy, pageStats, pageNavigation].forEach(p => p && p.classList.remove("active"));
+      if (pageElement) {
+        pageElement.classList.add("active");
+        pageElement.scrollTop = 0;
+      }
 
-      if (pageId === "home") {
-        pageHome.classList.add("active");
-      } else if (pageId === "study") {
-        pageStudy.classList.add("active");
-      } else if (pageId === "stats") {
-        pageStats.classList.add("active");
+      // Profile picture only visible for all screens after login
+      const isPostLogin = [pageHome, pageStudy, pageStats, pageNavigation].includes(pageElement);
+      if (postLoginAccount) {
+        postLoginAccount.style.display = isPostLogin ? "block" : "none";
+      }
+
+      // Close expand tab when changing screens
+      if (accountExpandMenu) {
+        accountExpandMenu.classList.remove("open");
       }
     }
 
     /* ==========================================================================
-       Page 1: Interval Selection Logic
+       Page 1: Break Interval Selection Logic
        ========================================================================== */
-    function selectInterval(seconds, btnElement) {
-      sound.playClick();
-      haptic.light();
+    function selectOption(seconds, buttonElement) {
+      haptic.medium();
       selectedIntervalSeconds = seconds;
-
-      // Highlight active mini button
-      [btnOpt5s, btnOpt30s, btnOptCustom].forEach(b => b.classList.remove("selected"));
-      if (btnElement) {
-        btnElement.classList.add("selected");
+      
+      [btnOpt5s, btnOpt30s, btnOptCustom].forEach(btn => btn.classList.remove("selected"));
+      if (buttonElement) {
+        buttonElement.classList.add("selected");
       }
 
-      // Enable main Start button
-      homeStartBtn.removeAttribute("disabled");
+      homeStartBtn.disabled = false;
+      homeStartBtn.classList.add("active");
     }
 
-    btnOpt5s.addEventListener("click", () => {
-      selectInterval(5, btnOpt5s);
-    });
-
-    btnOpt30s.addEventListener("click", () => {
-      selectInterval(30, btnOpt30s);
-    });
+    btnOpt5s.addEventListener("click", () => selectOption(5, btnOpt5s));
+    btnOpt30s.addEventListener("click", () => selectOption(30, btnOpt30s));
 
     btnOptCustom.addEventListener("click", () => {
+      haptic.light();
       openCustomModal();
     });
 
+    homeStartBtn.addEventListener("click", () => {
+      if (!selectedIntervalSeconds) return;
+      haptic.success();
+      startStudySession();
+    });
+
     /* ==========================================================================
-       Custom Modal: Sliding / Touch Drag & Stepper Logic (0 to 59)
+       Custom Digital Interval Wheel Logic (0 to 59)
        ========================================================================== */
-    function setCustomTime(mins, secs) {
-      customMins = Math.max(0, Math.min(59, mins));
-      customSecs = Math.max(0, Math.min(59, secs));
-
-      const mStr = String(customMins).padStart(2, '0');
-      const sStr = String(customSecs).padStart(2, '0');
-
-      previewMins.innerText = mStr;
-      previewSecs.innerText = sStr;
-      displayMins.innerText = mStr;
-      displaySecs.innerText = sStr;
-    }
-
     function openCustomModal() {
-      sound.playClick();
-      haptic.medium();
+      updateDigitalDisplay();
       customModalBackdrop.classList.add("open");
-      setCustomTime(customMins, customSecs);
     }
 
     function closeCustomModal() {
-      haptic.light();
       customModalBackdrop.classList.remove("open");
     }
 
-    customModalBackdrop.addEventListener("click", (e) => {
-      if (e.target === customModalBackdrop) {
-        closeCustomModal();
-      }
-    });
+    function updateDigitalDisplay() {
+      const minStr = String(customMins).padStart(2, "0");
+      const secStr = String(customSecs).padStart(2, "0");
+      previewMins.innerText = minStr;
+      previewSecs.innerText = secStr;
+      displayMins.innerText = minStr;
+      displaySecs.innerText = secStr;
+    }
 
-    // Touch / Pointer Drag to slide values up and down smoothly with haptic ticks
-    function setupTouchSlider(containerEl, getValue, setValue) {
+    function stepMinute(delta) {
+      haptic.selection();
+      customMins = (customMins + delta + 60) % 60;
+      updateDigitalDisplay();
+    }
+
+    function stepSecond(delta) {
+      haptic.selection();
+      customSecs = (customSecs + delta + 60) % 60;
+      updateDigitalDisplay();
+    }
+
+    btnMinUp.addEventListener("click", (e) => { e.stopPropagation(); stepMinute(1); });
+    btnMinDown.addEventListener("click", (e) => { e.stopPropagation(); stepMinute(-1); });
+    btnSecUp.addEventListener("click", (e) => { e.stopPropagation(); stepSecond(1); });
+    btnSecDown.addEventListener("click", (e) => { e.stopPropagation(); stepSecond(-1); });
+
+    function makeTouchSlidable(element, onStep) {
       let startY = 0;
-      let startVal = 0;
-      let lastVal = -1;
-      let isDragging = false;
+      let accumulated = 0;
+      const STEP_THRESHOLD = 14;
 
       function onPointerDown(e) {
-        isDragging = true;
         startY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
-        startVal = getValue();
-        lastVal = startVal;
-        containerEl.classList.add("dragging");
-        haptic.selection();
-        if (e.pointerId && containerEl.setPointerCapture) {
-          try { containerEl.setPointerCapture(e.pointerId); } catch(err) {}
-        }
+        accumulated = 0;
+        element.classList.add("dragging");
+
+        window.addEventListener("pointermove", onPointerMove);
+        window.addEventListener("pointerup", onPointerUp);
+        window.addEventListener("touchmove", onTouchMove, { passive: false });
+        window.addEventListener("touchend", onPointerUp);
       }
 
       function onPointerMove(e) {
-        if (!isDragging) return;
-        const currentY = e.clientY || (e.touches && e.touches[0].clientY) || 0;
-        const deltaY = startY - currentY; // Moving UP increases value
-        
-        const steps = Math.floor(deltaY / 12);
-        let newVal = (startVal + steps) % 60;
-        if (newVal < 0) newVal += 60;
-        
-        if (newVal !== lastVal) {
-          lastVal = newVal;
-          haptic.selection();
-        }
-        setValue(newVal);
+        const currentY = e.clientY || 0;
+        processDelta(currentY);
       }
 
-      function onPointerUp(e) {
-        if (!isDragging) return;
-        isDragging = false;
-        containerEl.classList.remove("dragging");
-        sound.playClick();
-        haptic.light();
-      }
-
-      containerEl.addEventListener("pointerdown", onPointerDown);
-      containerEl.addEventListener("pointermove", onPointerMove);
-      containerEl.addEventListener("pointerup", onPointerUp);
-      containerEl.addEventListener("pointercancel", onPointerUp);
-
-      // Mouse Wheel Support
-      containerEl.addEventListener("wheel", (e) => {
+      function onTouchMove(e) {
         e.preventDefault();
-        const currentVal = getValue();
-        const step = e.deltaY < 0 ? 1 : -1;
-        let newVal = (currentVal + step) % 60;
-        if (newVal < 0) newVal += 60;
-        haptic.selection();
-        setValue(newVal);
-      }, { passive: false });
+        const currentY = e.touches[0].clientY;
+        processDelta(currentY);
+      }
+
+      function processDelta(currentY) {
+        const delta = startY - currentY;
+        accumulated += delta;
+        startY = currentY;
+
+        while (accumulated >= STEP_THRESHOLD) {
+          onStep(1);
+          accumulated -= STEP_THRESHOLD;
+        }
+        while (accumulated <= -STEP_THRESHOLD) {
+          onStep(-1);
+          accumulated += STEP_THRESHOLD;
+        }
+      }
+
+      function onPointerUp() {
+        element.classList.remove("dragging");
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("pointerup", onPointerUp);
+        window.removeEventListener("touchmove", onTouchMove);
+        window.removeEventListener("touchend", onPointerUp);
+      }
+
+      element.addEventListener("pointerdown", onPointerDown);
+      element.addEventListener("touchstart", onPointerDown, { passive: true });
     }
 
-    setupTouchSlider(slideBoxMins, () => customMins, (val) => setCustomTime(val, customSecs));
-    setupTouchSlider(slideBoxSecs, () => customSecs, (val) => setCustomTime(customMins, val));
-
-    // Steppers Listeners
-    btnMinUp.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime((customMins + 1) % 60, customSecs); sound.playClick(); haptic.selection(); });
-    btnMinDown.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime((customMins + 59) % 60, customSecs); sound.playClick(); haptic.selection(); });
-    btnSecUp.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime(customMins, (customSecs + 1) % 60); sound.playClick(); haptic.selection(); });
-    btnSecDown.addEventListener("click", (e) => { e.stopPropagation(); setCustomTime(customMins, (customSecs + 59) % 60); sound.playClick(); haptic.selection(); });
+    makeTouchSlidable(slideBoxMins, (delta) => stepMinute(delta));
+    makeTouchSlidable(slideBoxSecs, (delta) => stepSecond(delta));
 
     btnConfirmCustom.addEventListener("click", () => {
-      const totalSec = customMins * 60 + customSecs;
-      const finalSec = Math.max(5, totalSec); // Minimum 5s interval
-
-      btnOptCustom.innerText = `${String(customMins).padStart(2, '0')}:${String(customSecs).padStart(2, '0')}`;
-
-      closeCustomModal();
-      sound.playClick();
+      const totalSecs = (customMins * 60) + customSecs;
+      if (totalSecs <= 0) {
+        haptic.light();
+        return;
+      }
       haptic.success();
-      selectInterval(finalSec, btnOptCustom);
+      closeCustomModal();
+      selectOption(totalSecs, btnOptCustom);
+      btnOptCustom.innerText = `${String(customMins).padStart(2,"0")}:${String(customSecs).padStart(2,"0")}`;
+    });
+
+    customModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === customModalBackdrop) closeCustomModal();
     });
 
     /* ==========================================================================
-       Page 2: Start & Run Study Stopwatch Session
+       Page 2: Active Study Session & Stopwatch Engine
        ========================================================================== */
-    homeStartBtn.addEventListener("click", () => {
-      if (!selectedIntervalSeconds) return;
-      sound.playClick();
-      haptic.success();
-      startStudySession();
-      showPage("study");
-    });
-
     function startStudySession() {
       isStudyActive = true;
       isBreakActive = false;
@@ -1494,241 +3265,669 @@
       studyElapsedMs = 0;
       breaksTakenCount = 0;
       breakTotalDurationMs = 0;
-
-      // Reset button state
-      setBreakButtonState(false);
-
       countdownRemainingSeconds = selectedIntervalSeconds;
-      updateCountdownLabel();
 
-      if (studyTimerInterval) clearInterval(studyTimerInterval);
+      updateStudyDisplay();
+      updateCountdownDisplay();
+      showPage(pageStudy);
+
       studyTimerInterval = setInterval(() => {
+        if (!isStudyActive) return;
+        studyElapsedMs = new Date() - studyStartTime - breakTotalDurationMs;
+        updateStudyDisplay();
+
         if (!isBreakActive) {
-          studyElapsedMs += 1000;
-          studyStopwatch.innerText = formatStopwatch(studyElapsedMs);
-
           countdownRemainingSeconds--;
+          updateCountdownDisplay();
+
           if (countdownRemainingSeconds <= 0) {
-            // Trigger Break Alert with Audio Chime & Universal Haptic Alarm
-            sound.playChime();
-            countdownRemainingSeconds = selectedIntervalSeconds;
-            // Every timed break is FlexScape room break
-            startRoomBreak(true);
+            triggerBreakAlarm();
           }
-          updateCountdownLabel();
         }
       }, 1000);
     }
 
-    function updateCountdownLabel() {
-      if (countdownRemainingSeconds >= 60) {
-        const m = Math.ceil(countdownRemainingSeconds / 60);
-        countdownText.innerText = `Break in ${m} minute${m > 1 ? 's' : ''}`;
-      } else {
-        countdownText.innerText = `Break in ${countdownRemainingSeconds} second${countdownRemainingSeconds !== 1 ? 's' : ''}`;
+    function updateStudyDisplay() {
+      if (studyCountdownDisplay) {
+        studyCountdownDisplay.innerText = formatCountdownDisplay(countdownRemainingSeconds);
       }
     }
 
-    /* ==========================================================================
-       Break Actions & Modals Handling
-       ========================================================================== */
-    function setBreakButtonState(inBreak) {
-      if (inBreak) {
-        breakActionBtn.classList.add("in-break-state");
-        breakBtnIcon.innerText = "✓";
-        breakBtnText.innerText = "Back from break";
+    function updateCountdownDisplay() {
+      if (studyCountdownDisplay) {
+        studyCountdownDisplay.innerText = formatCountdownDisplay(countdownRemainingSeconds);
+      }
+      if (countdownRemainingSeconds <= 0) {
+        countdownText.innerText = "Break ready now!";
+      } else if (countdownRemainingSeconds < 60) {
+        countdownText.innerText = `Break in ${countdownRemainingSeconds}s`;
       } else {
-        breakActionBtn.classList.remove("in-break-state");
-        breakBtnIcon.innerText = "☕";
-        breakBtnText.innerText = "Break now";
+        const mins = Math.ceil(countdownRemainingSeconds / 60);
+        countdownText.innerText = `Break in ${mins} min`;
       }
     }
 
-    function openBreakChoiceModal() {
-      sound.playClick();
-      haptic.medium();
-      if (breakChoiceBackdrop) breakChoiceBackdrop.classList.add("open");
-    }
-
-    function closeBreakChoiceModal() {
-      haptic.light();
-      if (breakChoiceBackdrop) breakChoiceBackdrop.classList.remove("open");
-    }
-
-    function triggerBreakVibration() {
-      // Hardware & Acoustic Multi-Pulse Haptics (iOS & Android Universal)
+    function triggerBreakAlarm() {
       haptic.alarm();
+      openBreakChoiceModal();
     }
 
-    function startRoomBreak(isTimed = false) {
-      closeBreakChoiceModal();
-      if (isBreakActive) return;
-      isBreakActive = true;
-      breaksTakenCount++;
-      currentBreakStartTime = performance.now();
-
-      triggerBreakVibration();
-      setBreakButtonState(true);
-      if (breakHudLabel) breakHudLabel.innerText = "🧘 FlexScape room break active";
-      if (breakHud) breakHud.classList.add("show");
-      
-      let breakElapsedSec = 0;
-      if (breakHudTimer) breakHudTimer.innerText = "00:00";
-      if (breakTimerInterval) clearInterval(breakTimerInterval);
-      breakTimerInterval = setInterval(() => {
-        breakElapsedSec++;
-        const m = String(Math.floor(breakElapsedSec / 60)).padStart(2, '0');
-        const s = String(breakElapsedSec % 60).padStart(2, '0');
-        if (breakHudTimer) breakHudTimer.innerText = `${m}:${s}`;
-      }, 1000);
-
-      // Open room activity popup
-      if (roomModalBackdrop) {
-        roomModalBackdrop.classList.add("open");
-      }
-    }
-
-    function startShortBreak() {
-      closeBreakChoiceModal();
-      if (isBreakActive) return;
-      isBreakActive = true;
-      breaksTakenCount++;
-      currentBreakStartTime = performance.now();
-
-      triggerBreakVibration();
-      setBreakButtonState(true);
-      if (breakHudLabel) breakHudLabel.innerText = "☕ Short break active";
-      if (breakHud) breakHud.classList.add("show");
-
-      let breakElapsedSec = 0;
-      if (breakHudTimer) breakHudTimer.innerText = "00:00";
-      if (breakTimerInterval) clearInterval(breakTimerInterval);
-      breakTimerInterval = setInterval(() => {
-        breakElapsedSec++;
-        const m = String(Math.floor(breakElapsedSec / 60)).padStart(2, '0');
-        const s = String(breakElapsedSec % 60).padStart(2, '0');
-        if (breakHudTimer) breakHudTimer.innerText = `${m}:${s}`;
-      }, 1000);
-    }
-
-    function endBreak() {
-      if (isBreakActive) {
-        isBreakActive = false;
-        if (currentBreakStartTime) {
-          breakTotalDurationMs += (performance.now() - currentBreakStartTime);
-        }
-        if (breakTimerInterval) clearInterval(breakTimerInterval);
-        if (breakHud) breakHud.classList.remove("show");
-        setBreakButtonState(false);
-        haptic.medium();
-        if (roomModalBackdrop) roomModalBackdrop.classList.remove("open");
-        if (breakChoiceBackdrop) breakChoiceBackdrop.classList.remove("open");
-      }
-    }
-
-    // Main Break Button Clicked on Page 2 (Toggles between Option Choice / End Break)
+    /* Break Controls */
     breakActionBtn.addEventListener("click", () => {
-      sound.playClick();
+      haptic.light();
       if (isBreakActive) {
-        endBreak();
+        resumeStudyFromBreak();
       } else {
         openBreakChoiceModal();
       }
     });
 
-    if (btnChooseRoomBreak) {
-      btnChooseRoomBreak.addEventListener("click", () => {
-        sound.playClick();
+    function openBreakChoiceModal() {
+      breakChoiceBackdrop.classList.add("open");
+    }
+
+    function closeBreakChoiceModal() {
+      breakChoiceBackdrop.classList.remove("open");
+    }
+
+    btnCancelBreakChoice.addEventListener("click", () => {
+      haptic.light();
+      closeBreakChoiceModal();
+      countdownRemainingSeconds = selectedIntervalSeconds;
+      updateCountdownDisplay();
+    });
+
+    // 1. Short Break Selection
+    btnChooseShortBreak.addEventListener("click", () => {
+      haptic.medium();
+      closeBreakChoiceModal();
+      startShortBreak();
+    });
+
+    function startShortBreak() {
+      isBreakActive = true;
+      breaksTakenCount++;
+      currentBreakStartTime = new Date();
+
+      breakActionBtn.classList.add("in-break-state");
+      breakBtnIcon.innerText = "▶";
+      breakBtnText.innerText = "Back to study";
+      breakHud.classList.add("show");
+      breakHudLabel.innerText = "☕ Short break active";
+
+      breakTimerInterval = setInterval(() => {
+        const breakDuration = new Date() - currentBreakStartTime;
+        const totalSecs = Math.floor(breakDuration / 1000);
+        const mins = Math.floor(totalSecs / 60);
+        const secs = totalSecs % 60;
+        breakHudTimer.innerText = `${String(mins).padStart(2,"0")}:${String(secs).padStart(2,"0")}`;
+      }, 1000);
+    }
+
+    function resumeStudyFromBreak() {
+      haptic.success();
+      isBreakActive = false;
+      if (currentBreakStartTime) {
+        breakTotalDurationMs += (new Date() - currentBreakStartTime);
+        currentBreakStartTime = null;
+      }
+      if (breakTimerInterval) {
+        clearInterval(breakTimerInterval);
+        breakTimerInterval = null;
+      }
+
+      breakActionBtn.classList.remove("in-break-state");
+      breakBtnIcon.innerText = "☕";
+      breakBtnText.innerText = "Break now";
+      breakHud.classList.remove("show");
+
+      countdownRemainingSeconds = selectedIntervalSeconds;
+      updateCountdownDisplay();
+    }
+
+    // 2. FlexScape Room Break Navigation Flow
+    btnChooseRoomBreak.addEventListener("click", () => {
+      haptic.medium();
+      closeBreakChoiceModal();
+      startRoomBreakNavigation();
+    });
+
+    function startRoomBreakNavigation() {
+      isBreakActive = true;
+      breaksTakenCount++;
+      currentBreakStartTime = new Date();
+
+      // Reset navigation view states
+      const mapContainer = document.querySelector(".nav-map-container");
+      if (mapContainer) mapContainer.style.display = "block";
+      const navActionGroup = document.querySelector(".nav-action-group");
+      if (navActionGroup) navActionGroup.style.display = "flex";
+      if (navStepsSection) navStepsSection.style.display = "block";
+      if (navArrivedSection) navArrivedSection.classList.remove("active");
+      if (btnNavArrived) btnNavArrived.style.display = "flex";
+
+      // Update study page break button & HUD
+      breakActionBtn.classList.add("in-break-state");
+      breakBtnIcon.innerText = "▶";
+      breakBtnText.innerText = "Back to study";
+      breakHud.classList.add("show");
+      breakHudLabel.innerText = "🧘 Room break active";
+
+      // Switch to Navigation Page
+      showPage(pageNavigation);
+
+      // Start break timer interval
+      if (breakTimerInterval) clearInterval(breakTimerInterval);
+      breakTimerInterval = setInterval(() => {
+        const breakDuration = new Date() - currentBreakStartTime;
+        const totalSecs = Math.floor(breakDuration / 1000);
+        const mins = Math.floor(totalSecs / 60);
+        const secs = totalSecs % 60;
+        const timeStr = `${String(mins).padStart(2, "0")}:${String(secs).padStart(2, "0")}`;
+        breakHudTimer.innerText = timeStr;
+        if (navArrivedStopwatch) navArrivedStopwatch.innerText = timeStr;
+      }, 1000);
+    }
+
+    // When user confirms arrival at FlexScape Room
+    if (btnNavArrived) {
+      btnNavArrived.addEventListener("click", () => {
+        haptic.success();
+        const mapContainer = document.querySelector(".nav-map-container");
+        if (mapContainer) mapContainer.style.display = "none";
+        const navActionGroup = document.querySelector(".nav-action-group");
+        if (navActionGroup) navActionGroup.style.display = "none";
+        if (navStepsSection) navStepsSection.style.display = "none";
+        if (navArrivedSection) navArrivedSection.classList.add("active");
+        btnNavArrived.style.display = "none";
+      });
+    }
+
+    // When user finishes the room break and returns to desk
+    if (btnNavFinishBreak) {
+      btnNavFinishBreak.addEventListener("click", () => {
+        resumeStudyFromBreak();
+        showPage(pageStudy);
+      });
+    }
+
+    // Cancel / Back to Study Desk buttons
+    if (btnNavCancelBreak) {
+      btnNavCancelBreak.addEventListener("click", () => {
+        resumeStudyFromBreak();
+        showPage(pageStudy);
+      });
+    }
+
+    if (btnNavReturnStudy) {
+      btnNavReturnStudy.addEventListener("click", () => {
+        resumeStudyFromBreak();
+        showPage(pageStudy);
+      });
+    }
+
+    /* Finish Study Session */
+    finishStudyBtn.addEventListener("click", () => {
+      haptic.success();
+      endStudySession();
+    });
+
+    function endStudySession() {
+      isStudyActive = false;
+      studyEndTime = new Date();
+      if (studyTimerInterval) clearInterval(studyTimerInterval);
+      if (breakTimerInterval) clearInterval(breakTimerInterval);
+
+      statFinalTime.innerText = formatStopwatchTime(studyElapsedMs);
+      const totalBreakMins = Math.round(breakTotalDurationMs / 60000);
+      statBreaksText.innerText = `Taken ${breaksTakenCount} Break${breaksTakenCount === 1 ? '' : 's'} for ${totalBreakMins} minute${totalBreakMins === 1 ? '' : 's'}`;
+      statStartTime.innerText = formatClockTime(studyStartTime);
+      statEndTime.innerText = formatClockTime(studyEndTime);
+
+      showPage(pageStats);
+    }
+
+    /* Page 3: Restart Session */
+    statRestartBtn.addEventListener("click", () => {
+      haptic.medium();
+      showPage(pageHome);
+    });
+
+    /* ==========================================================================
+       Onboarding Interaction Logic (Steps 1, 2, 3 -> Step 4)
+       ========================================================================== */
+    // Validation Helper Functions
+    // 1. Username: English letters + numbers only format
+    const usernameFormatRegex = /^[a-zA-Z0-9]+$/;
+    function checkUsername(val) {
+      if (!val || val.trim().length === 0) {
+        return { valid: false, msg: "• Letters and numbers only (e.g. Alex99)" };
+      }
+      if (!usernameFormatRegex.test(val)) {
+        return { valid: false, msg: "❌ English letters & numbers only (no spaces or symbols)" };
+      }
+      if (val.length < 2) {
+        return { valid: false, msg: "❌ Username must be at least 2 characters" };
+      }
+      return { valid: true, msg: "✓ Valid username format" };
+    }
+
+    // 2. UniKey: 4 English letters followed by 4 digits
+    const unikeyFormatRegex = /^[a-zA-Z]{4}[0-9]{4}$/;
+    function checkUniKey(val) {
+      if (!val || val.trim().length === 0) {
+        return { valid: false, msg: "• 4 English letters followed by 4 digits (e.g. abcd1234)" };
+      }
+      if (!unikeyFormatRegex.test(val)) {
+        return { valid: false, msg: "❌ Must be exactly 4 letters + 4 digits (e.g. abcd1234)" };
+      }
+      return { valid: true, msg: "✓ Valid UniKey format" };
+    }
+
+    function refreshDataSubmitButton() {
+      if (!btnDataSubmit) return;
+      const uRes = checkUsername(inputUsername ? inputUsername.value.trim() : "");
+      const kRes = checkUniKey(inputUnikey ? inputUnikey.value.trim() : "");
+      const isValid = uRes.valid && kRes.valid;
+      btnDataSubmit.disabled = !isValid;
+      if (isValid) {
+        btnDataSubmit.style.opacity = "1";
+        btnDataSubmit.style.cursor = "pointer";
+      } else {
+        btnDataSubmit.style.opacity = "0.4";
+        btnDataSubmit.style.cursor = "not-allowed";
+      }
+    }
+
+    // Step 1: Login or Sign Up Choices
+    if (btnAuthGotoSignup) {
+      btnAuthGotoSignup.addEventListener("click", () => {
         haptic.medium();
-        startRoomBreak(false);
+        showPage(pageOnboardingTerms);
       });
     }
 
-    if (btnChooseShortBreak) {
-      btnChooseShortBreak.addEventListener("click", () => {
-        sound.playClick();
-        haptic.medium();
-        startShortBreak();
-      });
-    }
-
-    if (btnCancelBreakChoice) {
-      btnCancelBreakChoice.addEventListener("click", () => {
-        sound.playClick();
-        closeBreakChoiceModal();
-      });
-    }
-
-    if (breakChoiceBackdrop) {
-      breakChoiceBackdrop.addEventListener("click", (e) => {
-        if (e.target === breakChoiceBackdrop) {
-          closeBreakChoiceModal();
-        }
-      });
-    }
-
-    if (btnCloseRoomModal && roomModalBackdrop) {
-      btnCloseRoomModal.addEventListener("click", () => {
-        sound.playClick();
+    if (btnAuthGotoLogin) {
+      btnAuthGotoLogin.addEventListener("click", () => {
         haptic.light();
-        roomModalBackdrop.classList.remove("open");
+        if (loginModalBackdrop) loginModalBackdrop.classList.add("open");
       });
     }
 
-    if (roomModalBackdrop) {
-      roomModalBackdrop.addEventListener("click", (e) => {
-        if (e.target === roomModalBackdrop) {
-          haptic.light();
-          roomModalBackdrop.classList.remove("open");
+    if (btnQuickDemoLogin) {
+      btnQuickDemoLogin.addEventListener("click", () => {
+        haptic.success();
+        currentUser = {
+          username: "Gloria99",
+          unikey: "glor1234",
+          avatarType: "emoji",
+          avatarValue: "🧘",
+          isLoggedIn: true
+        };
+        updateProfileUI();
+        showPage(pageHome);
+      });
+    }
+
+    // Step 2: Terms and Conditions
+    if (btnTermsBack) {
+      btnTermsBack.addEventListener("click", () => {
+        haptic.light();
+        showPage(pageOnboardingAuth);
+      });
+    }
+
+    if (termsAgreeCheckbox) {
+      termsAgreeCheckbox.addEventListener("change", () => {
+        haptic.light();
+        const agreed = termsAgreeCheckbox.checked;
+        if (btnTermsContinue) {
+          btnTermsContinue.disabled = !agreed;
+          btnTermsContinue.style.opacity = agreed ? "1" : "0.4";
+          btnTermsContinue.style.cursor = agreed ? "pointer" : "not-allowed";
         }
+      });
+    }
+
+    if (btnTermsContinue) {
+      btnTermsContinue.addEventListener("click", () => {
+        if (!termsAgreeCheckbox || !termsAgreeCheckbox.checked) return;
+        haptic.medium();
+        showPage(pageOnboardingData);
+      });
+    }
+
+    // Step 3: Data Input (Profile Picture, Username, UniKey)
+    let selectedAvatarEmoji = "🧘";
+    let customAvatarDataUrl = null;
+
+    if (btnDataBack) {
+      btnDataBack.addEventListener("click", () => {
+        haptic.light();
+        showPage(pageOnboardingTerms);
+      });
+    }
+
+    // Avatar Presets
+    if (avatarPresetBtns) {
+      avatarPresetBtns.forEach(btn => {
+        btn.addEventListener("click", () => {
+          haptic.light();
+          avatarPresetBtns.forEach(b => b.classList.remove("selected"));
+          btn.classList.add("selected");
+          selectedAvatarEmoji = btn.getAttribute("data-avatar") || "🧘";
+          customAvatarDataUrl = null;
+          if (avatarPreviewDisplay) {
+            avatarPreviewDisplay.innerHTML = `<span id="avatar-preview-icon">${selectedAvatarEmoji}</span>`;
+          }
+        });
+      });
+    }
+
+    // Custom Avatar Photo Upload
+    if (inputAvatarFile) {
+      inputAvatarFile.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (file) {
+          const reader = new FileReader();
+          reader.onload = (loadEvt) => {
+            haptic.success();
+            customAvatarDataUrl = loadEvt.target.result;
+            avatarPresetBtns.forEach(b => b.classList.remove("selected"));
+            if (avatarPreviewDisplay) {
+              avatarPreviewDisplay.innerHTML = `<img src="${customAvatarDataUrl}" alt="Avatar">`;
+            }
+          };
+          reader.readAsDataURL(file);
+        }
+      });
+    }
+
+    // Username Input Validation
+    if (inputUsername) {
+      inputUsername.addEventListener("input", () => {
+        const val = inputUsername.value.trim();
+        const res = checkUsername(val);
+        if (usernameFeedback) {
+          usernameFeedback.innerText = res.msg;
+          usernameFeedback.className = "input-feedback " + (res.valid ? "valid" : (val.length > 0 ? "invalid" : ""));
+        }
+        refreshDataSubmitButton();
+      });
+    }
+
+    // UniKey Input Validation
+    if (inputUnikey) {
+      inputUnikey.addEventListener("input", () => {
+        const val = inputUnikey.value.trim();
+        const res = checkUniKey(val);
+        if (unikeyFeedback) {
+          unikeyFeedback.innerText = res.msg;
+          unikeyFeedback.className = "input-feedback " + (res.valid ? "valid" : (val.length > 0 ? "invalid" : ""));
+        }
+        refreshDataSubmitButton();
+      });
+    }
+
+    // Submit Registration (Proceeds to Step 4: Setting break interval Booking)
+    if (btnDataSubmit) {
+      btnDataSubmit.addEventListener("click", () => {
+        const uVal = inputUsername ? inputUsername.value.trim() : "Student";
+        const kVal = inputUnikey ? inputUnikey.value.trim().toLowerCase() : "glor1234";
+
+        currentUser = {
+          username: uVal,
+          unikey: kVal,
+          avatarType: customAvatarDataUrl ? "image" : "emoji",
+          avatarValue: customAvatarDataUrl || selectedAvatarEmoji,
+          isLoggedIn: true
+        };
+
+        haptic.success();
+        updateProfileUI();
+        showPage(pageHome);
+      });
+    }
+
+    // Login Modal Interactions
+    if (btnLoginCancel) {
+      btnLoginCancel.addEventListener("click", () => {
+        haptic.light();
+        if (loginModalBackdrop) loginModalBackdrop.classList.remove("open");
+      });
+    }
+
+    if (btnLoginFillDemo) {
+      btnLoginFillDemo.addEventListener("click", () => {
+        haptic.light();
+        if (loginUnikey) {
+          loginUnikey.value = "glor1234";
+          const res = checkUniKey("glor1234");
+          if (loginUnikeyFeedback) {
+            loginUnikeyFeedback.innerText = res.msg;
+            loginUnikeyFeedback.className = "input-feedback valid";
+          }
+        }
+      });
+    }
+
+    if (loginUnikey) {
+      loginUnikey.addEventListener("input", () => {
+        const val = loginUnikey.value.trim();
+        const res = checkUniKey(val);
+        if (loginUnikeyFeedback) {
+          loginUnikeyFeedback.innerText = res.msg;
+          loginUnikeyFeedback.className = "input-feedback " + (res.valid ? "valid" : (val.length > 0 ? "invalid" : ""));
+        }
+      });
+    }
+
+    if (btnLoginSubmit) {
+      btnLoginSubmit.addEventListener("click", () => {
+        const val = loginUnikey ? loginUnikey.value.trim().toLowerCase() : "";
+        const res = checkUniKey(val);
+        if (!res.valid) {
+          haptic.alarm();
+          if (loginUnikeyFeedback) {
+            loginUnikeyFeedback.innerText = res.msg;
+            loginUnikeyFeedback.className = "input-feedback invalid";
+          }
+          if (loginUnikey) loginUnikey.focus();
+          return;
+        }
+
+        currentUser = {
+          username: "Gloria99",
+          unikey: val,
+          avatarType: "emoji",
+          avatarValue: "🧘",
+          isLoggedIn: true
+        };
+
+        haptic.success();
+        if (loginModalBackdrop) loginModalBackdrop.classList.remove("open");
+        updateProfileUI();
+        showPage(pageHome);
+      });
+    }
+
+    // Log Out / Switch Account Button on Step 4
+    if (btnSwitchAccount) {
+      btnSwitchAccount.addEventListener("click", () => {
+        haptic.medium();
+        currentUser.isLoggedIn = false;
+        showPage(pageOnboardingAuth);
       });
     }
 
     /* ==========================================================================
-       Page 3: Finish Study Session & Statistics Display
+       Post-Login Account Menu & Settings Modal Interactions
        ========================================================================== */
-    finishStudyBtn.addEventListener("click", () => {
-      sound.playClick();
-      haptic.success();
-      finishStudySession();
-    });
-
-    function finishStudySession() {
-      isStudyActive = false;
-      studyEndTime = new Date();
-      if (studyTimerInterval) clearInterval(studyTimerInterval);
-      endBreak();
-      closeBreakChoiceModal();
-
-      // Final Elapsed Study Time
-      statFinalTime.innerText = formatStopwatch(studyElapsedMs);
-
-      // Break Statistics Breakdown
-      const breakMins = Math.max(1, Math.round(breakTotalDurationMs / 60000));
-      if (breaksTakenCount === 0) {
-        statBreaksText.innerText = "No breaks taken";
-      } else if (breaksTakenCount === 1) {
-        statBreaksText.innerText = `Taken 1 Break for ${breakMins} minute${breakMins > 1 ? 's' : ''}`;
-      } else {
-        statBreaksText.innerText = `Taken ${breaksTakenCount} Breaks for ${breakMins} minutes`;
-      }
-
-      // Start & End Time Timestamps
-      statStartTime.innerText = formatTimeAMPM(studyStartTime);
-      statEndTime.innerText = formatTimeAMPM(studyEndTime);
-
-      sound.playChime();
-      haptic.success();
-      showPage("stats");
+    // Toggle expand tab
+    if (btnAccountAvatar) {
+      btnAccountAvatar.addEventListener("click", (e) => {
+        e.stopPropagation();
+        haptic.light();
+        if (accountExpandMenu) {
+          accountExpandMenu.classList.toggle("open");
+        }
+      });
     }
 
-    // Restart / Start New Session Button
-    statRestartBtn.addEventListener("click", () => {
-      sound.playClick();
-      haptic.medium();
-      showPage("home");
+    // Close expand tab when clicking outside
+    document.addEventListener("click", (e) => {
+      if (postLoginAccount && !postLoginAccount.contains(e.target)) {
+        if (accountExpandMenu) accountExpandMenu.classList.remove("open");
+      }
     });
 
+    // Open Settings Modal
+    if (menuBtnSettings) {
+      menuBtnSettings.addEventListener("click", () => {
+        haptic.light();
+        if (accountExpandMenu) accountExpandMenu.classList.remove("open");
+        tempSettingsAvatar = currentUser.avatarValue || "🧘";
+        tempSettingsAvatarType = currentUser.avatarType || "emoji";
+
+        // Update preview in settings
+        if (settingsAvatarPreview) {
+          if (tempSettingsAvatarType === "image") {
+            settingsAvatarPreview.innerHTML = `<img src="${tempSettingsAvatar}" alt="Avatar">`;
+          } else {
+            settingsAvatarPreview.innerHTML = `<span>${tempSettingsAvatar}</span>`;
+          }
+        }
+
+        // Highlight matching preset button
+        settingsAvatarOpts.forEach(btn => {
+          if (tempSettingsAvatarType === "emoji" && btn.getAttribute("data-avatar") === tempSettingsAvatar) {
+            btn.classList.add("selected");
+          } else {
+            btn.classList.remove("selected");
+          }
+        });
+
+        // Set username in input
+        if (settingsUsernameInput) {
+          settingsUsernameInput.value = currentUser.username || "Alex99";
+        }
+
+        // Set readonly account details
+        if (settingsReadonlyUnikey) {
+          settingsReadonlyUnikey.innerText = (currentUser.unikey || "glor1234").toUpperCase();
+        }
+        if (settingsReadonlyLocation) {
+          settingsReadonlyLocation.innerText = "Study Desk 14 • Level 2";
+        }
+
+        if (settingsModalBackdrop) {
+          settingsModalBackdrop.classList.add("open");
+        }
+      });
+    }
+
+    // Avatar Presets Selection in Settings
+    settingsAvatarOpts.forEach(btn => {
+      btn.addEventListener("click", () => {
+        haptic.selection();
+        settingsAvatarOpts.forEach(b => b.classList.remove("selected"));
+        btn.classList.add("selected");
+        tempSettingsAvatar = btn.getAttribute("data-avatar");
+        tempSettingsAvatarType = "emoji";
+        if (settingsAvatarPreview) {
+          settingsAvatarPreview.innerHTML = `<span>${tempSettingsAvatar}</span>`;
+        }
+      });
+    });
+
+    // Custom Photo Upload in Settings
+    if (settingsAvatarFileInput) {
+      settingsAvatarFileInput.addEventListener("change", (e) => {
+        const file = e.target.files && e.target.files[0];
+        if (!file) return;
+        const reader = new FileReader();
+        reader.onload = (event) => {
+          tempSettingsAvatar = event.target.result;
+          tempSettingsAvatarType = "image";
+          settingsAvatarOpts.forEach(b => b.classList.remove("selected"));
+          if (settingsAvatarPreview) {
+            settingsAvatarPreview.innerHTML = `<img src="${tempSettingsAvatar}" alt="Avatar">`;
+          }
+          haptic.selection();
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    // Save Settings
+    if (btnSaveSettings) {
+      btnSaveSettings.addEventListener("click", () => {
+        const rawName = settingsUsernameInput ? settingsUsernameInput.value.trim() : "";
+        if (!rawName) {
+          alert("Please enter a username.");
+          return;
+        }
+        if (!/^[a-zA-Z0-9]+$/.test(rawName)) {
+          alert("Username must only contain English letters and numbers.");
+          return;
+        }
+
+        currentUser.username = rawName;
+        currentUser.avatarValue = tempSettingsAvatar;
+        currentUser.avatarType = tempSettingsAvatarType;
+
+        try {
+          localStorage.setItem("flexscape_user", JSON.stringify(currentUser));
+        } catch (err) {}
+
+        updateProfileUI();
+        haptic.success();
+        if (settingsModalBackdrop) settingsModalBackdrop.classList.remove("open");
+      });
+    }
+
+    // Close Settings
+    if (btnCloseSettings) {
+      btnCloseSettings.addEventListener("click", () => {
+        haptic.light();
+        if (settingsModalBackdrop) settingsModalBackdrop.classList.remove("open");
+      });
+    }
+
+    if (settingsModalBackdrop) {
+      settingsModalBackdrop.addEventListener("click", (e) => {
+        if (e.target === settingsModalBackdrop) {
+          settingsModalBackdrop.classList.remove("open");
+        }
+      });
+    }
+
+    // Logout via expand menu
+    if (menuBtnLogout) {
+      menuBtnLogout.addEventListener("click", () => {
+        haptic.medium();
+        if (accountExpandMenu) accountExpandMenu.classList.remove("open");
+        currentUser.isLoggedIn = false;
+        try {
+          localStorage.removeItem("flexscape_user");
+        } catch (err) {}
+
+        if (isStudyActive) {
+          isStudyActive = false;
+          clearInterval(studyTimerInterval);
+        }
+        if (isBreakActive) {
+          isBreakActive = false;
+          clearInterval(breakTimerInterval);
+        }
+
+        showPage(pageOnboardingAuth);
+      });
+    }
+
+    // Initialize UI
+    updateProfileUI();
   </script>
+
 </body>
 </html>

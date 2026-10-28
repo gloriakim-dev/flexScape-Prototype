@@ -1,0 +1,373 @@
+:root {
+    --bg-dark: #030611;
+    --btn-blue: #091330;
+    --btn-blue-hover: #0d1b45;
+    --neon-pink: #ff2a8d;
+    --neon-cyan: #00f0ff;
+    --neon-green: #39ff14;
+    --neon-yellow: #ccff00;
+}
+
+body {
+    font-family: 'Rajdhani', sans-serif;
+    background-color: var(--bg-dark);
+    color: #ffffff;
+    overflow: hidden;
+    user-select: none;
+}
+
+.font-orbitron { font-family: 'Orbitron', sans-serif; }
+.font-exo { font-family: 'Exo 2', sans-serif; }
+.font-rajdhani { font-family: 'Rajdhani', sans-serif; }
+
+/* Figma UI Slanted Logo Text */
+.flexscape-logo-text {
+    font-family: 'Exo 2', sans-serif;
+    font-style: italic;
+    font-weight: 900;
+    letter-spacing: -1px;
+    color: #ffffff;
+    font-size: 3.5rem;
+    line-height: 1;
+}
+
+/* Exact Figma Buttons */
+.figma-btn {
+    background-color: var(--btn-blue);
+    border: 1px solid rgba(0, 240, 255, 0.18);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+
+.figma-btn:hover, .figma-btn.hovered {
+    background-color: var(--btn-blue-hover);
+    border-color: rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+.figma-btn:active {
+    transform: translateY(1px);
+}
+
+/* Pink Border Highlight Button (Ready, Accessibility) */
+.figma-btn-magenta {
+    background-color: var(--btn-blue);
+    border: 1.5px solid var(--neon-pink);
+    box-shadow: 0 0 14px rgba(255, 42, 141, 0.3);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+    cursor: pointer;
+}
+
+.figma-btn-magenta:hover, .figma-btn-magenta.hovered {
+    background-color: #160e2e;
+    box-shadow: 0 0 24px rgba(255, 42, 141, 0.55);
+    transform: translateY(-2px);
+}
+
+/* Selected Song Card */
+.song-card-active {
+    background: linear-gradient(180deg, #140924 0%, #0a0e24 100%);
+    border: 1.5px solid var(--neon-pink);
+    box-shadow: 0 0 18px rgba(255, 42, 141, 0.25);
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.song-card-active:hover, .song-card-active.hovered {
+    box-shadow: 0 0 26px rgba(255, 42, 141, 0.45);
+    transform: translateY(-2px);
+}
+
+/* Disabled Song Card */
+.song-card-disabled {
+    background-color: var(--btn-blue);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    opacity: 0.65;
+}
+
+/* Top Right Score Box */
+.total-score-card {
+    background: rgba(4, 9, 25, 0.9);
+    border: 2px solid var(--neon-cyan);
+    box-shadow: 0 0 18px rgba(0, 240, 255, 0.3);
+    border-radius: 18px;
+    backdrop-filter: blur(8px);
+}
+
+/* Custom Range Slider */
+input[type=range] {
+    -webkit-appearance: none;
+    appearance: none;
+    background: rgba(255, 255, 255, 0.12);
+    height: 6px;
+    border-radius: 3px;
+    outline: none;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    background: var(--neon-pink);
+    box-shadow: 0 0 12px var(--neon-pink);
+    cursor: pointer;
+    margin-top: -7px;
+    transition: transform 0.15s ease;
+}
+
+input[type=range]::-webkit-slider-thumb:hover {
+    transform: scale(1.2);
+}
+
+input[type=range]::-webkit-slider-runnable-track {
+    height: 6px;
+    border-radius: 3px;
+}
+
+/* Equalizer Animation Bars */
+.eq-bar {
+    width: 3.5px;
+    background-color: var(--neon-pink);
+    border-radius: 2px;
+    animation: eqBounce 1s ease-in-out infinite alternate;
+}
+
+.eq-bar:nth-child(1) { height: 18px; animation-delay: 0.1s; }
+.eq-bar:nth-child(2) { height: 26px; animation-delay: 0.3s; }
+.eq-bar:nth-child(3) { height: 14px; animation-delay: 0.2s; }
+.eq-bar:nth-child(4) { height: 22px; animation-delay: 0.4s; }
+
+@keyframes eqBounce {
+    0% { transform: scaleY(0.3); }
+    100% { transform: scaleY(1.15); }
+}
+
+/* CRT Grid lines ambient background */
+.bg-grid {
+    background-size: 50px 50px;
+    background-image: 
+        linear-gradient(to right, rgba(0, 240, 255, 0.035) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 240, 255, 0.035) 1px, transparent 1px);
+}
+
+/* Custom Gesture Glove Cursor & Radial Loader */
+#gesture-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 80px;
+    height: 80px;
+    pointer-events: none;
+    z-index: 9999;
+    transform: translate(-30%, -30%);
+    transition: transform 0.04s linear;
+}
+
+.glove-img {
+    width: 58px;
+    height: 58px;
+    position: absolute;
+    top: 11px;
+    left: 11px;
+    object-fit: contain;
+    filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.55));
+    user-select: none;
+    pointer-events: none;
+    transition: transform 0.15s ease;
+}
+
+.radial-svg {
+    width: 80px;
+    height: 80px;
+    position: absolute;
+    top: 0;
+    left: 0;
+    transform: rotate(-90deg);
+}
+
+.radial-bg {
+    fill: none;
+    stroke: rgba(0, 255, 170, 0.15);
+    stroke-width: 5;
+}
+
+.radial-progress {
+    fill: none;
+    stroke: var(--neon-cyan);
+    stroke-width: 5;
+    stroke-dasharray: 220;
+    stroke-dashoffset: 220;
+    stroke-linecap: round;
+    transition: stroke-dashoffset 0.08s linear;
+    filter: drop-shadow(0 0 10px var(--neon-cyan));
+}
+
+/* ==========================================================================
+   Tutorial Step 2: 2-Frame Fade Animation & Voice Meter Styles
+   ========================================================================== */
+
+/* 2-Frame Fade Animation for Hand Cursor Visual */
+.hand-anim-frame {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+@keyframes fadeFrame1 {
+    0%, 42% { opacity: 1; transform: translateY(0) scale(1); }
+    48%, 92% { opacity: 0; transform: translateY(-4px) scale(0.96); }
+    98%, 100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes fadeFrame2 {
+    0%, 42% { opacity: 0; transform: translateY(4px) scale(1.04); }
+    48%, 92% { opacity: 1; transform: translateY(0) scale(1); }
+    98%, 100% { opacity: 0; transform: translateY(4px) scale(1.04); }
+}
+
+.anim-frame-1 {
+    animation: fadeFrame1 2.2s infinite ease-in-out;
+}
+
+.anim-frame-2 {
+    animation: fadeFrame2 2.2s infinite ease-in-out;
+}
+
+/* Voice Equalizer Meter Bars */
+.voice-meter-bar {
+    width: 6px;
+    background: linear-gradient(180deg, var(--neon-pink) 0%, var(--neon-cyan) 100%);
+    border-radius: 4px;
+    height: 12px;
+    transition: height 0.08s ease;
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+}
+
+/* Split Screen Card Panels */
+.tutorial-panel {
+    background: linear-gradient(180deg, rgba(9, 19, 48, 0.85) 0%, rgba(4, 9, 25, 0.95) 100%);
+    border: 1.5px solid rgba(0, 240, 255, 0.25);
+    border-radius: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08);
+    transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.tutorial-panel:hover {
+    border-color: rgba(0, 240, 255, 0.5);
+    box-shadow: 0 0 25px rgba(0, 240, 255, 0.2), inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.tutorial-panel.completed {
+    border-color: var(--neon-green);
+    box-shadow: 0 0 30px rgba(57, 255, 20, 0.35);
+}
+
+/* Leaderboard & Podium Animations */
+.podium-card {
+    animation: podiumPop 0.6s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes podiumPop {
+    0% { opacity: 0; transform: translateY(30px) scale(0.9); }
+    100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.podium-card.-translate-y-3 {
+    animation: podiumPopCenter 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes podiumPopCenter {
+    0% { opacity: 0; transform: translateY(20px) scale(0.9); }
+    100% { opacity: 1; transform: translateY(-0.75rem) scale(1); }
+}
+
+.leaderboard-row {
+    animation: rowSlideIn 0.5s cubic-bezier(0.16, 1, 0.3, 1) both;
+    transition: all 0.2s ease;
+}
+
+.leaderboard-row:hover {
+    transform: translateX(4px);
+    border-color: rgba(0, 240, 255, 0.45);
+    background-color: #0b1842;
+}
+
+@keyframes rowSlideIn {
+    0% { opacity: 0; transform: translateX(-18px); }
+    100% { opacity: 1; transform: translateX(0); }
+}
+
+.text-glow-lime {
+    text-shadow: 0 0 12px rgba(199, 253, 5, 0.65);
+}
+
+.text-glow-cyan {
+    text-shadow: 0 0 12px rgba(0, 240, 255, 0.65);
+}
+
+.text-glow-pink {
+    text-shadow: 0 0 12px rgba(255, 42, 141, 0.65);
+}
+
+/* Tutorial Design System & Animations */
+.tutorial-glow-badge {
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 900;
+    font-size: 1.5rem;
+    letter-spacing: 0.12em;
+    color: #ffffff;
+    text-transform: uppercase;
+    text-shadow: 0 0 12px rgba(255, 255, 255, 0.9), 0 0 25px rgba(0, 240, 255, 0.5);
+}
+
+.logo-intro-glow {
+    animation: logoIntroPulse 2.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes logoIntroPulse {
+    0% { opacity: 0; transform: scale(0.75); filter: drop-shadow(0 0 0 rgba(0, 240, 255, 0)); }
+    40% { opacity: 1; transform: scale(1.08); filter: drop-shadow(0 0 45px rgba(48, 223, 242, 0.8)); }
+    80% { opacity: 1; transform: scale(1.0); filter: drop-shadow(0 0 30px rgba(48, 223, 242, 0.5)); }
+    100% { opacity: 1; transform: scale(1.0); filter: drop-shadow(0 0 25px rgba(48, 223, 242, 0.45)); }
+}
+
+.scan-beam {
+    position: absolute;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, #00f0ff 30%, #39ff14 70%, transparent);
+    box-shadow: 0 0 18px #00f0ff, 0 0 35px #39ff14;
+    animation: scanBeamSweep 2.2s infinite ease-in-out;
+    pointer-events: none;
+    z-index: 25;
+}
+
+@keyframes scanBeamSweep {
+    0% { top: 0%; opacity: 0; }
+    15% { opacity: 1; }
+    85% { opacity: 1; }
+    100% { top: 96%; opacity: 0; }
+}
+
+.ring-wrap-circle {
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+    stroke-dasharray: 283;
+    animation: wrapDwellRing 2.4s infinite ease-in-out;
+}
+
+@keyframes wrapDwellRing {
+    0% { stroke-dashoffset: 283; }
+    65% { stroke-dashoffset: 0; }
+    85% { stroke-dashoffset: 0; }
+    100% { stroke-dashoffset: 283; }
+}
+
+
