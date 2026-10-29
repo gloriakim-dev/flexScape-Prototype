@@ -227,7 +227,7 @@
       font-weight: 800;
       letter-spacing: 1px;
       color: #ffffff;
-      margin-bottom: 8px;
+      margin-bottom: 36px;
       font-variant-numeric: tabular-nums;
       text-shadow: 0 0 25px rgba(0, 240, 255, 0.45);
     }
@@ -237,7 +237,7 @@
       font-size: 18px;
       font-weight: 600;
       color: var(--text-muted);
-      margin-bottom: 36px;
+      margin-bottom: 8px;
       display: flex;
       align-items: center;
       gap: 8px;
@@ -2148,15 +2148,15 @@
           <span id="break-hud-timer" style="font-family: 'Orbitron', sans-serif; font-weight: 700;">00:00</span>
         </div>
 
+        <!-- Countdown Subtitle (Above timer) -->
+        <div class="stopwatch-countdown-subtitle" id="countdown-subtitle">
+          <span class="pulse-dot"></span>
+          <span id="countdown-text">Break in</span>
+        </div>
+
         <!-- Center Digital Break Countdown (00:00 format) -->
         <div class="stopwatch-digital-display" id="study-countdown-display" style="font-variant-numeric: tabular-nums; text-shadow: 0 0 24px rgba(0, 240, 255, 0.45);">
           00:00
-        </div>
-
-        <!-- Countdown Subtitle -->
-        <div class="stopwatch-countdown-subtitle" id="countdown-subtitle">
-          <span class="pulse-dot"></span>
-          <span id="countdown-text">Break countdown</span>
         </div>
 
         <!-- Action Buttons -->
@@ -2247,184 +2247,109 @@
 
             <!-- Base Canvas & Blueprint Grid -->
             <rect x="0" y="0" width="540" height="500" rx="16" fill="#040816"/>
-            <rect x="16" y="16" width="508" height="468" rx="12" fill="#091124" stroke="rgba(0, 240, 255, 0.25)" stroke-width="1.2"/>
-            <rect x="16" y="16" width="508" height="468" rx="12" fill="url(#cyberGrid)"/>
+            <rect x="14" y="14" width="512" height="472" rx="12" fill="#060b19" stroke="rgba(0, 240, 255, 0.2)" stroke-width="1.2"/>
+            <rect x="14" y="14" width="512" height="472" rx="12" fill="url(#cyberGrid)"/>
 
-            <!-- HUD Corner Crosshairs & Accents -->
-            <path d="M 24 38 L 24 24 L 38 24" fill="none" stroke="#00f0ff" stroke-width="2"/>
-            <path d="M 516 38 L 516 24 L 502 24" fill="none" stroke="#00f0ff" stroke-width="2"/>
-            <path d="M 24 462 L 24 476 L 38 476" fill="none" stroke="#00f0ff" stroke-width="2"/>
-            <path d="M 516 462 L 516 476 L 502 476" fill="none" stroke="#00f0ff" stroke-width="2"/>
-
-            <!-- Connecting Corridors / Architectural Floor Guide Paths -->
-            <rect x="160" y="32" width="30" height="380" fill="rgba(0, 240, 255, 0.03)"/>
-            <rect x="36" y="160" width="468" height="30" fill="rgba(0, 240, 255, 0.03)"/>
-            <rect x="36" y="390" width="468" height="24" fill="rgba(0, 240, 255, 0.03)"/>
+            <!-- HUD Corner Crosshairs -->
+            <path d="M 22 34 L 22 22 L 34 22" fill="none" stroke="#00f0ff" stroke-width="2"/>
+            <path d="M 518 34 L 518 22 L 506 22" fill="none" stroke="#00f0ff" stroke-width="2"/>
+            <path d="M 22 466 L 22 478 L 34 478" fill="none" stroke="#00f0ff" stroke-width="2"/>
+            <path d="M 518 466 L 518 478 L 506 478" fill="none" stroke="#00f0ff" stroke-width="2"/>
 
             <!-- ==========================================================================
-                 1. FLEXSCAPE ROOM (North-West) — KEY COLOR (NEON PINK #ff2a8d)
+                 SECTION 1: TOP-LEFT 3 VERTICAL ROUNDED BARS (CYAN)
                  ========================================================================== -->
-            <rect x="36" y="36" width="140" height="104" rx="8" fill="rgba(255, 42, 141, 0.25)" stroke="#ff2a8d" stroke-width="2.5" filter="url(#neonPinkGlow)"/>
+            <rect x="36" y="48" width="28" height="100" rx="7" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="78" y="48" width="28" height="100" rx="7" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="120" y="48" width="28" height="100" rx="7" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+
+            <!-- ==========================================================================
+                 SECTION 2: MIDDLE-LEFT VERTICAL BAR + 5 HORIZONTAL BARS (CYAN)
+                 ========================================================================== -->
+            <!-- Tall Vertical Bar on Far Left -->
+            <rect x="36" y="168" width="54" height="188" rx="8" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
             
-            <!-- Room Inner Decorative Motion Chamber Ring -->
-            <circle cx="106" cy="80" r="24" fill="none" stroke="rgba(255, 42, 141, 0.4)" stroke-dasharray="4 3" stroke-width="1.5"/>
-            <!-- Pulsing Center Figure Icon -->
-            <text x="106" y="87" font-size="22" text-anchor="middle">🧘</text>
-            
-            <!-- FlexScape Room Header Badge -->
-            <rect x="44" y="108" width="124" height="22" rx="4" fill="#ff2a8d" filter="url(#mapShadow)"/>
-            <text x="106" y="123" font-family="'Orbitron', sans-serif" font-size="8.5" font-weight="900" fill="#ffffff" letter-spacing="0.8" text-anchor="middle">★ FLEXSCAPE ROOM</text>
-            
-            <!-- Destination Door Opening / Beacon -->
-            <circle cx="106" cy="140" r="10" fill="none" stroke="#ff2a8d" stroke-width="2" class="destination-pulse"/>
+            <!-- Stack of 5 Horizontal Bars Directly to its Right -->
+            <rect x="104" y="168" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="104" y="208" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="104" y="248" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="104" y="288" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="104" y="328" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
 
             <!-- ==========================================================================
-                 2. MEETING ROOMS (North-East) — DIFFERENT COLOR OUTLINE (PURPLE #a855f7)
+                 SECTION 3: BOTTOM-LEFT WIDE HORIZONTAL RECTANGLE (CYAN)
                  ========================================================================== -->
-            <!-- Meeting Room 1 -->
-            <rect x="355" y="36" width="70" height="52" rx="6" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" stroke-width="1.8"/>
-            <ellipse cx="390" cy="58" rx="15" ry="9" fill="none" stroke="#a855f7" stroke-width="1.2"/>
-            <text x="390" y="80" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#d8b4fe" text-anchor="middle">MEETING 1</text>
-
-            <!-- Meeting Room 2 -->
-            <rect x="435" y="36" width="70" height="52" rx="6" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" stroke-width="1.8"/>
-            <ellipse cx="470" cy="58" rx="15" ry="9" fill="none" stroke="#a855f7" stroke-width="1.2"/>
-            <text x="470" y="80" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#d8b4fe" text-anchor="middle">MEETING 2</text>
-
-            <!-- Meeting Room 3 -->
-            <rect x="355" y="96" width="70" height="52" rx="6" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" stroke-width="1.8"/>
-            <ellipse cx="390" cy="118" rx="15" ry="9" fill="none" stroke="#a855f7" stroke-width="1.2"/>
-            <text x="390" y="140" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#d8b4fe" text-anchor="middle">MEETING 3</text>
-
-            <!-- Meeting Room 4 -->
-            <rect x="435" y="96" width="70" height="52" rx="6" fill="rgba(168, 85, 247, 0.12)" stroke="#a855f7" stroke-width="1.8"/>
-            <ellipse cx="470" cy="118" rx="15" ry="9" fill="none" stroke="#a855f7" stroke-width="1.2"/>
-            <text x="470" y="140" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#d8b4fe" text-anchor="middle">MEETING 4</text>
+            <rect x="36" y="374" width="112" height="82" rx="8" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
 
             <!-- ==========================================================================
-                 3. BOOK SECTIONS — DIFFERENT COLOR OUTLINE (SKY BLUE #38bdf8)
+                 SECTION 4: TOP-CENTER FLEXSCAPE ROOM (MAGENTA OUTLINE)
                  ========================================================================== -->
-            <!-- Book Stacks Row 1 -->
-            <rect x="200" y="36" width="130" height="28" rx="4" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.6"/>
-            <line x1="210" y1="50" x2="320" y2="50" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3"/>
-            <text x="265" y="46" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#bae6fd" text-anchor="middle">BOOKSTACKS • A</text>
-
-            <!-- Book Stacks Row 2 -->
-            <rect x="200" y="74" width="130" height="28" rx="4" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.6"/>
-            <line x1="210" y1="88" x2="320" y2="88" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3"/>
-            <text x="265" y="84" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#bae6fd" text-anchor="middle">BOOKSTACKS • B</text>
-
-            <!-- Book Stacks Row 3 -->
-            <rect x="200" y="112" width="130" height="28" rx="4" fill="rgba(56, 189, 248, 0.1)" stroke="#38bdf8" stroke-width="1.6"/>
-            <line x1="210" y1="126" x2="320" y2="126" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3 3"/>
-            <text x="265" y="122" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#bae6fd" text-anchor="middle">BOOKSTACKS • C</text>
-
-            <!-- East Book Wing (Fiction & Reference) -->
-            <rect x="355" y="196" width="150" height="88" rx="6" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.6"/>
-            <line x1="370" y1="216" x2="490" y2="216" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
-            <line x1="370" y1="234" x2="490" y2="234" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
-            <line x1="370" y1="252" x2="490" y2="252" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
-            <text x="430" y="272" font-family="'Orbitron', sans-serif" font-size="8" font-weight="700" fill="#bae6fd" text-anchor="middle">BOOKS • FICTION &amp; REF</text>
-
-            <!-- South Book Wing (Periodicals) -->
-            <rect x="355" y="300" width="150" height="80" rx="6" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.6"/>
-            <line x1="370" y1="320" x2="490" y2="320" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
-            <line x1="370" y1="338" x2="490" y2="338" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
-            <text x="430" y="365" font-family="'Orbitron', sans-serif" font-size="8" font-weight="700" fill="#bae6fd" text-anchor="middle">PERIODICALS &amp; JOURNALS</text>
-
-            <!-- Center Book Cluster -->
-            <rect x="200" y="200" width="130" height="96" rx="6" fill="rgba(56, 189, 248, 0.08)" stroke="#38bdf8" stroke-width="1.6"/>
-            <line x1="215" y1="225" x2="315" y2="225" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
-            <line x1="215" y1="245" x2="315" y2="245" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
-            <line x1="215" y1="265" x2="315" y2="265" stroke="rgba(56, 189, 248, 0.4)" stroke-width="1.2" stroke-dasharray="4 2"/>
-            <text x="265" y="284" font-family="'Orbitron', sans-serif" font-size="8" font-weight="700" fill="#bae6fd" text-anchor="middle">NONFICTION ARCHIVE</text>
+            <rect x="166" y="48" width="108" height="94" rx="8" fill="rgba(255, 42, 141, 0.12)" stroke="#ff2a8d" stroke-width="2.8" filter="url(#neonPinkGlow)"/>
+            <!-- Inner Label / Badge -->
+            <text x="220" y="88" font-family="'Orbitron', sans-serif" font-size="8.5" font-weight="900" fill="#ff2a8d" text-anchor="middle" letter-spacing="0.8">FLEXSCAPE</text>
+            <text x="220" y="103" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="800" fill="#ffffff" text-anchor="middle" letter-spacing="0.8">ROOM</text>
+            <!-- Destination Pulse Beacon at bottom opening -->
+            <circle cx="220" cy="142" r="6" fill="#ff2a8d" filter="drop-shadow(0 0 6px #ff2a8d)"/>
 
             <!-- ==========================================================================
-                 4. STUDY TABLES (West & South-West) — DIFFERENT COLOR OUTLINE (GREEN #10b981)
+                 SECTION 5: TOP-RIGHT 2 SQUARE ROOMS (CYAN)
                  ========================================================================== -->
-            <!-- Desk Cluster 1 (Desks 11, 12, 13, 14 - USER DESK) -->
-            <rect x="36" y="200" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
-            <text x="61" y="222" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 11</text>
-
-            <rect x="96" y="200" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
-            <text x="121" y="222" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 12</text>
-
-            <rect x="36" y="248" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
-            <text x="61" y="270" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 13</text>
-
-            <!-- Desk 14 (USER CURRENT DESK: Highlighted Green) -->
-            <rect x="96" y="248" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.28)" stroke="#10b981" stroke-width="2"/>
-            <text x="121" y="270" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="800" fill="#10b981" text-anchor="middle">Desk 14</text>
-
-            <!-- Desk Cluster 2 (Desks 15, 16, 17, 18) -->
-            <rect x="36" y="300" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
-            <text x="61" y="322" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 15</text>
-
-            <rect x="96" y="300" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
-            <text x="121" y="322" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 16</text>
-
-            <rect x="36" y="348" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
-            <text x="61" y="370" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 17</text>
-
-            <rect x="96" y="348" width="50" height="36" rx="4" fill="rgba(16, 185, 129, 0.12)" stroke="#10b981" stroke-width="1.4"/>
-            <text x="121" y="370" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">Desk 18</text>
-
-            <!-- Silent Study Pods Box -->
-            <rect x="36" y="420" width="110" height="52" rx="6" fill="rgba(16, 185, 129, 0.08)" stroke="#10b981" stroke-width="1.4"/>
-            <text x="91" y="445" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="700" fill="#6ee7b7" text-anchor="middle">QUIET STUDY PODS</text>
-            <text x="91" y="457" font-family="'Orbitron', sans-serif" font-size="6.5" font-weight="500" fill="#94a3b8" text-anchor="middle">10 Carrels</text>
+            <rect x="290" y="48" width="94" height="114" rx="8" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="404" y="48" width="94" height="114" rx="8" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
 
             <!-- ==========================================================================
-                 5. ELEVATOR (South-Center) — DIFFERENT COLOR OUTLINE (AMBER #f59e0b)
+                 SECTION 6: BOTTOM-CENTER 3 VERTICAL BARS (CYAN)
                  ========================================================================== -->
-            <rect x="180" y="420" width="140" height="52" rx="6" fill="rgba(245, 158, 11, 0.12)" stroke="#f59e0b" stroke-width="1.8"/>
-            <!-- Dual Elevator Cabs -->
-            <rect x="194" y="429" width="34" height="34" rx="3" fill="rgba(245, 158, 11, 0.22)" stroke="#f59e0b" stroke-width="1.2"/>
-            <line x1="211" y1="429" x2="211" y2="463" stroke="#f59e0b" stroke-width="1"/>
-            
-            <rect x="238" y="429" width="34" height="34" rx="3" fill="rgba(245, 158, 11, 0.22)" stroke="#f59e0b" stroke-width="1.2"/>
-            <line x1="255" y1="429" x2="255" y2="463" stroke="#f59e0b" stroke-width="1"/>
-
-            <text x="296" y="444" font-family="'Orbitron', sans-serif" font-size="8" font-weight="800" fill="#fbbf24">ELEVATOR</text>
-            <text x="296" y="455" font-family="'Orbitron', sans-serif" font-size="6.5" font-weight="600" fill="#fde68a">Cores 1 &amp; 2</text>
+            <rect x="208" y="274" width="30" height="182" rx="7" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="256" y="274" width="30" height="182" rx="7" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="304" y="274" width="30" height="182" rx="7" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
 
             <!-- ==========================================================================
-                 6. ENTRANCE (South-East) — DIFFERENT COLOR OUTLINE (CYAN #00f0ff)
+                 SECTION 7: RIGHT DESK GRID (2 COLUMNS x 6 ROWS)
+                 Row 5 Column 1 is MAGENTA (USER DESK)
                  ========================================================================== -->
-            <rect x="355" y="420" width="150" height="52" rx="6" fill="rgba(0, 240, 255, 0.12)" stroke="#00f0ff" stroke-width="1.8"/>
-            <!-- Turnstiles / Gates lines -->
-            <line x1="375" y1="432" x2="375" y2="460" stroke="#00f0ff" stroke-width="2"/>
-            <line x1="392" y1="432" x2="392" y2="460" stroke="#00f0ff" stroke-width="2"/>
-            <line x1="409" y1="432" x2="409" y2="460" stroke="#00f0ff" stroke-width="2"/>
+            <!-- Row 1 -->
+            <rect x="404" y="218" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="454" y="218" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
 
-            <text x="455" y="444" font-family="'Orbitron', sans-serif" font-size="8" font-weight="800" fill="#00f0ff">ENTRANCE</text>
-            <text x="455" y="455" font-family="'Orbitron', sans-serif" font-size="6.5" font-weight="600" fill="#94a3b8">Smart Gates ▲</text>
+            <!-- Row 2 -->
+            <rect x="404" y="258" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="454" y="258" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+
+            <!-- Row 3 -->
+            <rect x="404" y="298" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="454" y="298" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+
+            <!-- Row 4 -->
+            <rect x="404" y="338" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="454" y="338" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+
+            <!-- Row 5 (LEFT IS USER DESK: MAGENTA) -->
+            <rect x="404" y="378" width="44" height="26" rx="6" fill="rgba(255, 42, 141, 0.22)" stroke="#ff2a8d" stroke-width="2.8" filter="url(#neonPinkGlow)"/>
+            <text x="426" y="394.5" font-family="'Orbitron', sans-serif" font-size="7.5" font-weight="900" fill="#ffffff" text-anchor="middle">YOU</text>
+            <rect x="454" y="378" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+
+            <!-- Row 6 -->
+            <rect x="404" y="418" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
+            <rect x="454" y="418" width="44" height="26" rx="6" fill="rgba(0, 240, 255, 0.04)" stroke="#00f0ff" stroke-width="2.2" filter="url(#neonCyanGlow)"/>
 
             <!-- ==========================================================================
-                 7. STRAIGHT NAVIGATION LINE (Straight Segments from Desk 14 to Room 1)
+                 SECTION 8: ORTHOGONAL NAVIGATION ROUTE (MAGENTA)
+                 Room (220, 142) -> Down (220, 202) -> Right (370, 202) -> Down (370, 391) -> Right (404, 391) Desk
                  ========================================================================== -->
-            <!-- Underlay Neon Pink Glow -->
-            <path d="M 146 266 L 175 266 L 175 140 L 106 140" fill="none" stroke="rgba(255, 42, 141, 0.4)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
-            
-            <!-- Animated Route Flow (Pure Straight Lines) -->
-            <path d="M 146 266 L 175 266 L 175 140 L 106 140" fill="none" stroke="#ff2a8d" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" stroke-dasharray="8 6" class="nav-route-flow"/>
+            <!-- Glowing Pink Underlay -->
+            <path d="M 220 142 L 220 202 L 370 202 L 370 391 L 404 391" fill="none" stroke="rgba(255, 42, 141, 0.35)" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
 
-            <!-- Moving Active Position Particle -->
+            <!-- Solid Glowing Route Path -->
+            <path d="M 220 142 L 220 202 L 370 202 L 370 391 L 404 391" fill="none" stroke="#ff2a8d" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" filter="drop-shadow(0 0 4px #ff2a8d)"/>
+
+            <!-- Interactive Traveling Motion Particle (From Desk to Room) -->
             <circle r="4.5" fill="#39ff14" filter="drop-shadow(0 0 6px #39ff14)">
-              <animateMotion path="M 146 266 L 175 266 L 175 140 L 106 140" dur="2.4s" repeatCount="indefinite" />
+              <animateMotion path="M 404 391 L 370 391 L 370 202 L 220 202 L 220 142" dur="2.8s" repeatCount="indefinite" />
             </circle>
 
-            <!-- ==========================================================================
-                 8. CURRENT LOCATION: "YOU ARE HERE" PIN AT DESK 14
-                 ========================================================================== -->
-            <!-- Sonar Pulse Ring -->
-            <circle cx="121" cy="266" r="10" fill="none" stroke="#00f0ff" stroke-width="2.5" class="user-sonar-ring"/>
-            
-            <!-- Black & Cyan Circle Pin -->
-            <circle cx="121" cy="266" r="17" fill="#030611" stroke="#00f0ff" stroke-width="2.5" filter="url(#mapShadow)"/>
-            <text x="121" y="261" font-family="'Orbitron', -apple-system, sans-serif" font-size="6.5" font-weight="900" fill="#ffffff" text-anchor="middle">YOU</text>
-            <text x="121" y="268" font-family="'Orbitron', -apple-system, sans-serif" font-size="5.5" font-weight="900" fill="#00f0ff" text-anchor="middle">ARE</text>
-            <text x="121" y="275" font-family="'Orbitron', -apple-system, sans-serif" font-size="5.5" font-weight="900" fill="#ffffff" text-anchor="middle">HERE</text>
+            <!-- Desk Location Beacon Pin -->
+            <circle cx="404" cy="391" r="5" fill="#ff2a8d" filter="drop-shadow(0 0 5px #ff2a8d)"/>
 
           </svg>
         </div>
@@ -3299,11 +3224,8 @@
       }
       if (countdownRemainingSeconds <= 0) {
         countdownText.innerText = "Break ready now!";
-      } else if (countdownRemainingSeconds < 60) {
-        countdownText.innerText = `Break in ${countdownRemainingSeconds}s`;
       } else {
-        const mins = Math.ceil(countdownRemainingSeconds / 60);
-        countdownText.innerText = `Break in ${mins} min`;
+        countdownText.innerText = "Break in";
       }
     }
 

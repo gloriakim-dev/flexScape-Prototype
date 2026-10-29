@@ -53,16 +53,16 @@
 
         <!-- Vertical Menu Buttons -->
         <div class="w-full max-w-xs sm:max-w-sm space-y-4 flex flex-col items-center justify-center mx-auto text-center">
-            <button onclick="navigateTo('screenSongSelect')" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
+            <button id="homeBtnStart" onclick="navigateTo('screenSongSelect')" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
                 Start
             </button>
-            <button onclick="navigateTo('screenSettings')" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
+            <button id="homeBtnSetting" onclick="navigateTo('screenSettings')" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
                 Setting
             </button>
-            <button onclick="startTutorial()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
+            <button id="homeBtnTutorial" onclick="startTutorial()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
                 Tutorial
             </button>
-            <button onclick="openModal('Exit')" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
+            <button id="homeBtnExit" onclick="openModal('Exit')" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
                 Exit
             </button>
         </div>
@@ -83,12 +83,12 @@
         <div class="max-w-4xl w-full flex flex-col items-center justify-center my-auto z-20 text-center space-y-5 sm:space-y-6">
             
             <!-- Header Title -->
-            <h1 class="font-orbitron font-extrabold text-white text-3xl sm:text-4xl md:text-5xl tracking-wider leading-tight drop-shadow-[0_0_25px_rgba(0,240,255,0.4)]">
+            <h1 id="tut2Title" class="font-orbitron font-extrabold text-white text-3xl sm:text-4xl md:text-5xl tracking-wider leading-tight drop-shadow-[0_0_25px_rgba(0,240,255,0.4)]">
                 Health warning and Disclaimer
             </h1>
             
             <!-- Instructions Subtitle -->
-            <p class="font-rajdhani text-slate-200 text-lg sm:text-xl md:text-2xl font-semibold leading-relaxed max-w-2xl">
+            <p id="tut2Desc" class="font-rajdhani text-slate-200 text-lg sm:text-xl md:text-2xl font-semibold leading-relaxed max-w-2xl">
                 Please ensure your surroundings are clear of any trip hazards before you play.<br class="hidden sm:inline">
                 Allow for adequate room to move freely and comfortably.
             </p>
@@ -287,73 +287,131 @@
     </div>
 
     <!-- ========================================================================= -->
-    <!-- TUTORIAL STEP 5: GESTURE CONTROL & INTERACTIVE TEST BUTTON               -->
-    <!-- (Merged Step 6 into Step 5; Test button in center; hover swaps text)      -->
     <!-- ========================================================================= -->
-    <div id="screenTutorialStep5" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-between p-6 sm:p-10 select-none">
-        <!-- Top Left Tutorial Badge -->
-        <div class="w-full flex justify-between items-center max-w-6xl z-20">
+    <!-- TUTORIAL STEP 5: SPLIT CONTROLS (VOICE CONTROL & HAND CURSOR TEST)        -->
+    <!-- ========================================================================= -->
+    <div id="screenTutorialStep5" class="screen-view hidden fixed inset-0 z-50 bg-[#030611] flex flex-col items-center justify-between p-4 sm:p-8 select-none overflow-y-auto">
+        <!-- Top Bar -->
+        <div class="w-full flex justify-between items-center max-w-6xl z-20 pt-2 pb-1">
             <div class="tutorial-glow-badge">TUTORIAL</div>
-            <div></div>
+            <div class="font-orbitron text-xs sm:text-sm text-cyan-400 font-bold tracking-wider">STEP 5: CONTROLS SETUP</div>
         </div>
 
-        <!-- Center Stage -->
-        <div class="w-full max-w-4xl flex flex-col items-center justify-center my-auto z-20 relative">
-            <div class="w-full flex items-center justify-center relative min-h-[300px] sm:min-h-[340px]">
-                <!-- Left Pink-to-White Silhouette Figure -->
-                <div class="hidden sm:block absolute left-2 sm:left-6 bottom-0 w-32 h-64 pointer-events-none select-none">
-                    <svg viewBox="0 0 100 200" class="w-full h-full drop-shadow-[0_0_15px_rgba(255,42,141,0.4)]">
-                        <defs>
-                            <linearGradient id="bodyGrad5" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="#ff4099" />
-                                <stop offset="70%" stop-color="#ff99cc" />
-                                <stop offset="100%" stop-color="#ffffff" />
-                            </linearGradient>
-                        </defs>
-                        <!-- Head -->
-                        <circle cx="50" cy="22" r="12" fill="url(#bodyGrad5)" />
-                        <!-- Torso -->
-                        <path d="M35 38 Q50 34 65 38 L68 95 Q50 98 32 95 Z" fill="url(#bodyGrad5)" />
-                        <!-- Left arm (hanging) -->
-                        <path d="M34 40 L24 75 L20 110" stroke="url(#bodyGrad5)" stroke-width="8" stroke-linecap="round" fill="none" />
-                        <!-- Right arm (lifted dominant hand forward) -->
-                        <path d="M66 40 L84 62 L88 38" stroke="url(#bodyGrad5)" stroke-width="8" stroke-linecap="round" fill="none" />
-                        <!-- Right raised hand -->
-                        <circle cx="88" cy="32" r="6" fill="url(#bodyGrad5)" />
-                        <!-- Legs -->
-                        <path d="M40 96 L38 150 L36 195" stroke="url(#bodyGrad5)" stroke-width="8" stroke-linecap="round" fill="none" />
-                        <path d="M60 96 L62 150 L64 195" stroke="url(#bodyGrad5)" stroke-width="8" stroke-linecap="round" fill="none" />
-                    </svg>
+        <!-- Main Content Area: Split 50/50 Grid -->
+        <div class="w-full max-w-6xl grid grid-cols-1 md:grid-cols-2 gap-6 lg:gap-10 my-auto z-20 items-stretch px-2 sm:px-4 py-4">
+            
+            <!-- LEFT HALF: VOICE CONTROL -->
+            <div id="voiceControlCard" class="bg-[#060c20]/95 border-2 border-[#162758] rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-between text-center shadow-[0_8px_32px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-300">
+                <!-- Glowing cyan gradient backdrop -->
+                <div class="absolute -top-16 -left-16 w-36 h-36 bg-cyan-500/15 rounded-full blur-2xl pointer-events-none"></div>
+
+                <!-- Card Header -->
+                <div class="flex items-center gap-3 mb-2 z-10">
+                    <div class="w-12 h-12 rounded-full bg-cyan-500/20 border-2 border-cyan-400 flex items-center justify-center text-cyan-300 shadow-[0_0_15px_rgba(0,240,255,0.4)]">
+                        <i class="fa-solid fa-microphone text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <h3 class="font-orbitron text-xl sm:text-2xl font-black text-white tracking-wider">Voice Control</h3>
+                        <span class="font-sans text-xs text-cyan-400 font-medium">Hands-free accessibility</span>
+                    </div>
                 </div>
 
-                <!-- Center Interactive Test Button Card / Container -->
-                <div class="flex flex-col items-center justify-center gap-6 z-30 mx-auto">
-                    <!-- Center Interactive Test Button -->
+                <!-- Main Prompt Text -->
+                <div class="my-4 space-y-2 z-10">
+                    <p class="font-orbitron text-base sm:text-lg text-white font-bold leading-relaxed tracking-wide">
+                        Say <span class="text-cyan-300 bg-cyan-950/80 px-2.5 py-1 rounded-lg border border-cyan-400/50 shadow-[0_0_12px_rgba(0,240,255,0.3)]">"enable voice control"</span> to use voice control
+                    </p>
+                    <p class="font-sans text-xs sm:text-sm text-slate-400">
+                        Speak clearly into your microphone to activate
+                    </p>
+                </div>
+
+                <!-- Voice Meter Visuals -->
+                <div class="w-full max-w-xs bg-[#030611] border border-cyan-500/30 rounded-2xl p-4 my-2 flex flex-col items-center shadow-inner z-10">
+                    <div class="font-orbitron text-[11px] text-slate-300 mb-2.5 flex items-center gap-2">
+                        <span id="voiceStatusDot" class="w-2.5 h-2.5 rounded-full bg-cyan-400 animate-ping"></span>
+                        <span id="voiceStatusLabel" class="text-cyan-300 font-bold">Listening for "enable voice control"...</span>
+                    </div>
+
+                    <!-- Voice Equalizer / Waveform Bars -->
+                    <div id="voiceMeterBars" class="flex items-end justify-center gap-1.5 h-16 w-full px-2">
+                        <div class="w-2.5 bg-gradient-to-t from-cyan-500 to-[#ff2a8d] rounded-full voice-bar h-4 transition-all duration-75"></div>
+                        <div class="w-2.5 bg-gradient-to-t from-cyan-500 to-[#ff2a8d] rounded-full voice-bar h-8 transition-all duration-75"></div>
+                        <div class="w-2.5 bg-gradient-to-t from-cyan-500 to-[#ff2a8d] rounded-full voice-bar h-14 transition-all duration-75"></div>
+                        <div class="w-2.5 bg-gradient-to-t from-cyan-500 to-[#ff2a8d] rounded-full voice-bar h-10 transition-all duration-75"></div>
+                        <div class="w-2.5 bg-gradient-to-t from-cyan-500 to-[#ff2a8d] rounded-full voice-bar h-16 transition-all duration-75"></div>
+                        <div class="w-2.5 bg-gradient-to-t from-cyan-500 to-[#ff2a8d] rounded-full voice-bar h-12 transition-all duration-75"></div>
+                        <div class="w-2.5 bg-gradient-to-t from-cyan-500 to-[#ff2a8d] rounded-full voice-bar h-7 transition-all duration-75"></div>
+                        <div class="w-2.5 bg-gradient-to-t from-cyan-500 to-[#ff2a8d] rounded-full voice-bar h-13 transition-all duration-75"></div>
+                        <div class="w-2.5 bg-gradient-to-t from-cyan-500 to-[#ff2a8d] rounded-full voice-bar h-5 transition-all duration-75"></div>
+                    </div>
+                </div>
+
+                <!-- Simulation / Fallback Action -->
+                <button id="btnSimulateVoice" onclick="triggerVoiceControlEnabled()" class="interactable mt-3 px-6 py-2.5 rounded-xl border border-cyan-400/50 bg-[#091533] hover:bg-cyan-900/40 text-cyan-300 font-orbitron text-xs sm:text-sm font-bold tracking-wider transition-all flex items-center gap-2 active:scale-95 cursor-pointer z-10 shadow-[0_0_15px_rgba(0,240,255,0.2)]">
+                    <i class="fa-solid fa-microphone-lines"></i>
+                    <span>Say or Click "Enable Voice Control"</span>
+                </button>
+            </div>
+
+            <!-- RIGHT HALF: HAND POSITION CURSOR TEST BUTTON -->
+            <div id="handCursorCard" class="bg-[#060c20]/95 border-2 border-[#162758] rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-between text-center shadow-[0_8px_32px_rgba(0,0,0,0.6)] relative overflow-hidden transition-all duration-300">
+                <!-- Glowing magenta gradient backdrop -->
+                <div class="absolute -top-16 -right-16 w-36 h-36 bg-[#ff2a8d]/15 rounded-full blur-2xl pointer-events-none"></div>
+
+                <!-- Card Header with Default Indicator -->
+                <div class="flex items-center gap-3 mb-2 z-10">
+                    <div class="w-12 h-12 rounded-full bg-pink-500/20 border-2 border-[#ff2a8d] flex items-center justify-center text-pink-300 shadow-[0_0_15px_rgba(255,42,141,0.4)]">
+                        <i class="fa-solid fa-hand text-xl"></i>
+                    </div>
+                    <div class="text-left">
+                        <div class="flex items-center gap-2">
+                            <h3 class="font-orbitron text-xl sm:text-2xl font-black text-white tracking-wider">Hand Cursor</h3>
+                            <span class="px-2 py-0.5 rounded-full text-[10px] font-orbitron font-extrabold bg-emerald-500/20 text-emerald-300 border border-emerald-400/50 tracking-wider">DEFAULT</span>
+                        </div>
+                        <span class="font-sans text-xs text-pink-300 font-medium">Vision-tracked gesture control</span>
+                    </div>
+                </div>
+
+                <!-- Main Prompt Text -->
+                <div class="my-4 space-y-2 z-10">
+                    <p id="tutStep5Text" class="font-orbitron text-base sm:text-lg text-white font-bold leading-relaxed tracking-wide">
+                        Move hand to aim cursor, hover over test button to click
+                    </p>
+                    <p class="font-sans text-xs sm:text-sm text-slate-400">
+                        Hold cursor steady over button to fill the dwell progress ring
+                    </p>
+                </div>
+
+                <!-- Center Interactive Test Button with Dwell Ring -->
+                <div class="w-full flex justify-center my-3 z-10">
                     <button id="tutTestBtn" 
                             onclick="completeTestClick()" 
                             onmouseenter="handleTutBtnHover()" 
                             onmouseleave="handleTutBtnLeave()" 
-                            class="figma-btn-magenta interactable px-12 sm:px-16 py-7 sm:py-8 rounded-3xl font-orbitron font-extrabold text-white text-lg sm:text-xl tracking-widest shadow-[0_0_35px_rgba(255,42,141,0.6)] border-2 border-pink-400 hover:scale-105 active:scale-95 transition-all text-center flex flex-col items-center gap-2 group cursor-pointer">
-                        <span class="flex items-center gap-3">
-                            <i class="fa-solid fa-hand-pointer text-pink-300 text-2xl group-hover:animate-bounce"></i>
+                            class="figma-btn-magenta interactable px-8 sm:px-12 py-5 sm:py-6 rounded-2xl font-orbitron font-extrabold text-white text-base sm:text-lg tracking-widest shadow-[0_0_30px_rgba(255,42,141,0.5)] border-2 border-pink-400 hover:scale-105 active:scale-95 transition-all text-center flex flex-col items-center gap-1.5 group cursor-pointer w-full max-w-xs">
+                        <span class="flex items-center gap-2.5">
+                            <i class="fa-solid fa-hand-pointer text-pink-300 text-xl group-hover:animate-bounce"></i>
                             TEST BUTTON
                         </span>
-                        <span class="font-sans text-xs sm:text-sm font-normal text-pink-200 tracking-normal opacity-90">Hover or click to register</span>
+                        <span class="font-sans text-xs font-normal text-pink-200 tracking-normal opacity-90">Hover or click to register</span>
                         <!-- Dwell Progress Bar on button -->
-                        <div class="w-full bg-slate-900/80 h-2.5 rounded-full mt-3 overflow-hidden border border-pink-400/40">
+                        <div class="w-full bg-slate-900/80 h-2.5 rounded-full mt-2 overflow-hidden border border-pink-400/40">
                             <div id="testBtnProgress" class="h-full bg-cyan-400 rounded-full transition-all duration-75 shadow-[0_0_12px_#00f0ff]" style="width: 0%;"></div>
                         </div>
                     </button>
                 </div>
+
+                <!-- Note: Active by Default -->
+                <div class="font-orbitron text-[11px] text-emerald-400 font-bold z-10 flex items-center gap-1.5">
+                    <i class="fa-solid fa-circle-check text-xs"></i>
+                    <span>Hand position cursor active by default</span>
+                </div>
             </div>
 
-            <!-- Bottom Instruction Text (Dynamically changes when hovering middle button) -->
-            <p id="tutStep5Text" class="font-orbitron text-base sm:text-xl md:text-2xl font-bold text-white tracking-wider text-center mt-8 max-w-2xl px-4 drop-shadow-[0_0_15px_rgba(0,240,255,0.4)] transition-all duration-300">
-                To use gesture control please lift your dominant hand forward towards the screen
-            </p>
         </div>
 
-        <div class="h-6"></div>
+        <div class="h-4"></div>
     </div>
 
     <!-- ========================================================================= -->
@@ -402,14 +460,14 @@
         
         <!-- Header Bar -->
         <div class="w-full flex justify-between items-center">
-            <button onclick="navigateTo('screenHome')" onmouseenter="playSfx('hover')" class="figma-btn interactable px-8 py-2.5 rounded-xl font-orbitron text-sm font-bold tracking-wider text-white">
+            <button id="songSelectBackBtn" onclick="navigateTo('screenHome')" onmouseenter="playSfx('hover')" class="figma-btn interactable px-8 py-2.5 rounded-xl font-orbitron text-sm font-bold tracking-wider text-white">
                 Back
             </button>
 
             <!-- Centered Logo & Title -->
             <div class="flex flex-col items-center">
                 <img src="logo.svg" alt="FlexScape Logo" class="w-10 h-11 object-contain mb-1 drop-shadow-[0_0_12px_rgba(48,223,242,0.5)]">
-                <h1 class="font-orbitron text-2xl font-extrabold text-white tracking-wider">Song selection</h1>
+                <h1 id="songSelectTitle" class="font-orbitron text-2xl font-extrabold text-white tracking-wider">Song selection</h1>
             </div>
 
             <button onclick="navigateTo('screenSettings')" onmouseenter="playSfx('hover')" class="interactable text-slate-300 hover:text-white text-2xl p-2 transition">
@@ -431,13 +489,13 @@
                         <div class="eq-bar"></div>
                     </div>
                     <div>
-                        <h3 class="font-orbitron font-bold text-lg text-white">Song title</h3>
+                        <h3 id="songSelectCard1Title" class="font-orbitron font-bold text-lg text-white">Song title</h3>
                         <p class="font-orbitron text-xs text-slate-400 mt-1">Tempo 100 <span class="mx-2 text-slate-600">|</span> <span class="text-[#ff2a8d] font-bold">Energetic</span></p>
                     </div>
                 </div>
                 <div class="flex items-center space-x-2 text-[#ff2a8d] font-orbitron text-sm font-bold">
                     <i class="fa-regular fa-circle-check text-base"></i>
-                    <span>Selected</span>
+                    <span id="songSelectCard1Selected">Selected</span>
                 </div>
             </div>
 
@@ -448,11 +506,11 @@
                         <i class="fa-solid fa-lock"></i>
                     </div>
                     <div>
-                        <h3 class="font-orbitron font-bold text-lg text-slate-400">Coming soon</h3>
+                        <h3 id="songSelectCard2Title" class="font-orbitron font-bold text-lg text-slate-400">Coming soon</h3>
                         <p class="font-orbitron text-xs text-slate-500 mt-1">Tempo 72 <span class="mx-2 text-slate-700">|</span> Calm</p>
                     </div>
                 </div>
-                <div class="font-orbitron text-sm font-bold text-slate-500">
+                <div id="songSelectCard2Status" class="font-orbitron text-sm font-bold text-slate-500">
                     Unavailable
                 </div>
             </div>
@@ -464,11 +522,11 @@
                         <i class="fa-solid fa-lock"></i>
                     </div>
                     <div>
-                        <h3 class="font-orbitron font-bold text-lg text-slate-400">Coming soon</h3>
+                        <h3 id="songSelectCard3Title" class="font-orbitron font-bold text-lg text-slate-400">Coming soon</h3>
                         <p class="font-orbitron text-xs text-slate-500 mt-1">Tempo 86 <span class="mx-2 text-slate-700">|</span> Calm</p>
                     </div>
                 </div>
-                <div class="font-orbitron text-sm font-bold text-slate-500">
+                <div id="songSelectCard3Status" class="font-orbitron text-sm font-bold text-slate-500">
                     Unavailable
                 </div>
             </div>
@@ -477,7 +535,7 @@
 
         <!-- Ready Button -->
         <div class="w-full flex justify-center pb-4">
-            <button onclick="startHoleInWallGame()" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable w-full max-w-sm py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-widest text-center">
+            <button id="songSelectReadyBtn" onclick="startHoleInWallGame()" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable w-full max-w-sm py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-widest text-center">
                 Ready
             </button>
         </div>
@@ -490,55 +548,116 @@
         
         <!-- Top Bar -->
         <div class="w-full flex justify-between items-center">
-            <button onclick="returnFromSettings()" onmouseenter="playSfx('hover')" class="figma-btn interactable px-8 py-2.5 rounded-xl font-orbitron text-sm font-bold tracking-wider text-white">
+            <button id="settingsBackBtn" onclick="returnFromSettings()" onmouseenter="playSfx('hover')" class="figma-btn interactable px-8 py-2.5 rounded-xl font-orbitron text-sm font-bold tracking-wider text-white">
                 Back
             </button>
 
             <!-- Centered Logo & Title -->
             <div class="flex flex-col items-center">
                 <img src="logo.svg" alt="FlexScape Logo" class="w-10 h-11 object-contain mb-1 drop-shadow-[0_0_12px_rgba(48,223,242,0.5)]">
-                <h1 class="font-orbitron text-2xl font-extrabold text-white tracking-wider">Settings</h1>
+                <h1 id="settingsTitle" class="font-orbitron text-2xl font-extrabold text-white tracking-wider">Settings</h1>
             </div>
 
             <div class="w-20"></div> <!-- Spacer -->
         </div>
 
-        <!-- Settings Box Controls -->
-        <div class="w-full space-y-5 my-auto max-w-xl">
+        <!-- Settings Box Controls (Matching Image 1) -->
+        <div class="w-full space-y-4 my-auto max-w-xl z-20">
             
-            <!-- Volume Card -->
-            <div class="figma-btn rounded-2xl p-6 space-y-4 border-slate-800">
+            <!-- 1. Volume Card (Matching Image 1) -->
+            <div id="volumeControlCard" 
+                 onmouseenter="handleVolumeCardHover(true)" 
+                 onmouseleave="handleVolumeCardHover(false)"
+                 class="figma-btn interactable rounded-xl px-6 py-4 space-y-2 border border-slate-800 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 relative select-none">
+                
                 <div class="flex justify-between items-center">
-                    <span class="font-orbitron text-xl font-bold text-white">Volume</span>
-                    <span id="volValueText" class="font-orbitron text-sm font-bold text-[#ff2a8d]">75%</span>
+                    <span id="i18n_vol_title" class="font-orbitron text-2xl font-bold text-white tracking-wide">Volume</span>
+                    <span id="volValueText" class="font-orbitron text-xl font-bold text-[#ff2a8d] tracking-wider">75%</span>
                 </div>
-                <div class="flex items-center space-x-4 text-slate-400">
-                    <i class="fa-solid fa-volume-low text-sm"></i>
-                    <input id="volSlider" type="range" min="0" max="100" value="75" oninput="updateVolume(this.value)" class="interactable w-full">
-                    <i class="fa-solid fa-volume-high text-sm"></i>
+
+                <!-- Slider Track with Speaker Icons -->
+                <div class="flex items-center gap-3 pt-1">
+                    <i id="volIconLeft" class="fa-solid fa-volume-low text-slate-400 text-xs"></i>
+                    <div id="volTrackContainer" 
+                         class="interactable relative py-2 cursor-pointer flex-1"
+                         onclick="handleVolumeTrackClick(event)">
+                        <!-- Track Line -->
+                        <div class="w-full bg-[#162347] h-1.5 rounded-full overflow-hidden relative">
+                            <div id="volProgressFill" class="h-full bg-[#ff2a8d] rounded-full transition-all duration-75 shadow-[0_0_10px_#ff2a8d]" style="width: 75%;"></div>
+                        </div>
+                        <!-- Thumb Handle -->
+                        <div id="volThumbHandle" class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-4 h-4 rounded-full bg-[#ff2a8d] border border-white shadow-[0_0_10px_#ff2a8d] pointer-events-none transition-all duration-75 flex items-center justify-center" style="left: 75%;"></div>
+                        <input id="volSlider" type="range" min="0" max="100" value="75" oninput="updateVolume(this.value)" class="sr-only">
+                    </div>
+                    <i id="volIconRight" class="fa-solid fa-volume-high text-slate-400 text-xs"></i>
                 </div>
             </div>
 
-            <!-- Language Card -->
-            <div class="figma-btn rounded-2xl p-6 flex justify-between items-center border-slate-800">
-                <span class="font-orbitron text-xl font-bold text-white">Language</span>
-                <div class="relative">
-                    <select class="interactable bg-[#091330] border border-cyan-500/30 rounded-xl px-6 py-2 font-orbitron text-sm text-white focus:outline-none cursor-pointer appearance-none pr-10">
-                        <option>English</option>
-                        <option>Spanish</option>
-                        <option>Japanese</option>
-                    </select>
-                    <i class="fa-solid fa-caret-down absolute right-3 top-3 text-cyan-400 text-xs pointer-events-none"></i>
+            <!-- 2. Language Card (Matching Image 1, expands to Image 2 when selected) -->
+            <div id="languageControlCard" 
+                 onmouseenter="handleLanguageCardHover(true)" 
+                 onmouseleave="handleLanguageCardHover(false)"
+                 onclick="toggleLanguageOptions()"
+                 class="figma-btn interactable rounded-xl px-6 py-4 border border-slate-800 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300 relative select-none cursor-pointer">
+                
+                <div class="flex justify-between items-center">
+                    <span id="i18n_lang_title" class="font-orbitron text-2xl font-bold text-white tracking-wide">Language</span>
+                    <div class="flex items-center gap-2 px-5 py-2 rounded-lg bg-[#0d1838] border border-slate-700/80">
+                        <span id="langCurrentText" class="font-orbitron text-sm font-bold text-white">English</span>
+                        <span id="langChevron" class="text-xs text-slate-300 ml-1 transition-transform duration-300">▾</span>
+                    </div>
+                </div>
+
+                <!-- Language Options Panel (Matching Image 2: expands when selected) -->
+                <div id="languageOptionsPanel" class="w-full grid grid-cols-3 gap-3 pt-4 overflow-hidden transition-all duration-300 max-h-0 opacity-0 pointer-events-none">
+                    
+                    <!-- English Option (Matching Image 2: cyan rounded border, ACTIVE badge) -->
+                    <div id="langBtnEn" 
+                         onclick="requestLanguageChange('en', event)" 
+                         onmouseenter="handleLangOptionHover('en')" 
+                         onmouseleave="handleLangOptionLeave('en')"
+                         class="lang-option-card interactable p-4 rounded-2xl border-2 border-cyan-400 bg-[#091330] text-white cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 text-center shadow-[0_0_18px_rgba(0,240,255,0.4)]">
+                        <div class="flex items-center gap-2 font-orbitron text-lg font-bold">
+                            <span>🇬🇧</span>
+                            <span>English</span>
+                        </div>
+                        <span id="badgeLangEn" class="text-xs font-orbitron font-extrabold text-cyan-300 px-3.5 py-0.5 rounded-full border border-cyan-400">ACTIVE</span>
+                    </div>
+
+                    <!-- Spanish Option (Matching Image 2: dark border, ES badge) -->
+                    <div id="langBtnEs" 
+                         onclick="requestLanguageChange('es', event)" 
+                         onmouseenter="handleLangOptionHover('es')" 
+                         onmouseleave="handleLangOptionLeave('es')"
+                         class="lang-option-card interactable p-4 rounded-2xl border-2 border-slate-700 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] bg-[#070e24] text-slate-300 hover:text-white cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 text-center">
+                        <div class="flex items-center gap-2 font-orbitron text-lg font-bold">
+                            <span>🇪🇸</span>
+                            <span>Español</span>
+                        </div>
+                        <span id="badgeLangEs" class="text-xs font-orbitron text-slate-400">ES</span>
+                    </div>
+
+                    <!-- Japanese Option (Matching Image 2: dark border, JA badge) -->
+                    <div id="langBtnJa" 
+                         onclick="requestLanguageChange('ja', event)" 
+                         onmouseenter="handleLangOptionHover('ja')" 
+                         onmouseleave="handleLangOptionLeave('ja')"
+                         class="lang-option-card interactable p-4 rounded-2xl border-2 border-slate-700 hover:border-cyan-400 hover:shadow-[0_0_15px_rgba(0,240,255,0.3)] bg-[#070e24] text-slate-300 hover:text-white cursor-pointer transition-all duration-200 flex flex-col items-center justify-center gap-2 text-center">
+                        <div class="flex items-center gap-2 font-orbitron text-lg font-bold">
+                            <span>🇯🇵</span>
+                            <span>日本語</span>
+                        </div>
+                        <span id="badgeLangJa" class="text-xs font-orbitron text-slate-400">JA</span>
+                    </div>
+
                 </div>
             </div>
 
-        </div>
-
-        <!-- Accessibility Settings Button -->
-        <div class="w-full flex justify-center pb-4">
-            <button onclick="navigateTo('screenAccessibility')" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable w-full max-w-md py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center shadow-[0_0_20px_rgba(255,42,141,0.4)]">
-                Accessability settings
+            <!-- 3. Accessibility Settings Button (Matching Image 1) -->
+            <button id="btnOpenAccessibility" onclick="navigateTo('screenAccessibility')" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-5 rounded-xl text-2xl font-orbitron font-bold text-white tracking-wide text-center block border border-slate-800 hover:border-cyan-400 hover:shadow-[0_0_20px_rgba(0,240,255,0.4)] transition-all duration-300">
+                Accessibility settings
             </button>
+
         </div>
     </div>
 
@@ -549,7 +668,7 @@
         
         <!-- Top Bar -->
         <div class="w-full flex justify-between items-center z-20">
-            <button onclick="returnFromAccessibility()" onmouseenter="playSfx('hover')" class="figma-btn interactable px-8 py-2.5 rounded-xl font-orbitron text-sm font-bold tracking-wider text-white">
+            <button id="accessBackBtn" onclick="returnFromAccessibility()" onmouseenter="playSfx('hover')" class="figma-btn interactable px-8 py-2.5 rounded-xl font-orbitron text-sm font-bold tracking-wider text-white">
                 Back
             </button>
 
@@ -562,7 +681,7 @@
         </div>
 
         <!-- Main Title -->
-        <h1 class="font-orbitron text-2xl sm:text-3xl font-extrabold text-white tracking-wider text-center my-2 z-20">
+        <h1 id="accessTitle" class="font-orbitron text-2xl sm:text-3xl font-extrabold text-white tracking-wider text-center my-2 z-20">
             Accessability Settings
         </h1>
 
@@ -571,7 +690,7 @@
             
             <!-- 1. Colour-blind Friendly Mode Card -->
             <div class="bg-[#091124]/90 border border-cyan-500/30 rounded-2xl p-5 sm:p-6 flex items-center justify-between shadow-[0_8px_24px_rgba(0,0,0,0.5)] hover:border-cyan-400/50 transition-all">
-                <div class="font-orbitron text-base sm:text-lg font-bold text-white tracking-wide leading-snug">
+                <div id="accessColorblindTitle" class="font-orbitron text-base sm:text-lg font-bold text-white tracking-wide leading-snug">
                     Colour-blind<br>Friendly Mode
                 </div>
                 
@@ -586,7 +705,7 @@
 
             <!-- 2. Limited Mobility Version Card -->
             <div class="bg-[#091124]/90 border border-cyan-500/30 rounded-2xl p-5 sm:p-6 flex items-center justify-between shadow-[0_8px_24px_rgba(0,0,0,0.5)] hover:border-cyan-400/50 transition-all">
-                <div class="font-orbitron text-base sm:text-lg font-bold text-white tracking-wide leading-snug">
+                <div id="accessMobilityTitle" class="font-orbitron text-base sm:text-lg font-bold text-white tracking-wide leading-snug">
                     Limited Mobility<br>Version
                 </div>
                 
@@ -601,7 +720,7 @@
 
             <!-- 3. Screen Reader & Audio Cues Card -->
             <div class="bg-[#091124]/90 border border-cyan-500/30 rounded-2xl p-5 sm:p-6 flex items-center justify-between shadow-[0_8px_24px_rgba(0,0,0,0.5)] hover:border-cyan-400/50 transition-all">
-                <div class="font-orbitron text-base sm:text-lg font-bold text-white tracking-wide leading-snug">
+                <div id="accessScreenReaderTitle" class="font-orbitron text-base sm:text-lg font-bold text-white tracking-wide leading-snug">
                     Screen Reader &amp;<br>Audio Cues
                 </div>
                 
@@ -647,7 +766,7 @@
 
             <!-- Top Right: Current Score Card with Cyan Border -->
             <div class="border-2 border-cyan-400 rounded-2xl bg-[#030611]/80 px-6 py-2.5 text-center shadow-[0_0_20px_rgba(0,240,255,0.25)] min-w-[170px]">
-                <div class="font-orbitron text-xs font-bold text-[#ff2a8d] tracking-wider mb-0.5">Current Score</div>
+                <div id="gameScoreLabelText" class="font-orbitron text-xs font-bold text-[#ff2a8d] tracking-wider mb-0.5">Current Score</div>
                 <div id="gameScoreText" class="font-orbitron text-xl sm:text-2xl font-black text-white tracking-wider">0 Pts</div>
             </div>
         </div>
@@ -687,7 +806,7 @@
 
         <!-- Top Right: Current Score Card with Cyan Border (Pinned to Top-Right) -->
         <div class="absolute top-6 sm:top-8 right-6 sm:right-8 z-30 border-2 border-cyan-400 rounded-2xl bg-[#030611]/80 px-6 py-2.5 text-center shadow-[0_0_20px_rgba(0,240,255,0.25)] min-w-[160px] sm:min-w-[170px]">
-            <div class="font-orbitron text-xs font-bold text-[#ff2a8d] tracking-wider mb-0.5">Current Score</div>
+            <div id="pauseScoreLabelText" class="font-orbitron text-xs font-bold text-[#ff2a8d] tracking-wider mb-0.5">Current Score</div>
             <div id="pauseScoreDisplay" class="font-orbitron text-xl sm:text-2xl font-black text-white tracking-wider">0 Pts</div>
         </div>
 
@@ -699,23 +818,23 @@
                     <rect x="14.5" y="4" width="4.5" height="16" rx="2.2" />
                 </svg>
             </div>
-            <h1 class="font-orbitron text-2xl sm:text-3xl font-extrabold text-white tracking-wider drop-shadow-[0_0_15px_rgba(255,42,141,0.4)]">
+            <h1 id="pauseTitleText" class="font-orbitron text-2xl sm:text-3xl font-extrabold text-white tracking-wider drop-shadow-[0_0_15px_rgba(255,42,141,0.4)]">
                 Game Paused
             </h1>
         </div>
 
         <!-- Center Action Buttons (matching screenshot) -->
         <div class="w-full max-w-xs sm:max-w-sm space-y-3.5 flex flex-col items-center justify-center mx-auto my-auto z-20 text-center">
-            <button onclick="resumeGame()" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block shadow-[0_0_20px_rgba(255,42,141,0.4)]">
+            <button id="pauseBtnContinue" onclick="resumeGame()" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block shadow-[0_0_20px_rgba(255,42,141,0.4)]">
                 Continue
             </button>
-            <button onclick="openSettingsFromPause()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
+            <button id="pauseBtnSetting" onclick="openSettingsFromPause()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
                 Setting
             </button>
-            <button onclick="finishHoleInWallGame()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
+            <button id="pauseBtnFinish" onclick="finishHoleInWallGame()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
                 Finish Game
             </button>
-            <button onclick="exitGameplay()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
+            <button id="pauseBtnExit" onclick="exitGameplay()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full py-3.5 rounded-xl text-lg font-orbitron font-bold text-white tracking-wider text-center block">
                 Exit
             </button>
         </div>
@@ -763,7 +882,7 @@
 
             <!-- Main Cyan Bordered Card: Your Score -->
             <div class="border-2 border-cyan-400 rounded-3xl bg-[#030611]/85 backdrop-blur-md px-12 sm:px-20 py-10 sm:py-12 text-center shadow-[0_0_40px_rgba(0,240,255,0.25)] w-full max-w-lg">
-                <div class="font-orbitron text-xl sm:text-2xl font-bold text-[#ff2a8d] tracking-wide mb-3">
+                <div id="endGameScoreLabelText" class="font-orbitron text-xl sm:text-2xl font-bold text-[#ff2a8d] tracking-wide mb-3">
                     Your Score
                 </div>
                 <div id="endGameScoreValue" class="font-orbitron text-4xl sm:text-6xl font-extrabold text-white tracking-wider">
@@ -773,10 +892,10 @@
 
             <!-- Advance to Leaderboard & Exit to Home Actions -->
             <div class="flex flex-col sm:flex-row items-center justify-center gap-4 mt-8 w-full max-w-md">
-                <button onclick="showLeaderboardScreen()" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable w-full sm:w-auto px-8 py-3.5 rounded-xl font-orbitron font-bold text-base text-white tracking-widest shadow-[0_0_25px_rgba(255,42,141,0.5)] hover:scale-105 transition-all text-center">
+                <button id="endGameBtnLeaderboard" onclick="showLeaderboardScreen()" onmouseenter="playSfx('hover')" class="figma-btn-magenta interactable w-full sm:w-auto px-8 py-3.5 rounded-xl font-orbitron font-bold text-base text-white tracking-widest shadow-[0_0_25px_rgba(255,42,141,0.5)] hover:scale-105 transition-all text-center">
                     Leaderboard <i class="fa-solid fa-arrow-right ml-2"></i>
                 </button>
-                <button onclick="exitToHomeFromEndGame()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full sm:w-auto px-8 py-3.5 rounded-xl font-orbitron font-bold text-base text-white tracking-widest hover:scale-105 transition-all text-center">
+                <button id="endGameBtnExit" onclick="exitToHomeFromEndGame()" onmouseenter="playSfx('hover')" class="figma-btn interactable w-full sm:w-auto px-8 py-3.5 rounded-xl font-orbitron font-bold text-base text-white tracking-widest hover:scale-105 transition-all text-center">
                     Exit
                 </button>
             </div>
@@ -797,7 +916,7 @@
                 <img src="logo.svg" alt="FlexScape" class="w-9 h-11 sm:w-11 sm:h-13 object-contain drop-shadow-[0_0_12px_rgba(48,223,242,0.4)]">
             </div>
             
-            <h1 class="font-zendots text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-wider text-center flex-1 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]">
+            <h1 id="leaderboardTitleText" class="font-zendots text-3xl sm:text-4xl md:text-5xl font-black text-white tracking-wider text-center flex-1 drop-shadow-[0_0_20px_rgba(255,255,255,0.3)]">
                 Leaderboard
             </h1>
 
@@ -941,7 +1060,7 @@
 
             <!-- Exit Button with Pink Outline (matching reference image) -->
             <div class="w-full flex justify-center pt-6 pb-2 z-20">
-                <button onclick="exitLeaderboard()" onmouseenter="playSfx('hover')" class="interactable px-16 py-3.5 rounded-2xl border-2 border-[#ff2a8d] bg-[#060b1e] text-white font-zendots text-base tracking-widest hover:bg-[#ff2a8d]/20 transition-all shadow-[0_0_20px_rgba(255,42,141,0.4)] active:scale-95 cursor-pointer">
+                <button id="leaderboardExitBtn" onclick="exitLeaderboard()" onmouseenter="playSfx('hover')" class="interactable px-16 py-3.5 rounded-2xl border-2 border-[#ff2a8d] bg-[#060b1e] text-white font-zendots text-base tracking-widest hover:bg-[#ff2a8d]/20 transition-all shadow-[0_0_20px_rgba(255,42,141,0.4)] active:scale-95 cursor-pointer">
                     Exit
                 </button>
             </div>
@@ -1093,12 +1212,14 @@
                 pauseModal.classList.add('hidden');
                 pauseModal.style.display = 'none';
             }
-            navigateTo('screenAccessibility');
-            announceAudioCue('Accessibility settings opened.');
+            if (typeof resetSettingsSelectionStates === 'function') resetSettingsSelectionStates();
+            navigateTo('screenSettings');
+            announceAudioCue('Settings opened.');
         }
 
         function returnFromSettings() {
             playSfx('click');
+            if (typeof resetSettingsSelectionStates === 'function') resetSettingsSelectionStates();
             if (previousScreenBeforeSettings === 'screenGameplay') {
                 navigateTo('screenGameplay');
                 isGameRunning = true;
@@ -1115,18 +1236,8 @@
 
         function returnFromAccessibility() {
             playSfx('click');
-            if (previousScreenBeforeSettings === 'screenGameplay') {
-                navigateTo('screenGameplay');
-                isGameRunning = true;
-                isGamePaused = true;
-                const pauseModal = document.getElementById('pauseModal');
-                if (pauseModal) {
-                    pauseModal.classList.remove('hidden');
-                    pauseModal.style.display = 'flex';
-                }
-            } else {
-                navigateTo('screenSettings');
-            }
+            navigateTo('screenSettings');
+            announceAudioCue('Returned to settings.');
         }
 
         // Gameplay Pause & Resume System
@@ -1374,7 +1485,10 @@
         function navigateTo(screenId) {
             playSfx('click');
             currentActiveScreen = screenId;
-            document.querySelectorAll('.screen-view').forEach(s => s.classList.add('hidden'));
+            document.querySelectorAll('.screen-view').forEach(s => {
+                s.classList.add('hidden');
+                s.style.display = 'none';
+            });
             const targetScreen = document.getElementById(screenId);
             if (targetScreen) {
                 targetScreen.classList.remove('hidden');
@@ -1386,6 +1500,11 @@
             }
 
             if (screenId !== 'screenGameplay') {
+                const pauseModal = document.getElementById('pauseModal');
+                if (pauseModal) {
+                    pauseModal.classList.add('hidden');
+                    pauseModal.style.display = 'none';
+                }
                 if (previousScreenBeforeSettings !== 'screenGameplay' || (screenId !== 'screenSettings' && screenId !== 'screenAccessibility')) {
                     isGameRunning = false;
                     isGamePaused = false;
@@ -1402,6 +1521,11 @@
                     cursorElem.style.display = '';
                 }
             }
+            if (screenId === 'screenSettings') {
+                if (typeof resetSettingsSelectionStates === 'function') {
+                    resetSettingsSelectionStates();
+                }
+            }
             if (screenId === 'screenAccessibility') {
                 syncAccessibilityUI();
             }
@@ -1413,18 +1537,918 @@
             startHoleInWallGame();
         }
 
-        // Settings Controls
+        // =========================================================================
+        // SETTINGS: HAND POSITION CURSOR CONTROLS & WHOLE ROOM TRANSLATION SYSTEM
+        // =========================================================================
+        let currentVolPercent = 75;
+        let isVolumeSelected = false;
+        let volSelectStartTime = 0;
+        let isVolumeHandAdjusting = false;
+        let isVolumeConfirmed = false;
+        let volHoldStartTime = 0;
+        let volLastStillX = 0;
+        let volLastStillY = 0;
+        let lastVolTickTime = 0;
+        let settingsHoverTimer = null;
+
+        let isLanguageSelected = false;
+        let langSelectStartTime = 0;
+        let isLanguageMenuOpen = false;
+        let currentLanguage = 'en';
+        let pendingLanguage = null;
+        let langConfirmStartTime = 0;
+        let isLanguageConfirmed = false;
+        let langHoverTimer = null;
+        let langOptionHoverTimer = null;
+
+        // Internationalization Dictionary for whole FlexScape room
+        const I18N_DICTIONARY = {
+            en: {
+                flag: '🇬🇧',
+                name: 'English',
+                // Home Screen
+                homeBtnStart: 'Start',
+                homeBtnSetting: 'Setting',
+                homeBtnTutorial: 'Tutorial',
+                homeBtnExit: 'Exit',
+                // Song Select Screen
+                songSelectBackBtn: 'Back',
+                songSelectTitle: 'Song selection',
+                songSelectCard1Title: 'Song title',
+                songSelectCard1Selected: 'Selected',
+                songSelectCard2Title: 'Coming soon',
+                songSelectCard2Status: 'Unavailable',
+                songSelectCard3Title: 'Coming soon',
+                songSelectCard3Status: 'Unavailable',
+                songSelectReadyBtn: 'Ready',
+                // Settings Screen
+                settingsBackBtn: 'Back',
+                settingsTitle: 'Settings',
+                i18n_vol_title: 'Volume',
+                i18n_vol_instruction: 'Hover & move hand left / right to adjust • Hold hand for 5s to confirm',
+                volConfirmPromptText: 'Hold hand still to confirm:',
+                volConfirmNowBtn: 'Confirm Now',
+                volConfirmBadge: 'CONFIRMED ✓',
+                i18n_lang_title: 'Language',
+                i18n_lang_instruction: 'Hover over language to open options • Hover/click to change flexscape room language',
+                btnOpenAccessibility: 'Accessability settings',
+                // Accessibility Screen
+                accessBackBtn: 'Back',
+                accessTitle: 'Accessability Settings',
+                accessColorblindTitle: 'Colour-blind<br>Friendly Mode',
+                accessMobilityTitle: 'Limited Mobility<br>Version',
+                accessScreenReaderTitle: 'Screen Reader &amp;<br>Audio Cues',
+                // Pause Screen
+                pauseTitleText: 'Game Paused',
+                pauseScoreLabelText: 'Current Score',
+                pauseBtnContinue: 'Continue',
+                pauseBtnSetting: 'Setting',
+                pauseBtnFinish: 'Finish Game',
+                pauseBtnExit: 'Exit',
+                // Gameplay Screen
+                gameScoreLabelText: 'Current Score',
+                // End Game Screen
+                endGameSongTitle: 'Song title',
+                endGameScoreLabelText: 'Your Score',
+                endGameBtnLeaderboard: 'Leaderboard <i class="fa-solid fa-arrow-right ml-2"></i>',
+                endGameBtnExit: 'Exit',
+                // Leaderboard Screen
+                leaderboardTitleText: 'Leaderboard',
+                leaderboardExitBtn: 'Exit',
+                // Tutorial Step 2
+                tut2Title: 'Health warning and Disclaimer',
+                tut2Desc: 'Please ensure your surroundings are clear of any trip hazards before you play.<br class="hidden sm:inline">Allow for adequate room to move freely and comfortably.'
+            },
+            es: {
+                flag: '🇪🇸',
+                name: 'Español',
+                // Home Screen
+                homeBtnStart: 'Comenzar',
+                homeBtnSetting: 'Configuración',
+                homeBtnTutorial: 'Tutorial',
+                homeBtnExit: 'Salir',
+                // Song Select Screen
+                songSelectBackBtn: 'Atrás',
+                songSelectTitle: 'Selección de canciones',
+                songSelectCard1Title: 'Título de pista',
+                songSelectCard1Selected: 'Seleccionado',
+                songSelectCard2Title: 'Próximamente',
+                songSelectCard2Status: 'No disponible',
+                songSelectCard3Title: 'Próximamente',
+                songSelectCard3Status: 'No disponible',
+                songSelectReadyBtn: 'Listo',
+                // Settings Screen
+                settingsBackBtn: 'Atrás',
+                settingsTitle: 'Configuración',
+                i18n_vol_title: 'Volumen',
+                i18n_vol_instruction: 'Mueva la mano izquierda/derecha para ajustar • Mantenga 5s para confirmar',
+                volConfirmPromptText: 'Mantenga la mano quieta para confirmar:',
+                volConfirmNowBtn: 'Confirmar Ahora',
+                volConfirmBadge: 'CONFIRMADO ✓',
+                i18n_lang_title: 'Idioma',
+                i18n_lang_instruction: 'Pase el cursor sobre el idioma para ver opciones • Cambie el idioma de la sala',
+                btnOpenAccessibility: 'Configuración de accesibilidad',
+                // Accessibility Screen
+                accessBackBtn: 'Atrás',
+                accessTitle: 'Configuración de Accesibilidad',
+                accessColorblindTitle: 'Modo para<br>Daltonismo',
+                accessMobilityTitle: 'Versión de<br>Movilidad Reducida',
+                accessScreenReaderTitle: 'Lector de Pantalla y<br>Pistas de Audio',
+                // Pause Screen
+                pauseTitleText: 'Juego Pausado',
+                pauseScoreLabelText: 'Puntuación Actual',
+                pauseBtnContinue: 'Continuar',
+                pauseBtnSetting: 'Configuración',
+                pauseBtnFinish: 'Terminar Juego',
+                pauseBtnExit: 'Salir',
+                // Gameplay Screen
+                gameScoreLabelText: 'Puntuación Actual',
+                // End Game Screen
+                endGameSongTitle: 'Título de pista',
+                endGameScoreLabelText: 'Tu Puntuación',
+                endGameBtnLeaderboard: 'Clasificación <i class="fa-solid fa-arrow-right ml-2"></i>',
+                endGameBtnExit: 'Salir',
+                // Leaderboard Screen
+                leaderboardTitleText: 'Clasificación',
+                leaderboardExitBtn: 'Salir',
+                // Tutorial Step 2
+                tut2Title: 'Advertencia de salud y Descargo',
+                tut2Desc: 'Asegúrese de que el entorno esté libre de obstáculos antes de jugar.<br class="hidden sm:inline">Deje espacio adecuado para moverse con comodidad.'
+            },
+            ja: {
+                flag: '🇯🇵',
+                name: '日本語',
+                // Home Screen
+                homeBtnStart: 'スタート',
+                homeBtnSetting: '設定',
+                homeBtnTutorial: 'チュートリアル',
+                homeBtnExit: '終了',
+                // Song Select Screen
+                songSelectBackBtn: '戻る',
+                songSelectTitle: '曲の選択',
+                songSelectCard1Title: '楽曲タイトル',
+                songSelectCard1Selected: '選択中',
+                songSelectCard2Title: '近日公開',
+                songSelectCard2Status: '利用不可',
+                songSelectCard3Title: '近日公開',
+                songSelectCard3Status: '利用不可',
+                songSelectReadyBtn: '準備完了',
+                // Settings Screen
+                settingsBackBtn: '戻る',
+                settingsTitle: '設定',
+                i18n_vol_title: '音量',
+                i18n_vol_instruction: '手を左右に動かして音量調整 • 5秒間手を静止して確定',
+                volConfirmPromptText: '手を静止して確定:',
+                volConfirmNowBtn: '今すぐ確定',
+                volConfirmBadge: '確定済み ✓',
+                i18n_lang_title: '言語',
+                i18n_lang_instruction: '言語の上に手を置いて選択 • FlexScape全体の言語を変更',
+                btnOpenAccessibility: 'アクセシビリティ設定',
+                // Accessibility Screen
+                accessBackBtn: '戻る',
+                accessTitle: 'アクセシビリティ設定',
+                accessColorblindTitle: '色覚サポート<br>モード',
+                accessMobilityTitle: '動作制限アシスト<br>モード',
+                accessScreenReaderTitle: 'スクリーンリーダー＆<br>音声ガイド',
+                // Pause Screen
+                pauseTitleText: 'ゲーム一時停止',
+                pauseScoreLabelText: '現在のスコア',
+                pauseBtnContinue: '再開',
+                pauseBtnSetting: '設定',
+                pauseBtnFinish: 'ゲーム終了',
+                pauseBtnExit: '終了',
+                // Gameplay Screen
+                gameScoreLabelText: '現在のスコア',
+                // End Game Screen
+                endGameSongTitle: '楽曲タイトル',
+                endGameScoreLabelText: 'あなたのスコア',
+                endGameBtnLeaderboard: 'ランキング <i class="fa-solid fa-arrow-right ml-2"></i>',
+                endGameBtnExit: 'ホームへ',
+                // Leaderboard Screen
+                leaderboardTitleText: 'リーダーボード',
+                leaderboardExitBtn: '戻る',
+                // Tutorial Step 2
+                tut2Title: '健康上の注意と免責事項',
+                tut2Desc: 'プレイを始める前に、周囲に転倒の危険となる物がないか確認してください。<br class="hidden sm:inline">自由に快適に動ける十分なスペースを確保してください。'
+            }
+        };
+
+        // --- Sound Volume Controls ---
         function updateVolume(val) {
-            masterVolume = val / 100;
-            document.getElementById('volValueText').innerText = val + '%';
+            currentVolPercent = Math.max(0, Math.min(100, Math.round(val)));
+            masterVolume = currentVolPercent / 100;
+
+            const valText = document.getElementById('volValueText');
+            if (valText) valText.innerText = currentVolPercent + '%';
+
+            const progressFill = document.getElementById('volProgressFill');
+            if (progressFill) progressFill.style.width = currentVolPercent + '%';
+
+            const thumb = document.getElementById('volThumbHandle');
+            if (thumb) thumb.style.left = currentVolPercent + '%';
+
+            const slider = document.getElementById('volSlider');
+            if (slider) slider.value = currentVolPercent;
+
+            const leftIcon = document.getElementById('volIconLeft');
+            const rightIcon = document.getElementById('volIconRight');
+            if (leftIcon) {
+                leftIcon.className = currentVolPercent === 0 
+                    ? 'fa-solid fa-volume-xmark text-slate-500 text-sm' 
+                    : 'fa-solid fa-volume-low text-cyan-400 text-sm';
+            }
+            if (rightIcon) {
+                rightIcon.className = currentVolPercent > 70 
+                    ? 'fa-solid fa-volume-high text-pink-400 text-sm drop-shadow-[0_0_8px_#ff2a8d]' 
+                    : 'fa-solid fa-volume-high text-slate-400 text-sm';
+            }
         }
 
-        function toggleOutlineGlow() {
-            showOutlineGlow = !showOutlineGlow;
-            document.getElementById('outlineModeText').innerText = showOutlineGlow 
-                ? "OUTLINE: GLOWING SHAPES" 
-                : "OUTLINE: WIREFRAME";
-            playSfx('hover');
+        function playVolumeTick(pct) {
+            if (Date.now() - lastVolTickTime < 90) return;
+            lastVolTickTime = Date.now();
+            try {
+                initAudio();
+                if (!activeAudioCtx || masterVolume === 0) return;
+                if (activeAudioCtx.state === 'suspended') {
+                    try { activeAudioCtx.resume(); } catch(e) {}
+                }
+                const osc = activeAudioCtx.createOscillator();
+                const gain = activeAudioCtx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(340 + (pct * 3.5), activeAudioCtx.currentTime);
+                gain.gain.setValueAtTime(0.08 * masterVolume, activeAudioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.001, activeAudioCtx.currentTime + 0.05);
+                osc.connect(gain);
+                gain.connect(activeAudioCtx.destination);
+                osc.start();
+                osc.stop(activeAudioCtx.currentTime + 0.05);
+            } catch(e) {}
+        }
+
+        // =========================================================================
+        // VOLUME 5-SECOND SELECTION & 5-SECOND CONFIRMATION CONTROLS
+        // =========================================================================
+        function handleVolumeCardHover(isHovering) {
+            if (isHovering) {
+                if (!isVolumeSelected) {
+                    startVolumeSelectionCountdown();
+                    if (!settingsHoverTimer) {
+                        settingsHoverTimer = setInterval(() => {
+                            if (!isVolumeSelected) {
+                                stepVolumeSelectionCountdown();
+                            }
+                        }, 100);
+                    }
+                }
+            } else {
+                if (settingsHoverTimer) {
+                    clearInterval(settingsHoverTimer);
+                    settingsHoverTimer = null;
+                }
+                if (!isVolumeSelected) {
+                    cancelVolumeSelectionCountdown();
+                }
+            }
+        }
+
+        function startVolumeSelectionCountdown() {
+            if (isVolumeSelected) return;
+            if (!volSelectStartTime) volSelectStartTime = Date.now();
+            const box = document.getElementById('volSelectCountdownBox');
+            if (box) box.classList.remove('hidden');
+            stepVolumeSelectionCountdown();
+        }
+
+        function stepVolumeSelectionCountdown() {
+            if (isVolumeSelected) return;
+            if (!volSelectStartTime) volSelectStartTime = Date.now();
+
+            const elapsed = Date.now() - volSelectStartTime;
+            const remainingMs = Math.max(0, 5000 - elapsed);
+            const remainingSec = (remainingMs / 1000).toFixed(1);
+
+            const countSecEl = document.getElementById('volSelectCountdownSec');
+            if (countSecEl) countSecEl.innerText = remainingSec + 's';
+
+            const ringEl = document.getElementById('volSelectRing');
+            if (ringEl) {
+                // Circumference is 2 * PI * 14 ≈ 88
+                const offset = Math.max(0, 88 - (88 * (elapsed / 5000)));
+                ringEl.style.strokeDashoffset = offset;
+            }
+
+            if (elapsed >= 5000) {
+                selectVolumeNow();
+            }
+        }
+
+        function cancelVolumeSelectionCountdown() {
+            volSelectStartTime = 0;
+            const box = document.getElementById('volSelectCountdownBox');
+            if (box) box.classList.add('hidden');
+            const ringEl = document.getElementById('volSelectRing');
+            if (ringEl) ringEl.style.strokeDashoffset = 88;
+            const countSecEl = document.getElementById('volSelectCountdownSec');
+            if (countSecEl) countSecEl.innerText = '5.0s';
+        }
+
+        function selectVolumeNow() {
+            if (isVolumeSelected) return;
+            isVolumeSelected = true;
+            isVolumeConfirmed = false;
+            cancelVolumeSelectionCountdown();
+            playSfx('score');
+
+            const card = document.getElementById('volumeControlCard');
+            if (card) {
+                card.classList.add('border-cyan-400', 'shadow-[0_0_25px_rgba(0,240,255,0.4)]');
+            }
+
+            const stateBadge = document.getElementById('volStateBadge');
+            if (stateBadge) {
+                stateBadge.innerText = 'SELECTED • ADJUSTING';
+                stateBadge.className = 'text-xs font-orbitron font-extrabold text-cyan-300 bg-cyan-950/80 px-2.5 py-1 rounded-full border border-cyan-400/60 shadow-[0_0_12px_rgba(0,240,255,0.4)]';
+            }
+
+            const instruction = document.getElementById('i18n_vol_instruction');
+            if (instruction) {
+                instruction.innerText = 'Move hand left / right to adjust volume • Hold hand still for 5s to confirm';
+            }
+
+            const sliderWrapper = document.getElementById('volSliderWrapper');
+            if (sliderWrapper) sliderWrapper.classList.remove('opacity-50');
+
+            const volValText = document.getElementById('volValueText');
+            if (volValText) {
+                volValText.classList.remove('text-slate-400');
+                volValText.classList.add('text-[#ff2a8d]');
+            }
+
+            // Start confirmation timer
+            resetVolumeHoldTimer();
+            const confirmBox = document.getElementById('volConfirmContainer');
+            if (confirmBox) confirmBox.classList.remove('hidden');
+
+            if (accessibilitySettings && accessibilitySettings.screenReader) {
+                announceAudioCue('Volume selected. Move hand left or right to adjust, then hold still for 5 seconds to confirm.');
+            }
+        }
+
+        function handleVolumeTrackClick(event) {
+            if (!isVolumeSelected) {
+                selectVolumeNow();
+            }
+            const track = document.getElementById('volTrackContainer');
+            if (!track) return;
+            const rect = track.getBoundingClientRect();
+            let pct = Math.round(((event.clientX - rect.left) / rect.width) * 100);
+            pct = Math.max(0, Math.min(100, pct));
+            updateVolume(pct);
+            playVolumeTick(pct);
+            resetVolumeHoldTimer();
+            const confirmBox = document.getElementById('volConfirmContainer');
+            if (confirmBox) confirmBox.classList.remove('hidden');
+        }
+
+        function resetVolumeHoldTimer() {
+            volHoldStartTime = Date.now();
+            const countSecEl = document.getElementById('volCountdownSec');
+            if (countSecEl) countSecEl.innerText = '5.0s';
+            const ringEl = document.getElementById('volConfirmRing');
+            if (ringEl) ringEl.style.strokeDashoffset = 88;
+        }
+
+        function stepVolumeHoldCountdown() {
+            if (!isVolumeSelected || isVolumeConfirmed) return;
+            if (!volHoldStartTime) volHoldStartTime = Date.now();
+
+            const elapsed = Date.now() - volHoldStartTime;
+            const remainingMs = Math.max(0, 5000 - elapsed);
+            const remainingSec = (remainingMs / 1000).toFixed(1);
+
+            const countSecEl = document.getElementById('volCountdownSec');
+            if (countSecEl) countSecEl.innerText = remainingSec + 's';
+
+            const ringEl = document.getElementById('volConfirmRing');
+            if (ringEl) {
+                const offset = Math.max(0, 88 - (88 * (elapsed / 5000)));
+                ringEl.style.strokeDashoffset = offset;
+            }
+
+            if (elapsed >= 5000) {
+                confirmVolumeChangeNow();
+            }
+        }
+
+        function confirmVolumeChangeNow() {
+            if (!isVolumeSelected || isVolumeConfirmed) return;
+            isVolumeConfirmed = true;
+
+            playSfx('success');
+
+            const container = document.getElementById('volConfirmContainer');
+            if (container) container.classList.add('hidden');
+
+            const badge = document.getElementById('volConfirmBadge');
+            if (badge) {
+                badge.classList.remove('hidden');
+                badge.classList.add('animate-bounce');
+                setTimeout(() => badge.classList.remove('animate-bounce'), 1000);
+            }
+
+            const stateBadge = document.getElementById('volStateBadge');
+            if (stateBadge) {
+                stateBadge.innerText = 'CONFIRMED ✓';
+                stateBadge.className = 'text-xs font-orbitron font-extrabold text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-400/50 shadow-[0_0_15px_rgba(52,211,153,0.4)]';
+            }
+
+            const card = document.getElementById('volumeControlCard');
+            if (card) {
+                card.classList.remove('border-cyan-400');
+                card.classList.add('border-emerald-400', 'shadow-[0_0_30px_rgba(52,211,153,0.6)]');
+            }
+
+            const instruction = document.getElementById('i18n_vol_instruction');
+            if (instruction) {
+                instruction.innerText = `Volume confirmed at ${currentVolPercent}%. Hold for 5s to select again.`;
+            }
+
+            if (accessibilitySettings && accessibilitySettings.screenReader) {
+                announceAudioCue(`Volume confirmed at ${currentVolPercent} percent.`);
+            }
+
+            setTimeout(() => {
+                isVolumeSelected = false;
+                isVolumeConfirmed = false;
+                volHoldStartTime = 0;
+                volSelectStartTime = 0;
+                if (card) {
+                    card.classList.remove('border-emerald-400', 'shadow-[0_0_30px_rgba(52,211,153,0.6)]');
+                }
+                if (badge) badge.classList.add('hidden');
+                if (stateBadge) {
+                    stateBadge.innerText = 'HOLD 5S TO SELECT';
+                    stateBadge.className = 'text-xs font-orbitron font-extrabold text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-700';
+                }
+                const sliderWrapper = document.getElementById('volSliderWrapper');
+                if (sliderWrapper) sliderWrapper.classList.add('opacity-50');
+                const volValText = document.getElementById('volValueText');
+                if (volValText) {
+                    volValText.classList.remove('text-[#ff2a8d]');
+                    volValText.classList.add('text-slate-400');
+                }
+                if (instruction) {
+                    instruction.innerText = 'Hold hand for 5s to select Volume before adjusting';
+                }
+            }, 2500);
+        }
+
+        // =========================================================================
+        // LANGUAGE 5-SECOND SELECTION & 5-SECOND CONFIRMATION CONTROLS
+        // =========================================================================
+        function handleLanguageCardHover(isHovering) {
+            if (isHovering) {
+                if (!isLanguageSelected) {
+                    startLanguageSelectionCountdown();
+                    if (!langHoverTimer) {
+                        langHoverTimer = setInterval(() => {
+                            if (!isLanguageSelected) {
+                                stepLanguageSelectionCountdown();
+                            }
+                        }, 100);
+                    }
+                }
+            } else {
+                if (langHoverTimer) {
+                    clearInterval(langHoverTimer);
+                    langHoverTimer = null;
+                }
+                if (!isLanguageSelected) {
+                    cancelLanguageSelectionCountdown();
+                }
+            }
+        }
+
+        function toggleLanguageOptions() {
+            if (!isLanguageSelected) {
+                selectLanguageCardNow();
+            } else {
+                isLanguageMenuOpen = !isLanguageMenuOpen;
+                const panel = document.getElementById('languageOptionsPanel');
+                const chevron = document.getElementById('langChevron');
+                if (panel) {
+                    if (isLanguageMenuOpen) {
+                        panel.classList.remove('max-h-0', 'opacity-0', 'pointer-events-none');
+                        panel.classList.add('max-h-80', 'opacity-100', 'pointer-events-auto', 'mt-2');
+                        if (chevron) chevron.classList.add('rotate-180');
+                    } else {
+                        panel.classList.add('max-h-0', 'opacity-0', 'pointer-events-none');
+                        panel.classList.remove('max-h-80', 'opacity-100', 'pointer-events-auto', 'mt-2');
+                        if (chevron) chevron.classList.remove('rotate-180');
+                    }
+                }
+            }
+        }
+
+        function startLanguageSelectionCountdown() {
+            if (isLanguageSelected) return;
+            if (!langSelectStartTime) langSelectStartTime = Date.now();
+            const box = document.getElementById('langSelectCountdownBox');
+            if (box) box.classList.remove('hidden');
+            stepLanguageSelectionCountdown();
+        }
+
+        function stepLanguageSelectionCountdown() {
+            if (isLanguageSelected) return;
+            if (!langSelectStartTime) langSelectStartTime = Date.now();
+
+            const elapsed = Date.now() - langSelectStartTime;
+            const remainingMs = Math.max(0, 5000 - elapsed);
+            const remainingSec = (remainingMs / 1000).toFixed(1);
+
+            const countSecEl = document.getElementById('langSelectCountdownSec');
+            if (countSecEl) countSecEl.innerText = remainingSec + 's';
+
+            const ringEl = document.getElementById('langSelectRing');
+            if (ringEl) {
+                const offset = Math.max(0, 88 - (88 * (elapsed / 5000)));
+                ringEl.style.strokeDashoffset = offset;
+            }
+
+            if (elapsed >= 5000) {
+                selectLanguageCardNow();
+            }
+        }
+
+        function cancelLanguageSelectionCountdown() {
+            langSelectStartTime = 0;
+            const box = document.getElementById('langSelectCountdownBox');
+            if (box) box.classList.add('hidden');
+            const ringEl = document.getElementById('langSelectRing');
+            if (ringEl) ringEl.style.strokeDashoffset = 88;
+            const countSecEl = document.getElementById('langSelectCountdownSec');
+            if (countSecEl) countSecEl.innerText = '5.0s';
+        }
+
+        function selectLanguageCardNow() {
+            if (isLanguageSelected) return;
+            isLanguageSelected = true;
+            cancelLanguageSelectionCountdown();
+            playSfx('score');
+
+            const card = document.getElementById('languageControlCard');
+            if (card) {
+                card.classList.add('border-cyan-400', 'shadow-[0_0_25px_rgba(0,240,255,0.4)]');
+            }
+
+            const stateBadge = document.getElementById('langStateBadge');
+            if (stateBadge) {
+                stateBadge.innerText = 'SELECTED • CHOOSE LANGUAGE';
+                stateBadge.className = 'text-xs font-orbitron font-extrabold text-cyan-300 bg-cyan-950/80 px-2.5 py-1 rounded-full border border-cyan-400/60 shadow-[0_0_12px_rgba(0,240,255,0.4)]';
+            }
+
+            const instruction = document.getElementById('i18n_lang_instruction');
+            if (instruction) {
+                instruction.innerText = 'Hold hand over a language for 5s to confirm change';
+            }
+
+            // Open Language Options Panel
+            const panel = document.getElementById('languageOptionsPanel');
+            const chevron = document.getElementById('langChevron');
+            if (panel) {
+                panel.classList.remove('max-h-0', 'opacity-0', 'pointer-events-none');
+                panel.classList.add('max-h-80', 'opacity-100', 'pointer-events-auto', 'mt-2');
+            }
+            if (chevron) chevron.classList.add('rotate-180');
+            isLanguageMenuOpen = true;
+
+            if (accessibilitySettings && accessibilitySettings.screenReader) {
+                announceAudioCue('Language setting selected. Options are open. Hold hand over a language for 5 seconds to confirm change.');
+            }
+        }
+
+        function requestLanguageChange(langCode) {
+            if (!isLanguageSelected) {
+                selectLanguageCardNow();
+            }
+            if (langCode === currentLanguage) return;
+
+            pendingLanguage = langCode;
+            langConfirmStartTime = Date.now();
+
+            const container = document.getElementById('langConfirmContainer');
+            if (container) container.classList.remove('hidden');
+
+            const targetName = document.getElementById('langTargetNameText');
+            if (targetName && I18N_DICTIONARY[langCode]) {
+                targetName.innerText = `${I18N_DICTIONARY[langCode].flag} ${I18N_DICTIONARY[langCode].name}`;
+            }
+
+            stepLanguageConfirmCountdown();
+        }
+
+        function handleLangOptionHover(langCode) {
+            if (!isLanguageSelected) return;
+            if (langCode !== currentLanguage) {
+                requestLanguageChange(langCode);
+                if (!langOptionHoverTimer) {
+                    langOptionHoverTimer = setInterval(() => {
+                        if (isLanguageSelected && pendingLanguage === langCode && !isLanguageConfirmed) {
+                            stepLanguageConfirmCountdown();
+                        }
+                    }, 100);
+                }
+            }
+        }
+
+        function handleLangOptionLeave(langCode) {
+            if (langOptionHoverTimer) {
+                clearInterval(langOptionHoverTimer);
+                langOptionHoverTimer = null;
+            }
+            if (!isLanguageConfirmed && pendingLanguage === langCode) {
+                cancelLanguageConfirmCountdown();
+            }
+        }
+
+        function stepLanguageConfirmCountdown() {
+            if (!isLanguageSelected || !pendingLanguage || isLanguageConfirmed) return;
+            if (!langConfirmStartTime) langConfirmStartTime = Date.now();
+
+            const elapsed = Date.now() - langConfirmStartTime;
+            const remainingMs = Math.max(0, 5000 - elapsed);
+            const remainingSec = (remainingMs / 1000).toFixed(1);
+
+            const countSecEl = document.getElementById('langCountdownSec');
+            if (countSecEl) countSecEl.innerText = remainingSec + 's';
+
+            const ringEl = document.getElementById('langConfirmRing');
+            if (ringEl) {
+                const offset = Math.max(0, 88 - (88 * (elapsed / 5000)));
+                ringEl.style.strokeDashoffset = offset;
+            }
+
+            if (elapsed >= 5000) {
+                confirmLanguageChangeNow();
+            }
+        }
+
+        function cancelLanguageConfirmCountdown() {
+            pendingLanguage = null;
+            langConfirmStartTime = 0;
+            const container = document.getElementById('langConfirmContainer');
+            if (container) container.classList.add('hidden');
+            const ringEl = document.getElementById('langConfirmRing');
+            if (ringEl) ringEl.style.strokeDashoffset = 88;
+            const countSecEl = document.getElementById('langCountdownSec');
+            if (countSecEl) countSecEl.innerText = '5.0s';
+        }
+
+        function confirmLanguageChangeNow() {
+            if (!pendingLanguage) return;
+            const chosenLang = pendingLanguage;
+            isLanguageConfirmed = true;
+
+            playSfx('success');
+            cancelLanguageConfirmCountdown();
+
+            // Translate whole flexscape room!
+            selectLanguage(chosenLang);
+
+            const card = document.getElementById('languageControlCard');
+            if (card) {
+                card.classList.remove('border-cyan-400');
+                card.classList.add('border-emerald-400', 'shadow-[0_0_30px_rgba(52,211,153,0.6)]');
+            }
+
+            const stateBadge = document.getElementById('langStateBadge');
+            if (stateBadge) {
+                stateBadge.innerText = 'CONFIRMED ✓';
+                stateBadge.className = 'text-xs font-orbitron font-extrabold text-emerald-300 bg-emerald-950/80 px-2.5 py-1 rounded-full border border-emerald-400/50 shadow-[0_0_15px_rgba(52,211,153,0.4)]';
+            }
+
+            const instruction = document.getElementById('i18n_lang_instruction');
+            if (instruction) {
+                instruction.innerText = `Language confirmed: ${I18N_DICTIONARY[chosenLang].name}. Hold for 5s to select again.`;
+            }
+
+            setTimeout(() => {
+                isLanguageSelected = false;
+                isLanguageConfirmed = false;
+                pendingLanguage = null;
+                langSelectStartTime = 0;
+                if (card) {
+                    card.classList.remove('border-emerald-400', 'shadow-[0_0_30px_rgba(52,211,153,0.6)]');
+                }
+                if (stateBadge) {
+                    stateBadge.innerText = 'HOLD 5S TO SELECT';
+                    stateBadge.className = 'text-xs font-orbitron font-extrabold text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-700';
+                }
+                const panel = document.getElementById('languageOptionsPanel');
+                const chevron = document.getElementById('langChevron');
+                if (panel) {
+                    panel.classList.add('max-h-0', 'opacity-0', 'pointer-events-none');
+                    panel.classList.remove('max-h-80', 'opacity-100', 'pointer-events-auto', 'mt-2');
+                }
+                if (chevron) chevron.classList.remove('rotate-180');
+                isLanguageMenuOpen = false;
+
+                if (instruction) {
+                    instruction.innerText = 'Hold hand for 5s to select Language before changing';
+                }
+            }, 2500);
+        }
+
+        function selectLanguage(langCode) {
+            if (!I18N_DICTIONARY[langCode]) langCode = 'en';
+            currentLanguage = langCode;
+
+            // Update Header Display
+            const flagEl = document.getElementById('langCurrentFlag');
+            if (flagEl) flagEl.innerText = I18N_DICTIONARY[langCode].flag;
+
+            const textEl = document.getElementById('langCurrentText');
+            if (textEl) textEl.innerText = I18N_DICTIONARY[langCode].name;
+
+            // Update Option Cards Styles
+            const options = [
+                { id: 'langBtnEn', badgeId: 'badgeLangEn', code: 'en', defaultBadge: 'EN', activeBadge: 'ACTIVE' },
+                { id: 'langBtnEs', badgeId: 'badgeLangEs', code: 'es', defaultBadge: 'ES', activeBadge: 'ACTIVO' },
+                { id: 'langBtnJa', badgeId: 'badgeLangJa', code: 'ja', defaultBadge: 'JA', activeBadge: '選択中' }
+            ];
+
+            options.forEach(opt => {
+                const btn = document.getElementById(opt.id);
+                const badge = document.getElementById(opt.badgeId);
+                if (btn) {
+                    if (opt.code === langCode) {
+                        btn.className = 'lang-option-card interactable p-3 rounded-xl border-2 border-cyan-400/90 bg-cyan-950/70 text-white cursor-pointer transition-all duration-200 flex items-center justify-between sm:flex-col sm:justify-center gap-1.5 text-center shadow-[0_0_18px_rgba(0,240,255,0.4)] scale-105';
+                        if (badge) {
+                            badge.innerText = opt.activeBadge;
+                            badge.className = 'text-[10px] font-orbitron font-extrabold text-cyan-300 bg-cyan-900/80 px-2 py-0.5 rounded-full border border-cyan-400/50';
+                        }
+                    } else {
+                        btn.className = 'lang-option-card interactable p-3 rounded-xl border-2 border-slate-700 hover:border-cyan-400 bg-[#060c20]/90 hover:bg-cyan-950/40 text-slate-300 hover:text-white cursor-pointer transition-all duration-200 flex items-center justify-between sm:flex-col sm:justify-center gap-1.5 text-center';
+                        if (badge) {
+                            badge.innerText = opt.defaultBadge;
+                            badge.className = 'text-[10px] font-orbitron text-slate-400';
+                        }
+                    }
+                }
+            });
+
+            // Translate whole flexscape room
+            applyLanguageTranslations(langCode);
+
+            if (accessibilitySettings && accessibilitySettings.screenReader) {
+                announceAudioCue(`Language set to ${I18N_DICTIONARY[langCode].name}.`);
+            }
+        }
+
+        function applyLanguageTranslations(lang) {
+            const dict = I18N_DICTIONARY[lang] || I18N_DICTIONARY['en'];
+            for (const [key, val] of Object.entries(dict)) {
+                if (key === 'flag' || key === 'name') continue;
+                const el = document.getElementById(key);
+                if (el) {
+                    if (val.includes('<') || val.includes('&')) {
+                        el.innerHTML = val;
+                    } else {
+                        el.innerText = val;
+                    }
+                }
+            }
+        }
+
+        function resetSettingsSelectionStates() {
+            if (settingsHoverTimer) {
+                clearInterval(settingsHoverTimer);
+                settingsHoverTimer = null;
+            }
+            if (langHoverTimer) {
+                clearInterval(langHoverTimer);
+                langHoverTimer = null;
+            }
+            if (langOptionHoverTimer) {
+                clearInterval(langOptionHoverTimer);
+                langOptionHoverTimer = null;
+            }
+            cancelVolumeSelectionCountdown();
+            cancelLanguageSelectionCountdown();
+            cancelLanguageConfirmCountdown();
+            isVolumeSelected = false;
+            isVolumeConfirmed = false;
+            isLanguageSelected = false;
+            isLanguageConfirmed = false;
+            pendingLanguage = null;
+
+            const volBox = document.getElementById('volConfirmContainer');
+            if (volBox) volBox.classList.add('hidden');
+            const volCard = document.getElementById('volumeControlCard');
+            if (volCard) volCard.classList.remove('border-cyan-400', 'border-emerald-400', 'shadow-[0_0_25px_rgba(0,240,255,0.4)]', 'shadow-[0_0_30px_rgba(52,211,153,0.6)]');
+            const volStateBadge = document.getElementById('volStateBadge');
+            if (volStateBadge) {
+                volStateBadge.innerText = 'HOLD 5S TO SELECT';
+                volStateBadge.className = 'text-xs font-orbitron font-extrabold text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-700';
+            }
+            const sliderWrapper = document.getElementById('volSliderWrapper');
+            if (sliderWrapper) sliderWrapper.classList.add('opacity-50');
+            const volValText = document.getElementById('volValueText');
+            if (volValText) {
+                volValText.classList.remove('text-[#ff2a8d]');
+                volValText.classList.add('text-slate-400');
+            }
+
+            const langCard = document.getElementById('languageControlCard');
+            if (langCard) langCard.classList.remove('border-cyan-400', 'border-emerald-400', 'shadow-[0_0_25px_rgba(0,240,255,0.4)]', 'shadow-[0_0_30px_rgba(52,211,153,0.6)]');
+            const langStateBadge = document.getElementById('langStateBadge');
+            if (langStateBadge) {
+                langStateBadge.innerText = 'HOLD 5S TO SELECT';
+                langStateBadge.className = 'text-xs font-orbitron font-extrabold text-slate-400 bg-slate-900/80 px-2.5 py-1 rounded-full border border-slate-700';
+            }
+            const panel = document.getElementById('languageOptionsPanel');
+            const chevron = document.getElementById('langChevron');
+            if (panel) {
+                panel.classList.add('max-h-0', 'opacity-0', 'pointer-events-none');
+                panel.classList.remove('max-h-80', 'opacity-100', 'pointer-events-auto', 'mt-2');
+            }
+            if (chevron) chevron.classList.remove('rotate-180');
+            isLanguageMenuOpen = false;
+        }
+
+        // Dedicated Hand Cursor Controller for Settings Screen
+        function handleSettingsHandCursorInteraction(cx, cy, elements) {
+            if (!elements || elements.length === 0) return;
+
+            // 1. VOLUME CARD INTERACTION
+            const inVolArea = elements.some(el => el.id === 'volumeControlCard' || el.id === 'volTrackContainer' || (el.closest && el.closest('#volumeControlCard')));
+            if (inVolArea) {
+                if (!isVolumeSelected) {
+                    // PHASE 1: 5 seconds to select
+                    stepVolumeSelectionCountdown();
+                } else if (!isVolumeConfirmed) {
+                    // PHASE 2: Volume is selected, hand adjusts volume
+                    const track = document.getElementById('volTrackContainer');
+                    if (track) {
+                        const rect = track.getBoundingClientRect();
+                        let pct = Math.round(((cx - rect.left) / rect.width) * 100);
+                        pct = Math.max(0, Math.min(100, pct));
+
+                        if (Math.abs(pct - currentVolPercent) >= 1) {
+                            updateVolume(pct);
+                            playVolumeTick(pct);
+                            resetVolumeHoldTimer();
+                        }
+                    }
+
+                    // 5-second Hold Stillness Detection to confirm
+                    const moveDist = Math.hypot(cx - volLastStillX, cy - volLastStillY);
+                    if (moveDist > 28) {
+                        volLastStillX = cx;
+                        volLastStillY = cy;
+                        resetVolumeHoldTimer();
+                    } else {
+                        stepVolumeHoldCountdown();
+                    }
+                }
+            } else {
+                if (!isVolumeSelected) {
+                    cancelVolumeSelectionCountdown();
+                }
+            }
+
+            // 2. LANGUAGE CARD INTERACTION
+            const inLangArea = elements.some(el => el.id === 'languageControlCard' || (el.closest && el.closest('#languageControlCard')));
+            if (inLangArea) {
+                if (!isLanguageSelected) {
+                    // PHASE 1: 5 seconds to select
+                    stepLanguageSelectionCountdown();
+                } else if (!isLanguageConfirmed) {
+                    // PHASE 2: Language is selected, check which option is hovered
+                    const optionEl = elements.find(el => el.id && (el.id === 'langBtnEn' || el.id === 'langBtnEs' || el.id === 'langBtnJa'));
+                    if (optionEl) {
+                        const langCode = optionEl.id.replace('langBtn', '').toLowerCase();
+                        if (langCode !== currentLanguage) {
+                            if (pendingLanguage !== langCode) {
+                                requestLanguageChange(langCode);
+                            } else {
+                                stepLanguageConfirmCountdown();
+                            }
+                        } else if (pendingLanguage) {
+                            cancelLanguageConfirmCountdown();
+                        }
+                    } else if (pendingLanguage) {
+                        cancelLanguageConfirmCountdown();
+                    }
+                }
+            } else {
+                if (!isLanguageSelected) {
+                    cancelLanguageSelectionCountdown();
+                } else if (pendingLanguage) {
+                    cancelLanguageConfirmCountdown();
+                }
+            }
         }
 
         // Modal Dialogs
@@ -1500,9 +2524,15 @@
             playSfx('click');
             isGameRunning = false;
             isGamePaused = false;
+            previousScreenBeforeSettings = 'screenHome';
             if (gameLoopRafId) {
                 cancelAnimationFrame(gameLoopRafId);
                 gameLoopRafId = null;
+            }
+            const gameScreen = document.getElementById('screenGameplay');
+            if (gameScreen) {
+                gameScreen.classList.add('hidden');
+                gameScreen.style.display = 'none';
             }
             const pauseModal = document.getElementById('pauseModal');
             if (pauseModal) {
@@ -1744,6 +2774,8 @@
 
         function exitTutorial() {
             inTutorialMode = false;
+            stopVoiceMeterVisuals();
+            stopSpeechRecognitionForStep5();
             // Restore cursor
             const cursorElem = document.getElementById('gesture-cursor');
             if (cursorElem) {
@@ -1756,6 +2788,8 @@
         function finishTutorial() {
             playSfx('success');
             inTutorialMode = false;
+            stopVoiceMeterVisuals();
+            stopSpeechRecognitionForStep5();
             // Restore cursor
             const cursorElem = document.getElementById('gesture-cursor');
             if (cursorElem) {
@@ -1824,26 +2858,27 @@
                 if (bar) bar.style.width = '0%';
                 requestAnimationFrame(tutorialStep4Loop);
             } else if (stepNumber === 5) {
-                // Step 5 (Merged with Step 6): Lift dominant hand to control cursor, test button in center
+                // Step 5: Split screen with Voice Control on left and Hand Position Cursor on right
                 const cursorElem = document.getElementById('gesture-cursor');
                 if (cursorElem) {
                     cursorElem.classList.remove('hidden');
                     cursorElem.style.display = '';
                 }
-                const textElem = document.getElementById('tutStep5Text');
-                if (textElem) {
-                    textElem.textContent = TUT_STEP5_DEFAULT_TEXT;
-                }
                 const prog = document.getElementById('testBtnProgress');
                 if (prog) prog.style.width = '0%';
                 const testBtn = document.getElementById('tutTestBtn');
                 if (testBtn) testBtn.classList.remove('ring-4', 'ring-emerald-400');
+
+                startVoiceMeterVisuals();
+                startSpeechRecognitionForStep5();
             } else if (stepNumber === 6) {
                 // Step 6 has been merged into Step 5
                 goToTutorialStep(5);
                 return;
             } else if (stepNumber === 7) {
                 // Step 7: Game controls tutorial complete (automatic transition after 2.5s)
+                stopVoiceMeterVisuals();
+                stopSpeechRecognitionForStep5();
                 playSfx('success');
                 setTimeout(() => {
                     if (inTutorialMode && currentTutorialStep === 7) {
@@ -2002,6 +3037,97 @@
             requestAnimationFrame(tutorialStep4Loop);
         }
 
+        // STEP 5: Voice Control Meter Animation & Speech Recognition
+        let voiceMeterAnimTimer = null;
+        let step5SpeechRec = null;
+
+        function startVoiceMeterVisuals() {
+            if (voiceMeterAnimTimer) clearInterval(voiceMeterAnimTimer);
+            const bars = document.querySelectorAll('#voiceMeterBars .voice-bar');
+            voiceMeterAnimTimer = setInterval(() => {
+                if (currentTutorialStep !== 5 || !inTutorialMode) {
+                    stopVoiceMeterVisuals();
+                    return;
+                }
+                bars.forEach(bar => {
+                    const h = Math.floor(Math.random() * 50) + 10;
+                    bar.style.height = h + 'px';
+                });
+            }, 90);
+        }
+
+        function stopVoiceMeterVisuals() {
+            if (voiceMeterAnimTimer) {
+                clearInterval(voiceMeterAnimTimer);
+                voiceMeterAnimTimer = null;
+            }
+        }
+
+        function startSpeechRecognitionForStep5() {
+            try {
+                const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+                if (!SpeechRecognition) return;
+                if (step5SpeechRec) {
+                    try { step5SpeechRec.stop(); } catch(e) {}
+                }
+                step5SpeechRec = new SpeechRecognition();
+                step5SpeechRec.continuous = true;
+                step5SpeechRec.interimResults = true;
+                step5SpeechRec.lang = 'en-US';
+
+                step5SpeechRec.onresult = (event) => {
+                    for (let i = event.resultIndex; i < event.results.length; ++i) {
+                        const transcript = event.results[i][0].transcript.toLowerCase();
+                        if (transcript.includes('enable voice control') || transcript.includes('voice control')) {
+                            triggerVoiceControlEnabled();
+                            break;
+                        }
+                    }
+                };
+
+                step5SpeechRec.onerror = (e) => {
+                    console.log('Speech rec handled:', e);
+                };
+
+                step5SpeechRec.start();
+            } catch(e) {
+                console.log('Speech rec init note:', e);
+            }
+        }
+
+        function stopSpeechRecognitionForStep5() {
+            if (step5SpeechRec) {
+                try { step5SpeechRec.stop(); } catch(e) {}
+                step5SpeechRec = null;
+            }
+        }
+
+        function triggerVoiceControlEnabled() {
+            stopSpeechRecognitionForStep5();
+            stopVoiceMeterVisuals();
+            playSfx('success');
+            
+            const card = document.getElementById('voiceControlCard');
+            if (card) {
+                card.classList.add('border-emerald-400', 'shadow-[0_0_35px_rgba(52,211,153,0.5)]');
+            }
+            const dot = document.getElementById('voiceStatusDot');
+            if (dot) {
+                dot.className = "w-2.5 h-2.5 rounded-full bg-emerald-400";
+            }
+            const label = document.getElementById('voiceStatusLabel');
+            if (label) {
+                label.className = "text-emerald-300 font-bold";
+                label.innerText = "Voice control enabled! ✓";
+            }
+
+            setTimeout(() => {
+                if (inTutorialMode && (currentTutorialStep === 5 || currentTutorialStep === 6)) {
+                    goToTutorialStep(7);
+                }
+            }, 600);
+        }
+
         // STEP 5: Interactive Center Test Button Dwell / Click Handlers
         function startTestDwell() {
             testBtnDwellStartTime = Date.now();
@@ -2074,7 +3200,24 @@
 
             // Check hover target interactable elements
             const elements = document.elementsFromPoint(cursorX, cursorY);
+
+            // Handle Settings Screen Hand Cursor Volume & Language Controls
+            if (currentActiveScreen === 'screenSettings' && typeof handleSettingsHandCursorInteraction === 'function') {
+                handleSettingsHandCursorInteraction(cursorX, cursorY, elements);
+            }
+
             const interactable = elements ? elements.find(el => el.classList && el.classList.contains('interactable')) : null;
+
+            // If hovering on volume track in settings, hand motion adjusts slider continuously (generic dwell click bypassed)
+            if (interactable && interactable.id === 'volTrackContainer') {
+                if (hoverTarget) {
+                    hoverTarget.classList.remove('hovered');
+                    hoverTarget = null;
+                }
+                const progressCircle = document.getElementById('cursor-progress');
+                if (progressCircle) progressCircle.style.strokeDashoffset = 220;
+                return;
+            }
 
             if (interactable) {
                 if (cursorElem) cursorElem.classList.add('selecting');
